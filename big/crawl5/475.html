@@ -1,0 +1,913 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>An update on Apache Hadoop 1.0 | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="An update on Apache Hadoop 1.0"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2012/01/an-update-on-apache-hadoop-1-0/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; An update on Apache Hadoop 1.0 Comments Feed" href="http://blog.cloudera.com/blog/2012/01/an-update-on-apache-hadoop-1-0/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Caching in Apache HBase: SlabCache' href='http://blog.cloudera.com/blog/2012/01/caching-in-hbase-slabcache/' />
+<link rel='next' title='Apache Hadoop in 2011' href='http://blog.cloudera.com/blog/2012/01/hadoop-in-2011/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2012/01/an-update-on-apache-hadoop-1-0/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=10438' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-10438 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">An update on Apache Hadoop 1.0</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/charles/" title="Posts by Charles Zedlewski" rel="author">Charles Zedlewski</a></li>
+				<li>January 08, 2012</li>
+				<li class="comment"><a href="#comments">12 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>Some users &amp; customers have asked about the most recent release of Apache Hadoop, v1.0: what&#8217;s in it, what it followed and what it preceded.&#160; To explain this we should start with some basics of how Apache projects release software:</p>
+<p>By and large, in Apache projects new features are developed on a main codeline known as &#8220;trunk.&#8221;&#160; Occasionally very large features are developed on their own branches with the expectation they&#8217;ll later merge into trunk.&#160; While new features usually land in trunk before they reach a release, there is not much expectation of quality or stability.&#160; Periodically, candidate releases are branched from trunk.&#160; Once a candidate release is branched it usually stops getting new features.&#160;&#160; Bugs are fixed and after a vote, a release is declared for that particular branch.&#160; Any member of the community can create a branch for a release and name it whatever they like.</p>
+<p><a href="https://www.cloudera.com/wp-content/uploads/2012/01/diagram-1.jpeg4.png"><img class="alignnone size-large wp-image-10444" title="Apache Hadoop releases and branches" src="https://www.cloudera.com/wp-content/uploads/2012/01/diagram-1.jpeg4-1024x670.png" alt="" width="717" height="469" /></a></p>
+<p>This diagram illustrates the history of the various Apache Hadoop releases and their origins.&#160; There are 3 occasions where community releases from the Apache Hadoop project broke with what would be a more traditional release &amp; branch convention.&#160; These occasions are usually the source of confusion for users.</p>
+<ol>
+<li>More than a year after Apache Hadoop 0.20 branched, significant feature development continued on just that branch and not on trunk.&#160; Two major features were added to branches off 0.20.2.&#160; One feature was authentication, enabling strong security for core Hadoop.&#160; The other major feature was append, enabling users to run Apache HBase without risk of data loss.&#160; The security branch was later released as 0.20.203. &#160;These branches and their subsequent release have been the largest source of confusion for users because since that time, releases off of the 0.20 branches had features that releases off of trunk did not have and vice versa.</li>
+<li>Apache Hadoop .22 released chronologically after Apache Hadoop 0.23.&#160; In actuality Apache Hadoop 0.23 is a strict superset of features over 0.22 but it actually released a month before 0.22.</li>
+<li>A few weeks after 0.23 released, the 0.20 branch formerly known as 0.20.205 was renumbered 1.0.&#160; There is next to no functional difference between 0.20.205 and 1.0.&#160; This is just a renumbering.</li>
+</ol>
+<p>Because of issue #1, there has been an 18 month period where there has been no one Apache release that had all the committed features of Apache Hadoop.&#160; This table illustrates the point:</p>
+<p><a href="https://www.cloudera.com/wp-content/uploads/2012/01/diagram-24.png"><img class="alignnone size-large wp-image-10466" title="Apache Hadoop releases and features" src="https://www.cloudera.com/wp-content/uploads/2012/01/diagram-24-1024x712.png" alt="" width="717" height="498" /></a></p>
+<p>As members of the Apache Hadoop community, Cloudera engineers have focused their efforts on getting back to releases that are strict superset of all of the features of any past releases so as to avoid having to make the unpleasant choice of picking one feature set over another.&#160; The good news is minus the confusion over the 1.0 numbering, we are basically there.&#160; There have been two good recent releases off of trunk (0.22 and 0.23) one of which (0.23) does have all of the features of any past release.&#160; It&#8217;s very possible these new releases will get renumbered to 2.0 or 3.0 or some other number to indicate they are functional supersets of 1.0 but this remains to be decided.</p>
+<p>Many of you are CDH users and by now you&#8217;re wondering what Apache Hadoop you are running today and what Apache Hadoop you&#8217;ll be running in the future.&#160; This diagram shows the CDH releases and the Apache Hadoop releases they draw from.</p>
+<p><a href="https://www.cloudera.com/wp-content/uploads/2012/01/diagram-3.png"><img class="alignnone size-large wp-image-10446" title="CDH and Apache Hadoop releases" src="https://www.cloudera.com/wp-content/uploads/2012/01/diagram-3-1024x739.png" alt="" width="717" height="517" /></a></p>
+<p>The CDH1 distribution incorporated the 0.18.3 Apache Hadoop release.&#160; The CDH2 distribution incorporated the 0.20.1 Apache Hadoop release.&#160; The CDH3 distribution incorporated the 0.20.2 Apache Hadoop release plus the features of the 0.20.append and 0.20.security branches that collectively are now known as &#8220;1.0.&#8221;&#160; The Apache Hadoop in CDH3 has been the equivalent of the recently announced Apache Hadoop 1.0 for approximately a year now.&#160; The CDH4 distribution will likely incorporate a release from the 0.23.x series.&#160; We also do quarterly updates for CDH releases.&#160; These updates typically include backports from trunk that fix bugs or improve performance &amp; stability, not new component releases.&#160; In some cases when it is not destabilizing or compatibility breaking, a CDH update will include an incrementally new component version.&#160; For example CDH3U0 uses HBase 0.90.0 whereas CDH3U2 uses HBase 0.90.4.</p>
+<p>Cloudera&#8217;s Distribution including Apache Hadoop currently incorporates and integrates 13 different open source components to create a single open source Apache Hadoop based data management platform.&#160; 11 of the 13 components come from Apache projects, Apache Hadoop being one of them.&#160; All of these projects have their own branch and release quirks because each project is a different collection of individuals with different motivations and preferences.&#160; This is a feature, not a bug of the Apache community process.&#160; By creating an environment where individuals with disparate motivations can all contribute, projects attract more contributors and more innovation.</p>
+<p>CDH has a multi-year history of annual releases, quarterly updates, clear upgrade paths and strong policies around maintaining compatibility and stability across updates.&#160; This has only been possible because the CDH engineering team is comprised of more than 20 engineers that are committers and PMC members of the various Apache projects who can shape the innovation of the extended community into a single coherent system.&#160; It is why we believe demonstrated leadership in open source contribution is the only way to harness the open innovation of the Apache Hadoop ecosystem.</p>
+<p>The most current GA release of CDH is CDH3, update 2.&#160; Find out more about it <a href="http://blog.cloudera.com/blog/2011/10/cdh3-update-2-is-released/">here</a>.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>12 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://tm.durusau.net">Patrick Durusau</a> /
+			January 09, 2012 / 11:55 AM		</em>
+		<p>Charles, good explanation of the Apache process but I think the average customer is looking for something a bit shorter. </p>
+<p>The main confusion arose from the jump from 0.2.* to 1.0. </p>
+<p>True, allowed by the rules, etc. but sudden and unexpected, two bad things for comfort level of customers.</p>
+<p>Not to mention that customers watch release #&#8217;s as though meaningful. Sometimes they are, sometimes not, but try explaining that to a customer. They want the latest X, whatever that is at the moment.</p>
+<p>I took a stab at a shorter version at: <a href="http://tm.durusau.net/?p=20359" rel="nofollow">http://tm.durusau.net/?p=20359</a> . Basic goal was to reassure, not educate. ;-)</p>
+<p>Thanks for all the hard work!</p>
+<p>Patrick</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='10438' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="1jk=" />
+		<input type="hidden" name="cptch_time" value="1397910010" />
+		<input type="hidden" value="Version: 2.4" />
+		5 &times; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  &#116;&#119;enty &#102;i&#118;&#101;	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

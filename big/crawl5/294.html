@@ -1,0 +1,1507 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>From Zero to Impala in Minutes | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="From Zero to Impala in Minutes"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/02/from-zero-to-impala-in-minutes/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; From Zero to Impala in Minutes Comments Feed" href="http://blog.cloudera.com/blog/2013/02/from-zero-to-impala-in-minutes/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Cloudera is the Second &quot;Sexiest Enterprise Startup&quot; for 2012' href='http://blog.cloudera.com/blog/2013/02/cloudera-is-the-second-sexiest-enterprise-startup-for-2012/' />
+<link rel='next' title='Inside Cloudera Impala: Runtime Code Generation' href='http://blog.cloudera.com/blog/2013/02/inside-cloudera-impala-runtime-code-generation/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/02/from-zero-to-impala-in-minutes/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=20209' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-20209 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">From Zero to Impala in Minutes</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Matt Massie</li>
+				<li>February 07, 2013</li>
+				<li class="comment"><a href="#comments">15 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><em>This was post was originally published by <a href="https://amplab.cs.berkeley.edu/">U.C. Berkeley AMPLab</a> developer (and former Clouderan) Matt Massie, on his <a href="http://zenfractal.com/">personal blog</a>. Matt has graciously permitted us to re-publish here for your convenience.</em></p>
+<p><span style="font-size: medium;"><strong>Note: The post below is <span style="text-decoration: underline;">valid for Impala version 0.6 only</span> and is not being maintained for subsequent releases. To deploy Impala 0.7 and later using a much easier (and also free) method,</strong><strong> use <a href="http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/">this how-to</a>.</strong></span></p>
+<p><a href="http://blog.cloudera.com/blog/2012/10/cloudera-impala-real-time-queries-in-apache-hadoop-for-real/">Cloudera Impala</a> provides fast, interactive SQL queries directly on your Apache Hadoop data stored in HDFS or Apache HBase.</p>
+<p>This post will explain how to use <a href="http://whirr.apache.org/">Apache Whirr</a> to bring up a Cloudera Impala multi-node cluster on EC2 in minutes. When the installation script finishes, you’ll be able to immediately query the sample data in Impala without any more setup needed. The script also sets up Impala for performance (e.g. enabling direct reads). Since Amazon’s Elastic Compute Cloud (Amazon EC2) is a resizable compute capacity, you can easily choose any size Impala cluster you want.</p>
+<p>In addition, your Impala cluster will be automatically setup with <a href="http://ganglia.info">Ganglia</a>: a lightweight and scalable metric-collection framework that provides a powerful web UI for analyzing trends in cluster and application performance.</p>
+<p>The installation scripts represent a day of work so I’m sure there are ways they can be improved. Please feel free to comment at the end of the post if you have any ideas (or issues). These scripts could also easily be used as a basis for a proper <a href="http://www.slideshare.net/jclouds/how-to-write-a-whirr-service">Whirr service</a> if someone had the time.</p>
+<p>If you’re planning to deploy Impala in production, I highly recommend that you use <a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html">Cloudera Manager</a>.</p>
+<h2>Installing Whirr</h2>
+<p>If you haven’t already installed <a href="http://whirr.apache.org/">Apache Whirr</a>, download and install using the following instructions. If you already have Whirr 0.8.1 installed, feel free to skip ahead.</p>
+<p>Note: I like to install things in <code>/workspace</code> on my machine but you can install Whirr anywhere you like of course.</p>
+<pre class="code" style="padding-left: 10px;">$ cd /workspace
+$ wget http://www.apache.org/dist/whirr/stable/whirr-0.8.1.tar.gz
+$ gunzip &lt; whirr-0.8.1.tar.gz | tar -xvf -
+$ cd whirr-0.8.1
+$ mkdir ~/.whirr
+$ cp conf/credentials.sample ~/.whirr/credentials
+</pre>
+<p>&nbsp;</p>
+<p>Add the following line to your <code>.bashrc</code> replacing <code>/workspace</code> with the path you installed Whirr into.</p>
+<pre class="code" style="padding-left: 10px;">"/workspace/whirr-0.8.1/bin:$PATH"
+</pre>
+<p>&nbsp;</p>
+<p>Once you’ve edited your <code>.bashrc</code>, source it and check that whirr is in your path.</p>
+<pre class="code" style="padding-left: 10px;">$ . ~/.bashrc
+$ whirr version
+Apache Whirr 0.8.1
+jclouds 1.5.1
+</pre>
+<p>&nbsp;</p>
+<p>Edit your <code>~/.whirr/credential</code> file (created above) to set EC2 (<code>aws-ec2</code>) as your cloud provider and add your AWS identity and credentials, e.g.</p>
+<pre class="code" style="padding-left: 10px;">PROVIDER=aws-ec2
+IDENTITY=[Put your AWS Access Key ID here]
+CREDENTIAL=[Put your AWS Secret Access Key here]
+</pre>
+<p>&nbsp;</p>
+<p>For the last step, you need to create an SSH RSA (not DSA!) keypair. You’ll use this keypair whenever you launch a cluster on EC2 using Whirr (more on that soon).</p>
+<pre class="code" style="padding-left: 10px;">$ ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa_whirr
+</pre>
+<p>&nbsp;</p>
+<p>Note that this keypair has nothing to do with your AWS keypair that is generated in the AWS Management Console or by running <code>ec2-add-keypair</code>.</p>
+<h2>Preparing for Impala Installation</h2>
+<p>You will need three files to install Impala: impalacluster.properties, installer.sh, and setup-impala.sh. </p>
+<p>The impalacluster.properties file will be passed to Whirr as a recipe for creating your cluster. This cluster will be built to satify Impala requirements, e.g. CentOS 6.2, CDH, etc.</p>
+<p>The installer.sh script will use the information provided by Whirr about your cluster to <code>scp</code> and <code>ssh</code> the setup-impala.sh script to each machine and run it. The installer.sh will pass the address of the machine to house the Hive metadata store as well as a randomly generated password for the ‘hive’ user.</p>
+<p>The setup-impala.sh script does the actual installation on each machine in your cluster. This script will completely configure Impala and Hive on your cluster for optimal performance. Once complete, you will immediately be able to query against Impala (and Hive).</p>
+<p>Let’s go through each of these files in detail.</p>
+<h3>impalacluster.properties</h3>
+<p>The Impala <a href="https://ccp.cloudera.com/display/IMPALA10BETADOC/Installing+Impala">installation guide</a> lists the following requirements, e.g.</p>
+<ul>
+<li>Red Hat Enterprise Linux (RHEL)/CentOS 6.2 (64-bit)</li>
+<li>CDH 4.2.0 or later</li>
+<li>Hive</li>
+<li>MySQL</li>
+<li>Sufficient memory to handle join operation</li>
+</ul>
+<p>The RightImage CentOS_6.2_x64 v5.8.8 EBS image (ami-51c3e614) will satisfy the CentOS 6.2 requirement and Whirr will do all the work to install CDH 4.2.x on your cluster. The installation scripts provided in this post will handle setting up Hive, MySQL and Impala.</p>
+<p>Here is the Impala-ready Apache Whirr recipe, impalacluster.properties, to use a starting point for your deployment:</p>
+<pre class="code" style="padding-left: 10px;">#
+# NOTE: EDIT THE FOLLOWING PROPERTIES TO MATCH YOUR ENVIRONMENT AND DESIRED CLUSTER
+#
+
+# The private key you created during the Whirr installation above (you'll need to change this path)
+whirr.private-key-file=/Users/matt/.ssh/id_rsa_whirr
+# The public key you created during the Whirr installation above (you'll need to change this path)
+whirr.public-key-file=/Users/matt/.ssh/id_rsa_whirr.pub
+# The size of EC2 instances to run (see http://aws.amazon.com/ec2/instance-types/). Keep in mind that some
+# joins can require quite a bit of memory. We'll use the m2.xlarge (High-Memory Extra Large Instance) for extra memory.
+# You can use any size instance you like here (except micro).
+whirr.hardware-id=m2.xlarge
+# You can modify the number of machines in the cluster here. The first machine type is the master and the second
+# machine type are the workers.  To change you cluster size, change the number of workers in the cluster.
+whirr.instance-templates=1 hadoop-namenode+hadoop-jobtracker+ganglia-metad,5 hadoop-datanode+hadoop-tasktracker+ganglia-monitor
+
+#
+# NOTE: DO NOT CHANGE THE PROPERTIES FROM HERE DOWN OR THE INSTALLER MAY BREAK
+#
+
+# This name will be used by Amazon to create the security group name. Using any string you like.
+whirr.cluster-name=myimpalacluster
+# Impala should not be run as root since root is not allowed to do direct reads
+whirr.cluster-user=impala
+# The RightImage CentOS 6.2 x64 image
+whirr.image-id=us-west-1/ami-51c3e614
+# The following two lines will cause Whirr to install CDH instead of Apache Hadoop
+whirr.hadoop.install-function=install_cdh_hadoop
+whirr.hadoop.configure-function=configure_cdh_hadoop
+</pre>
+<p>&nbsp;</p>
+<p>The installer.sh will pass these properties to Whirr when you launch your cluster. You should edit the properties at the top of the file to match your environment and desired cluster characteristics (e.g. RSA key, cluster size and EC2 instance type).</p>
+<p>Do not edit the properties at the bottom of the file. Doing so, could break the installer.</p>
+<p>If you want to learn more about these whirr options, take a look at the <a href="http://whirr.apache.org/docs/0.8.0/configuration-guide.html">Whirr Configuration Guide</a>. There is also a <code>recipes</code> directory inside the Whirr distribution with example recipes.</p>
+<h3>installer.sh</h3>
+<p>The installer.sh file orchestrates the installation using the Whirr deployment information that is generated by the <code>launch-cluster</code> command. This information is found in the directory <code>~/.whirr/myimpalacluster</code>. Here is the script:</p>
+<pre class="code" style="padding-left: 10px;">#!/bin/bash
+
+# Please provide the path to the RSA private key you
+# created as part of the Whirr installation
+RSA_PRIVATE_KEY=$HOME/.ssh/id_rsa_whirr
+
+# DO NOT MODIFY ANYTHING FROM HERE ON DOWN
+CLUSTER_NAME=myimpalacluster
+CLUSTER_USERNAME=impala
+WHIRR_INSTANCES=$HOME/.whirr/$CLUSTER_NAME/instances
+
+SETUP_IMPALA_SCRIPT=setup-impala.sh
+
+# Generate a random password to secure the 'root' and 'hive' mysql users
+RANDOM_PASSWORD=$(dd count=1 bs=16 if=/dev/urandom of=/dev/stdout 2&gt;/dev/null | base64)
+
+# Use Whirr to bring up the CDH cluster
+whirr launch-cluster --config impalacluster.properties
+
+# Fetch the list of workers from the Whirr deployment
+WORKER_NODES=$(egrep -v 'hadoop-namenode|hadoop-jobtracker|ganglia-metad' \
+                    $WHIRR_INSTANCES | awk '{print $3}')
+
+# Install the Hive metastore on the first worker node
+# Hive box internal IP
+HIVE_MYSQL_BOX_INTERNAL=$(head -1 $WHIRR_INSTANCES | awk '{print $4}')
+# Hive box external IP
+HIVE_MYSQL_BOX_EXTERNAL=$(head -1 $WHIRR_INSTANCES | awk '{print $3}')
+
+# Copy the impala setup script to every machine in the cluster and run it
+SSH_OPTS=" -i $RSA_PRIVATE_KEY -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "
+for WORKER_NODE in $WORKER_NODES
+do
+  scp $SSH_OPTS $SETUP_IMPALA_SCRIPT $CLUSTER_USERNAME@$WORKER_NODE:/tmp
+        # Run the script in the background so the installation is in parallel
+  ssh $SSH_OPTS $CLUSTER_USERNAME@$WORKER_NODE \
+            sudo bash /tmp/$SETUP_IMPALA_SCRIPT $HIVE_MYSQL_BOX_INTERNAL $RANDOM_PASSWORD &gt; /tmp/impala-install.log 2&gt;&amp;1 &amp;
+done
+
+echo "Waiting for the installation scripts to finish on all the nodes. This will take about a minute per node in the cluster."
+wait
+
+echo "The password for your root and Hive account on the MySQL box is $RANDOM_PASSWORD"
+echo "Please save this password somewhere safe."
+</pre>
+<p>&nbsp;</p>
+<p>You will likely need to change the <code>RSA_PRIVATE_KEY</code> specified at the top of the script; otherwise, you should not need to modify anything else in this file.</p>
+<p>This script will generate a random password for the Hive metadatastore user, launch a cluster using the impalacluster.properties file, using the Whirr deployment to copy and run the setup-impala.sh script on every worker in the cluster.</p>
+<p>Note that, for performance, the installer runs the <code>ssh</code> calls in parallel and waits for them to complete. Using <code>time ./installer.sh</code>, I’ve found that it takes about a minutes/machine to bring up a cluster, e.g. an 11-node cluster (1 master, 10 workers) will take, e.g.</p>
+<pre class="code" style="padding-left: 10px;">real 11m41.172s
+user  0m22.061s
+sys   0m2.402s
+</pre>
+<p>&nbsp;</p>
+<h3>setup-impala.sh</h3>
+<p>This is the setup-impala.sh script that is run on each machine in your Impala cluster to install and configure Impala:</p>
+<pre class="code" style="padding-left: 10px;">#!/bin/bash
+
+# Ip address of the box with the Hive metastore
+HIVE_METASTORE_IP=$1
+# Password to use for the hive user
+HIVE_PASSWORD=$2
+
+HADOOP_CONF_DIR=/etc/hadoop/conf
+HIVE_CONF_DIR=/etc/hive/conf
+IMPALA_CONF_DIR=/etc/impala/conf
+IMPALA_REPO_FILE=http://beta.cloudera.com/impala/redhat/6/x86_64/impala/cloudera-impala.repo
+
+function write_hive_site {
+cat &gt; $1 &lt;&lt;HIVESITE
+&lt;?xml version="1.0"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;
+&lt;configuration&gt;
+&lt;property&gt;
+  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;
+  &lt;value&gt;jdbc:mysql://$HIVE_METASTORE_IP/metastore&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;
+  &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;
+  &lt;value&gt;hive&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;
+  &lt;value&gt;$HIVE_PASSWORD&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;datanucleus.autoCreateSchema&lt;/name&gt;
+  &lt;value&gt;false&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;datanucleus.fixedDatastore&lt;/name&gt;
+  &lt;value&gt;true&lt;/value&gt;
+&lt;/property&gt;
+&lt;/configuration&gt;
+HIVESITE
+}
+
+# Some configuration only needs to be run the the box housing the hive metastore
+/sbin/ifconfig -a | grep "addr:$HIVE_METASTORE_IP " &gt; /dev/null &amp;&amp; {
+
+# Install all the necessary packages
+yum install -y hive mysql mysql-server mysql-connector-java
+# Start the mysql server
+/etc/init.d/mysqld start
+# Create the Hive metastore and hive user
+/usr/bin/mysql -u root &lt;&lt;SQL
+-- Create the metastore database
+create DATABASE metastore;
+-- Use the metastore database
+use metastore;
+-- Import the metastore schema from hive
+SOURCE /usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.10.0.mysql.sql;
+-- Secure the root accounts with the hive password
+update mysql.user set password = PASSWORD('$HIVE_PASSWORD') where user = 'root';
+-- Create a user 'hive' with random password for localhost access
+CREATE USER 'hive'@'localhost' IDENTIFIED BY '$HIVE_PASSWORD';
+-- Grant privileges on the metastore to the 'hive' user on localhost
+GRANT ALL PRIVILEGES ON metastore.* TO 'hive'@'localhost' WITH GRANT OPTION;
+-- Create a user 'hive' with random password
+CREATE USER 'hive'@'%' IDENTIFIED BY '$HIVE_PASSWORD';
+-- Grant privileges on the metastore to the 'hive' user
+GRANT ALL PRIVILEGES ON metastore.* TO 'hive'@'%' WITH GRANT OPTION;
+-- Load the new privileges
+FLUSH PRIVILEGES;
+SQL
+# Write the hive-site to the Hive configuration directory
+write_hive_site $HIVE_CONF_DIR/hive-site.xml
+# Link the mysql connector to hive lib
+ln -s /usr/share/java/mysql-connector-java.jar /usr/lib/hive/lib
+# Load up a really basic tab-delimited table into hive for testing end-to-end functionality
+cat &gt; /tmp/numbers.txt &lt;&lt;TABLE
+1 one
+2 two
+3 three
+4 four
+TABLE
+sudo -E -u impala hadoop fs -mkdir /user/impala
+sudo -E -u impala hadoop fs -put /tmp/numbers.txt /user/impala/numbers.txt
+sudo -E -u impala hive -e "CREATE TABLE numbers (num INT, word STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;"
+sudo -E -u impala hive -e "LOAD DATA INPATH '/user/impala/numbers.txt' into table numbers;"
+} # /end hive metadata store specific commands
+
+# Fetch the Cloudera yum repo file
+(cd /etc/yum.repos.d/ &amp;&amp; wget -N $IMPALA_REPO_FILE)
+# Install the impala and impala-shell packages
+yum -y install impala impala-shell impala-server impala-state-store
+
+# Create the impala configuration directory
+mkdir -p $IMPALA_CONF_DIR
+# Install the hive-site.xml into the Impala configuration directory
+write_hive_site $IMPALA_CONF_DIR/hive-site.xml
+
+# Copy the Hadoop core-site.xml into the Impala config directory
+# Make sure to prepend the some properties for performance
+CORE_SITE_XML=core-site.xml
+cat &gt; $IMPALA_CONF_DIR/$CORE_SITE_XML &lt;&lt;'EOF'
+ &lt;property&gt;
+     &lt;name&gt;dfs.domain.socket.path &lt;/name&gt;
+     &lt;value&gt;/var/lib/hadoop-hdfs/socket._PORT &lt;/value&gt;
+   &lt;/property&gt;
+   &lt;property&gt;
+     &lt;name&gt;dfs.client.read.shortcircuit.skip.checksum &lt;/name&gt;
+     &lt;value&gt;false &lt;/value&gt;
+   &lt;/property&gt;EOF
+grep -v "&lt;configuration&gt;" $HADOOP_CONF_DIR/$CORE_SITE_XML &gt;&gt; $IMPALA_CONF_DIR/$CORE_SITE_XML
+
+# Update the hdfs-site.xml file
+HDFS_SITE_XML=hdfs-site.xml
+cat &gt; /tmp/$HDFS_SITE_XML &lt;&lt;'EOF'
+&lt;property&gt;
+    &lt;name&gt;dfs.client.read.shortcircuit&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.domain.socket.path&lt;/name&gt;
+    &lt;value&gt;/var/lib/hadoop-hdfs/socket._PORT&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.datanode.hdfs-blocks-metadata.enabled&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+EOF
+grep -v "&lt;configuration&gt;" $HADOOP_CONF_DIR/$HDFS_SITE_XML &gt;&gt; /tmp/$HDFS_SITE_XML
+mv /tmp/$HDFS_SITE_XML $HADOOP_CONF_DIR/$HDFS_SITE_XML
+# Copy the hdfs-site.xml file into the Impala config directory
+cp $HADOOP_CONF_DIR/$HDFS_SITE_XML $IMPALA_CONF_DIR/$HDFS_SITE_XML
+# Copy the log4j properties from Hadoop to Impala
+cp $HADOOP_CONF_DIR/log4j.properties $IMPALA_CONF_DIR/log4j.properties
+
+# Add Impala to the HDFS group
+/usr/sbin/usermod -G hdfs impala
+
+# Restart HDFS
+/etc/init.d/hadoop-hdfs-datanode restart
+
+# Start the impala services
+# NOTE: It's important to run impala as a non-root user or performance will suffer (no direct reads)
+sudo -E -u impala GVLOG_v=1 nohup /usr/bin/impalad \
+-state_store_host=$HIVE_METASTORE_IP -nn=$NN_HOST -nn_port=$NN_PORT \
+-ipaddress=$(host $HOSTNAME | awk '{print $4}') &lt; /dev/null &gt;
+ /tmp/impalad.out 2&gt;&amp;1 &amp;
+</pre>
+<p>&nbsp;</p>
+<p>You do not need to edit this file.</p>
+<p>This script is a bit long but I hope it’s easy to understand. This script is passed two arguments: the IP address of the Hive metadata store and the password to hive user.</p>
+<p>When run, this script will, e.g.</p>
+<ol>
+<li>Check if it’s running on the machine designated to be the Hive metadata store; if so, it will install and configure Hive and MySQL and drop in a very simple example table.</li>
+<li>Install the necessary Impala packages</li>
+<li>Configure impala for <code>read.shortcircuit</code>, <code>skip.checksum</code>, <code>local-path-access.user</code> and data locality tracking for performance</li>
+<li>Create an <code>impala</code> user</li>
+<li>Restart the datanode to pull in the modified configuration</li>
+<li>Start the <code>statestored</code> service</li>
+<li>Start <code>impalad</code> passing in the <code>-state_store_host</code> (all <code>impalad</code> use the state store running on the Hive metadata store machine), <code>-nn</code> (NameNode) and <code>-nn_port</code> (NameNode port) arguments</li>
+</ol>
+<p>Once you’ve modified your <code>impalacluster.properties</code> and <code>installer.sh</code> files, you’re ready to launch your Impala cluster.</p>
+<h2>Launching your Impala cluster</h2>
+<p>At this point, you should have a directory with your customized installation script and configuration file:</p>
+<pre class="code" style="padding-left: 10px;">$ ls
+impalacluster.properties  installer.sh            setup-impala.sh
+</pre>
+<p>&nbsp;</p>
+<p>To launch your cluster, simply run the installer.sh script.</p>
+<pre class="code" style="padding-left: 10px;">% time bash ./installer.sh
+Running on provider aws-ec2 using identity ABCDEFGHIJKLMNOP
+Bootstrapping cluster
+Configuring template for bootstrap-hadoop-datanode_hadoop-tasktracker_ganglia-monitor
+Configuring template for bootstrap-hadoop-namenode_hadoop-jobtracker_ganglia-metad
+Starting 5 node(s) with roles [hadoop-datanode, hadoop-tasktracker, ganglia-monitor]
+Starting 1 node(s) with roles [hadoop-namenode, hadoop-jobtracker, ganglia-metad]
+...
+</pre>
+<p>&nbsp;</p>
+<p>When installer.shcompletes, you should see the following messages, e.g.</p>
+<pre class="code" style="padding-left: 10px;">...
+Warning: Permanently added '50.18.85.89' (RSA) to the list of known hosts.
+setup-impala.sh                                                                               100% 5675     5.5KB/s   00:00
+Warning: Permanently added '54.241.114.18' (RSA) to the list of known hosts.
+setup-impala.sh                                                                               100% 5675     5.5KB/s   00:00
+Warning: Permanently added '184.169.189.144' (RSA) to the list of known hosts.
+setup-impala.sh                                                                               100% 5675     5.5KB/s   00:00
+Warning: Permanently added '50.18.132.190' (RSA) to the list of known hosts.
+setup-impala.sh                                                                               100% 5675     5.5KB/s   00:00
+Warning: Permanently added '184.169.237.144' (RSA) to the list of known hosts.
+setup-impala.sh                                                                               100% 5675     5.5KB/s   00:00
+Waiting for the installation scripts to finish on all the nodes. This will take about a minute per node in the cluster.
+The password for your root and Hive account on the MySQL box is lBnn/HynCPcYNr/AUm5Hzg==
+Please save this password somewhere safe.
+
+real  6m42.620s
+user  0m14.590s
+sys   0m1.261s
+</pre>
+<p>&nbsp;</p>
+<p>At this point, your Impala Cluster is up and ready for work.</p>
+<h2>Using your Impala cluster</h2>
+<p>You can find your deployment details in the file <code>~/.whirr/myimpalacluster/instances</code>, e.g.</p>
+<pre class="code" style="padding-left: 10px;">$ cat ~/.whirr/myimpalacluster/instances
+us-west-1/i-082ab151  hadoop-datanode,hadoop-tasktracker,ganglia-monitor  50.18.85.89 10.178.233.226
+us-west-1/i-0a2ab153  hadoop-datanode,hadoop-tasktracker,ganglia-monitor  54.241.114.18   10.169.70.184
+us-west-1/i-0c2ab155  hadoop-datanode,hadoop-tasktracker,ganglia-monitor  184.169.189.144 10.166.173.74
+us-west-1/i-0e2ab157  hadoop-datanode,hadoop-tasktracker,ganglia-monitor  50.18.132.190   10.169.70.5
+us-west-1/i-142ab14d  hadoop-datanode,hadoop-tasktracker,ganglia-monitor  184.169.237.144 10.166.250.208
+us-west-1/i-162ab14f  hadoop-namenode,hadoop-jobtracker,ganglia-metad 54.241.85.84    10.166.123.235
+</pre>
+<p>&nbsp;</p>
+<p>The columns are, in order, the EC2 instance id, the Whirr service template, the EC2 public IP of the machine and the EC2 private address of the machine. The Hive metadata store is always installed on the first machine in the list (that is not a master running the namenode, jobtracker, etc).</p>
+<p>To log into the Hive machine, use the public IP address of the first node: <code>50.18.85.89</code> in this example.</p>
+<pre class="code" style="padding-left: 10px;">$ ssh -i /Users/matt/.ssh/id_rsa_whirr -o "UserKnownHostsFile /dev/null" -o StrictHostKeyChecking=no impala@50.18.85.89
+Warning: Permanently added '50.18.85.89' (RSA) to the list of known hosts.
+Last login: Tue Nov 20 22:57:12 2012 from 136.152.39.187
+-bash-4.1$
+</pre>
+<p>&nbsp;</p>
+<p>Launch <code>hive</code> to ensure you can run queries, e.g.</p>
+<pre class="code" style="padding-left: 10px;">-bash-4.1$ hive
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties
+Hive history file=/tmp/impala/hive_job_log_impala_201211202349_133443320.txt
+hive&gt; show tables;
+OK
+numbers
+Time taken: 2.883 seconds
+hive&gt; select * from numbers;
+OK
+1 one
+2 two
+3 three
+4 four
+Time taken: 0.943 seconds
+hive&gt; select word from numbers;
+Total MapReduce jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_201211210024_0003, Tracking URL = http://ec2-50-18-16-224.us-west-1.compute.amazonaws.com:50030/jobdetails.jsp?jobid=job_201211210024_0003
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -Dmapred.job.tracker=ec2-50-18-16-224.us-west-1.compute.amazonaws.com:8021 -kill job_201211210024_0003
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2012-11-21 00:29:11,916 Stage-1 map = 0%,  reduce = 0%
+2012-11-21 00:29:15,940 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 0.73 sec
+2012-11-21 00:29:16,949 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 0.73 sec
+2012-11-21 00:29:17,961 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 0.73 sec
+MapReduce Total cumulative CPU time: 730 msec
+Ended Job = job_201211210024_0003
+MapReduce Jobs Launched:
+Job 0: Map: 1   Cumulative CPU: 0.73 sec   HDFS Read: 0 HDFS Write: 0 SUCCESS
+Total MapReduce CPU Time Spent: 730 msec
+OK
+one
+two
+three
+four
+Time taken: 10.687 seconds
+hive&gt; quit;
+</pre>
+<p>&nbsp;</p>
+<p>Now that you know Hive is running correctly, you can use Impala to query the same table.</p>
+<pre class="code" style="padding-left: 10px;">$ impala-shell
+$ impala-shell
+Welcome to the Impala shell. Press TAB twice to see a list of available commands.
+
+Copyright (c) 2012 Cloudera, Inc. All rights reserved.
+
+(Build version: Impala v0.1 (e50c5a0) built on Mon Nov 12 13:22:11 PST 2012)
+[Not connected] &gt; connect localhost
+[localhost:21000] &gt; show tables;
+numbers
+[localhost:21000] &gt; select * from numbers;
+1 one
+2 two
+3 three
+4 four
+[localhost:21000] &gt; select word from numbers;
+one
+two
+three
+four
+[localhost:21000] &gt;
+</pre>
+<p>&nbsp;</p>
+<h2>Destroying your Impala Cluster</h2>
+<p>To destroy your Impala cluster, use the Whirr <code>destroy-cluster</code> command:</p>
+<pre class="code" style="padding-left: 10px;">$ whirr destroy-cluster --config impalacluster.properties
+Running on provider aws-ec2 using identity ABCDEFGHIJKLMNOP
+Finished running destroy phase scripts on all cluster instances
+Destroying myimpalacluster cluster
+</pre>
+<p>&nbsp;</p>
+<h2>Taking a look at Ganglia</h2>
+<p>For security, Whirr installs the <a href="http://ganglia.info/">Ganglia</a> web interface to only be accessible by <code>localhost</code>, e.g.</p>
+<pre class="code" style="padding-left: 10px;">  #
+  # Ganglia monitoring system php web frontend
+  #
+
+  Alias /ganglia /usr/share/ganglia
+
+    Order deny,allow
+    Deny from all
+    Allow from 127.0.0.1
+    Allow from ::1
+    # Allow from .example.com
+</pre>
+<p>&nbsp;</p>
+<p>In order to view ganglia, you will need to run the following script to create a secure SSH tunnel (in a separate terminal).</p>
+<pre class="code" style="padding-left: 10px;">#!/bin/sh
+LOCAL_PORT=8080
+CLUSTER_NAME=myimpalacluster
+CLUSTER_USER=impala
+GMETA_NODE=`grep ganglia-metad $HOME/.whirr/$CLUSTER_NAME/instances | awk '{print $3}'`
+echo "Creating an SSH tunnel to $GMETA_NODE. Open your browser to localhost:$LOCAL_PORT. Ctrl+C to exit"
+ssh -i $HOME/.ssh/id_rsa_whirr -o ConnectTimeout=10 -o ServerAliveInterval=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -L $LOCAL_PORT:localhost:80 -N $CLUSTER_USER@$GMETA_NODE
+</pre>
+<p>&nbsp;</p>
+<p>This script to look at your Whirr deployment to find the <code>ganglia-meta</code> machine and start an SSH tunnel. To view your ganglia data, open your browser to http://localhost:8080/ganglia/ or use whatever port you set <code>LOCAL_PORT</code> to in the script. (An alternative is to use the Whirr SOCKS proxy – see the Whirr docs.)</p>
+<p style="text-align: center;"><a href="http://blog.cloudera.com/wp-content/uploads/2013/01/3cRJI1.png"><img class="aligncenter size-full wp-image-20211" title="3cRJI" src="http://blog.cloudera.com/wp-content/uploads/2013/01/3cRJI1.png" alt="" width="700" height="483" /></a></p>
+<p>Ganglia tracks performance metrics for all your hosts and services. Keep in mind that it will take a few minutes for ganglia to distribute all metrics when it first starts. Initially, check that the <code>Hosts up:</code> number to make sure all the machines are reporting (meaning that ganglia heartbeats are getting through).</p>
+<h2>That’s it</h2>
+<p>I hope you find these bash scripts useful. Feel free to contact me using the comment box below.</p>
+<p><em>Matt Massie is the lead developer at the <a href="http://amplab.cs.berkeley.edu/">UC Berkeley AMP Lab</a>, and previously worked in the Cloudera engineering team. He founded the Ganglia project in 2000.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cloud-2/" title="View all posts in Cloud" rel="category tag">Cloud</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/guest/" title="View all posts in Guest" rel="category tag">Guest</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/impala/" title="View all posts in Impala" rel="category tag">Impala</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/whirr/" title="View all posts in Whirr" rel="category tag">Whirr</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>15 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">r roy</a> /
+			February 12, 2013 / 4:42 PM		</em>
+		<p>When I testing Hive as per instructions above. I get following error. what could be the reason?</p>
+<p>hive&gt; show tables;<br />
+FAILED: Error in metadata: javax.jdo.JDOFatalDataStoreException: Access denied for user &#8216;hive&#8217;@'ip-10-196-40-24.us-west-1.compute.internal&#8217; (using password: YES)<br />
+NestedThrowables:<br />
+java.sql.SQLException: Access denied for user &#8216;hive&#8217;@'ip-10-196-40-24.us-west-1.compute.internal&#8217; (using password: YES)<br />
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask<br />
+hive&gt;</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Ashish</a> /
+			February 12, 2013 / 5:36 PM		</em>
+		<p>1. For base64: command not found: use macports to install base64<br />
+2. For &#8220;Access denied for user ‘hive’@&#8217;ip-10-196-40-24.us-west-1.compute.internal’ (using password: YES)&#8221; error:</p>
+<p>I changed  line RANDOM_PASSWORD=$(dd count=1 bs=16 if=/dev/urandom of=/dev/stdout 2&gt;/dev/null | base64)</p>
+<p>to<br />
+RANDOM_PASSWORD = &#8221;</p>
+<p>and it worked.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Dave</a> /
+			February 27, 2013 / 3:46 PM		</em>
+		<p>These instructions no longer work with the latest release of Impala.  After the cluster has been created, I get the following error when issuing the &#8216;show tables&#8217; command from the Hive CLI:</p>
+<p>-bash-4.1$ hive<br />
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties<br />
+Hive history file=/tmp/impala/hive_job_log_impala_201302272345_1246843221.txt<br />
+hive&gt; show tables;<br />
+FAILED: Error in metadata: MetaException(message:Got exception: org.apache.hadoop.hive.metastore.api.MetaException javax.jdo.JDODataStoreException: Required table missing : &#8220;`SKEWED_STRING_LIST`&#8221; in Catalog &#8220;&#8221; Schema &#8220;&#8221;. DataNucleus requires this table to perform its persistence operations. Either your MetaData is incorrect, or you need to enable &#8220;datanucleus.autoCreateTables&#8221;<br />
+NestedThrowables:<br />
+org.datanucleus.store.rdbms.exceptions.MissingTableException: Required table missing : &#8220;`SKEWED_STRING_LIST`&#8221; in Catalog &#8220;&#8221; Schema &#8220;&#8221;. DataNucleus requires this table to perform its persistence operations. Either your MetaData is incorrect, or you need to enable &#8220;datanucleus.autoCreateTables&#8221;)<br />
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask<br />
+hive&gt; </p>
+<p>I get a similar message from the Impala shell.  Can someone take a look?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			February 27, 2013 / 4:59 PM		</em>
+		<p>Dave,</p>
+<p>We have updated the script and it should work for you now.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Aleksandra</a> /
+			March 01, 2013 / 6:31 AM		</em>
+		<p>It seems like the problem still exists: &#8220;show tables&#8221; from Hive CLI produces the same error.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			March 01, 2013 / 8:34 AM		</em>
+		<p>Aleksandra,</p>
+<p>Try dropping the old metastore database.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Steven Wong</a> /
+			March 07, 2013 / 12:46 PM		</em>
+		<p>These instructions do not work with the instance types m2.4xlarge and hs1.8xlarge. The instances come up but have 1 or 0 ephemeral disk, respectively. There should be 2 and 24 ephemeral disks, respectively, for the 2 instance types. How can this be fixed?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Naga</a> /
+			March 14, 2013 / 4:52 PM		</em>
+		<p>Hi,<br />
+Excellent article, I tried setting up the cluster today and I still get the same error message as Dave for both Hive and Impala-shell. Kindly suggest.</p>
+<p>Thanks</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Naga</a> /
+			March 16, 2013 / 4:03 PM		</em>
+		<p>Found the problem, the download script setup_impala.sh has to be updated from<br />
+The deployment script needs to be updated<br />
+to change:<br />
+SOURCE<br />
+/usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.9.0.mysql.sql;<br />
+To:<br />
+SOURCE<br />
+/usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.10.0.mysql.sql;</p>
+<p>or manually modify the changes in setup_impala.sh before running installer.sh</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			March 17, 2013 / 4:30 PM		</em>
+		<p>Naga, thanks for reporting.</p>
+<p>All scripts shown inline are correct; we have removed the download links for now to avoid confusion.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Dave</a> /
+			April 23, 2013 / 4:21 PM		</em>
+		<p>HI,</p>
+<p>This script seems to be broken again.  Neither Hive nor Impala start.  I get errors trying of get into the respective shells.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			April 23, 2013 / 4:41 PM		</em>
+		<p>All,</p>
+<p>We&#8217;re working on updates to resolve the issue. Thanks for your patience.</p>
+<p>In the meantime consider using this method:</p>
+<p><a href="http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/" rel="nofollow">http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			April 23, 2013 / 7:50 PM		</em>
+		<p>All,</p>
+<p>Rather than updating this post and causing confusion, we have determined that the fastest and most reliable approach for users is to follow the instructions provided here:</p>
+<p><a href="http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/" rel="nofollow">http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://bigdatacraft.com">Faina</a> /
+			June 15, 2013 / 11:03 PM		</em>
+		<p>Hi Justin!<br />
+Is updated post available?<br />
+I would like to install Impala 7.0 cluster with Whirr.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			June 18, 2013 / 8:30 AM		</em>
+		<p>Faina,</p>
+<p>Please see the message at the top of the post.</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='20209' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="ZEM=" />
+		<input type="hidden" name="cptch_time" value="1397909909" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &#43; se&#118;en = 8	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

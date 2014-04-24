@@ -1,0 +1,901 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How Syncsort Leverages Training to Optimize Hadoop Scalability | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How Syncsort Leverages Training to Optimize Hadoop Scalability"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/02/how-syncsort-leverages-training-to-optimize-hadoop-scalability/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Ph.D. Interns at Cloudera: Bringing Big Data Back to School' href='http://blog.cloudera.com/blog/2013/02/ph-d-interns-at-cloudera-bringing-big-data-back-to-school/' />
+<link rel='next' title='Cloudera is the Second &quot;Sexiest Enterprise Startup&quot; for 2012' href='http://blog.cloudera.com/blog/2013/02/cloudera-is-the-second-sexiest-enterprise-startup-for-2012/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/02/how-syncsort-leverages-training-to-optimize-hadoop-scalability/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=20250' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-20250 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How Syncsort Leverages Training to Optimize Hadoop Scalability</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Dave Nahmias (introduction by Patty Crowell)</li>
+				<li>February 06, 2013</li>
+				<li class="comment"><a href="#comments">no comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><em>This guest post is provided by Dave Nahmias, Pre-Sales and Partner Solutions Engineer at <a href="http://www.syncsort.com/">Syncsort</a>, with an introduction by Patty Crowell, Director of Global Education Services at <a href="http://www.syncsort.com/">Syncsort</a>.</em></p>
+<h2>Introduction: Training is Key</h2>
+<p>Apache Hadoop is extremely important to maximizing the value Syncsort’s technology delivers to our customers. That value promise starts with a solid foundation of knowledge and skills among key technical staff across the company.</p>
+<p>We chose <a href="http://university.cloudera.com/">Cloudera University’s</a> private training option to ensure Syncsort’s cross-functional team of engineering, support, services, and technical sales professionals had the expertise to optimize our data products for the end-user. Because the members of our team had different levels of prior Hadoop experience, the <a href="http://go.cloudera.com/private_training_request">private class</a> enabled us to freely share information and ask tough questions, resulting in a high level of engagement throughout the course.</p>
+<p>Everyone benefited tremendously from the experience and attention of Cloudera’s instructor, since the private training was tailored to our particular needs and was set up to promote collaboration during the entire learning process. Lessons ranged from core Hadoop knowledge for the less experienced members of the team all the way up to tight focus on specific roles and skills for those who had been using Hadoop all along, all supported by relevant and challenging labs. Moreover, the opportunity to host the training at our own location according to our own schedule made Cloudera training a highly convenient solution.</p>
+<p>Read on for the technical insights gained by a Syncsort engineer.</p>
+<h2>Why I Attended Cloudera’s Training</h2>
+<p>I am the technical interface to Syncsort’s partners. I have been working with large data environments for the past 20 years and specifically with Hadoop for the last year-and-a-half. As the first line of defense for a software vendor in the Hadoop marketplace, it is critical that I understand all the inner-workings of the technology. Armed with the proper level of product knowledge, I can give partners and customers a guided tour through the menagerie of animal names associated with the Hadoop ecosystem, helping them to better understand the solution components and to build successful applications. Ultimately, it helps me evangelize the benefits of Big Data solutions. Attending Cloudera’s <a href="http://university.cloudera.com/training/apache_hadoop/developer.html">Developer Training</a> was a no-brainer, since Cloudera is well recognized in the industry as a primary source of Hadoop knowledge and insight.</p>
+<h2>What Syncsort Brings to the Hadoop Party</h2>
+<p>Syncsort has been a thought leader in <a href="http://www.syncsort.com/Solutions/SyncsortSortAcceleration.aspx">high-efficiency sort solutions</a> on mainframes and open systems for more than 30 years. Syncsort’s unique product architecture allowed us to <a href="http://www.syncsort.com/ResourceCenter/WhitePapers/SyncsortDMExpressHadoopOptimizationSolution.aspx">contribute changes</a> to the core Hadoop code, which allows any sort algorithm (including Syncsort’s) to be called instead of Hadoop’s native sort. This interface also provides a vehicle for Syncsort to <a href="http://www.syncsort.com/Portals/0/Resources/Solution/DMX_Solution_Hadoop-Optimization_Web.pdf">integrate our native ETL engine</a> directly into the MapReduce architecture, bringing the graphical development environment, efficiencies, and throughput of native execution across the mainframe, open systems, and Hadoop environments. We extend Hadoop’s flexibility and ease of use, essentially leveling the playing field for any of these environments.</p>
+<h2>What I Learned</h2>
+<p>I had acquired most of my prior Hadoop knowledge by reading and experimenting. Having a knowledgeable instructor validate and fine-tune my understanding at a deeper level as well as articulate real-world use cases from his personal experience was incredibly valuable. Although there are plenty of blogs and articles attempting to build the Hadoop knowledge base, I have found they tend to misrepresent how Hadoop actually works, so the full <a href="https://university.cloudera.com/static/pdfs/Cloudera-University-Training-Overview_v2.pdf">Cloudera training course</a> proved to be both the fastest and the most reliable way to clarify cloudy areas, get first-hand experience, and transition from conceptualization to development with Hadoop.</p>
+<p>The details about how Hadoop actually reads and writes data were particularly interesting to me. I knew Hadoop stored multiple replicas of data blocks, but I didn’t previously have any in-depth knowledge of the exact algorithms used or how they relate to scheduling and data integrity with respect to the checksums maintained. It’s also very helpful to understand the difference in scheduling techniques. The course also clarified how the map and reduce tasks are scheduled across nodes to minimize network traffic.</p>
+<p>Additionally, in my day-to-day responsibilities, I can leverage what I learned about the way Hadoop clients are configured, the interrelationship of the XML configuration files, and how those files are organized to define the architecture across the cluster. The lessons about how the schedulers work and the impact they might have on various workloads, such as benchmarking, will also be of immediate value. Finally, I will derive immediate benefit from the lessons on the Hadoop client architecture, which gave me a better understanding of how Flume and Sqoop work.</p>
+<h2>What the Syncsort Team Learned</h2>
+<p>My colleagues agree the training enabled us to be much more productive when working with Hadoop and to better visualize the possibilities created by Hadoop. Specifically, it helped us understand how Syncsort might leverage the Hadoop architecture in conjunction with our <a href="http://www.syncsort.com/Solutions/HadoopOptimization.aspx">DMExpress software</a> to help our customers extend their usage of Hadoop. It will also help us position Syncsort to contribute to accelerating Hadoop acceptance by providing well-architected Big Data ETL and intra-platform data movement solutions. Even at a fraction of those expected outcomes we will have realized measurable return on investment from Cloudera training.</p>
+<p>From a professional standpoint, the knowledge we gained also prepares us for <a href="http://university.cloudera.com/certification.html">Cloudera Certification</a>, a necessity for anyone who needs to provide tangible evidence of Hadoop expertise in the field. Last, but certainly not least, we believe the training improved our collective ability to intelligently communicate with our partners and customers about Hadoop’s functionality, a skill that should never be underestimated.</p>
+<h2>Employing the Expanded Skill Set</h2>
+<p>Data in mainframes and open systems will continue to be important, and integrating that data together with data stored in HDFS will be a challenge for our customers that I believe Syncsort is now well-positioned to address. Thanks to Cloudera training, I can use my increased Hadoop knowledge to provide even better service to my partners and customers and provide more value with a technology that will grow increasingly important to my company’s business.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/guest/" title="View all posts in Guest" rel="category tag">Guest</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/training-2/" title="View all posts in Training" rel="category tag">Training</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>No Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='20250' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="9oM=" />
+		<input type="hidden" name="cptch_time" value="1397909910" />
+		<input type="hidden" value="Version: 2.4" />
+		7 &#43; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  &#116;&#101;n 	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

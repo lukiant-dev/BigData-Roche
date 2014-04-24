@@ -1,0 +1,1045 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Analyzing Apache logs with Apache Pig | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Analyzing Apache logs with Apache Pig"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2009/06/analyzing-apache-logs-with-pig/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Analyzing Apache logs with Apache Pig Comments Feed" href="http://blog.cloudera.com/blog/2009/06/analyzing-apache-logs-with-pig/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='The Smart Grid: Hadoop at the Tennessee Valley Authority (TVA)' href='http://blog.cloudera.com/blog/2009/06/smart-grid-hadoop-tennessee-valley-authority-tva/' />
+<link rel='next' title='A Great Week for Apache Hadoop: Summit Roundup' href='http://blog.cloudera.com/blog/2009/06/a-great-week-for-hadoop-summit-west-roundup/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2009/06/analyzing-apache-logs-with-pig/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=808' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-808 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Analyzing Apache logs with Apache Pig</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/aaa/" title="Posts by Amr Awadallah" rel="author">Amr Awadallah</a></li>
+				<li>June 17, 2009</li>
+				<li class="comment"><a href="#comments">9 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<blockquote>
+<p><em>(guest blog post by </em><a href="http://twitter.com/squarecog"><em>Dmitriy Ryaboy</em></a><em>)</em></p>
+</blockquote>
+<p>A number of organizations donate server space and bandwidth to the Apache Foundation; when you download Apache Hadoop, Tomcat, Maven, CouchDB, or any of the other great Apache projects, the bits are sent to you from a large <a href="http://www.apache.org/mirrors/">list of mirrors</a>. One of the ways in which Cloudera supports the open source community is to host such a mirror.</p>
+<p>In this blog post, we will use <a href="http://hadoop.apache.org/pig">Pig</a> to examine the download logs recorded on our server, demonstrating several features that are often glossed over in introductory Pig tutorials&#8212;parameter substitution in PigLatin scripts, Pig Streaming, and the use of custom loaders and user-defined functions (UDFs). It&#8217;s worth mentioning here that, as of last week, the <a href="http://www.cloudera.com/hadoop">Cloudera Distribution for Hadoop</a> includes a package for Pig version 0.2 for both Red Hat and Ubuntu, as promised in an <a href="http://blog.cloudera.com/blog/2009/05/29/common-questions-and-requests-from-our-users/">earlier post</a>. It&#8217;s as simple as <code>apt-get install pig</code> or <code>yum install hadoop-pig</code>.</p>
+<p>There are many software packages that can do this kind of analysis automatically for you on average-sized log files, of course. However, many organizations log so much data and require such custom analytics that these ordinary approaches cease to work. Hadoop provides a reliable method for scaling storage and computation; PigLatin provides an expressive and flexible language for data analysis.</p>
+<p>Our log files are in Apache&#8217;s standard <a href="http://httpd.apache.org/docs/2.2/logs.html">CombinedLogFormat</a>. It&#8217;s a tad more complicated to parse than tab- or comma- delimited files, so we can&#8217;t just use the built-in PigLoader().  Luckily, there is already a custom loader in the Piggybank built specifically for parsing these kinds of logs.</p>
+<p>First, we need to get the PiggyBank from Apache. The PiggyBank is a collection of useful add-ons (UDFs) for Pig, contributed by the Pig user community. There are <a href="http://wiki.apache.org/pig/PiggyBank">instructions on the Pig website</a> for downloading and compiling the PiggyBank. Note that you will need to make sure to add pig.jar to your CLASSPATH environment variable before running ant.</p>
+<p>Now, we can start our PigLatin script by registering the piggybank jarfile and defining references to methods we will be using.</p>
+<pre class='prettyprint lang-sql'> register /home/dvryaboy/src/pig/trunk/piggybank.jar; DEFINE LogLoader org.apache.pig.piggybank.storage.apachelog.CombinedLogLoader(); DEFINE DayExtractor org.apache.pig.piggybank.evaluation.util.apachelogparser.DateExtractor('yyyy-MM-dd'); </pre>
+<p>By the way &#8212; the PiggyBank contains another useful loader, called <tt>MyRegExLoader</tt>, which can be instantiated with any regular expression when you declare it with a DEFINE statement. Useful in a pinch.</p>
+<p>While we are working on our script, it may be useful to run in local mode, only reading a small sample data set (a few hundred lines). In production we will want to run on a different file. Moreover, if we like the reports enough to automate them, we may wish to run the report every day, as new logs come in. This means we need to parameterize the source data location. We will also be using a database that maps geographic locations to IPs, and we probably want to parametrize that as well.</p>
+<pre class='prettyprint lang-sql'> %default LOGS 'access_log.small' %default GEO 'GeoLiteCity.dat' </pre>
+<p>To specify a different value for a parameter, we can use the -param flag when launching the pig script:<br /> <code><br /> # pig -x mapreduce -f scripts/blogparse.pig -param LOGS='/mirror.cloudera.com/logs/access_log.*'<br /> </code></p>
+<p>For mapping IPs to geographic locations, we use a third-party database from <a href="http://www.maxmind.com/app/geolitecity">MaxMind</a>.  This database maps IP ranges to countries, regions, and cities.  Since the data from MaxMind lists IP ranges, and our logs list specific IPs, a regular join won&#8217;t work for our purposes. Instead, we will write a simple script that takes a parsed log as input, looks up the geo information using MaxMind&#8217;s Perl module, and outputs the log with geo data prepended.</p>
+<p>The script itself is simple &#8212; it reads in a tuple representing a parsed log record, checks the first field (the IP) against the database, and prints the data back to STDOUT :</p>
+<pre class='prettyprint lang-perl'> #!/usr/bin/env perl use warnings; use strict; use Geo::IP::PurePerl;
+
+my ($path)=shift; my $gi = Geo::IP::PurePerl->new($path);
+
+while (<>) { chomp; if (/([^\t]*)\t(.*)/) { my ($ip, $rest) = ($1, $2); my ($country_code, undef, $country_name, $region, $city) = $gi->get_city_record($ip); print join("\t", $country_code||'', $country_name||'', $region||'', $city||'', $ip, $rest), "\n"; } } </pre>
+<p>Getting this script into Pig is a bit more interesting. The <a href="http://wiki.apache.org/pig/PigStreamingFunctionalSpec">Pig Streaming interface</a> provides us with a simple way to ship scripts that will process data, and cache any necessary objects (such as the GeoLiteCity.dat file we downloaded from MaxMind).  However, when the scripts are shipped, they are simply dropped into the current working directory. It is our responsibility to ensure that all dependencies&#8212;such as the Geo::IP::PurePerl module&#8212;are satisfied. We could install the module on all the nodes of our cluster; however, this may not be an attractive option. We can ship the module with our script&#8212;but in Perl, packages are represented by directories, so just dropping the .pm file into <tt>cwd</tt> will not be sufficient, and Pig doesn&#8217;t let us ship directory hierarchies.  We solve this problem by packing the directory into a tarball, and writing a small Bash script called &#8220;ipwrapper.sh&#8221; that will set up our Perl environment when invoked:</p>
+<pre class='prettyprint lang-sql'> #!/usr/bin/env bash tar -xzf geo-pack.tgz PERL5LIB=$PERL5LIB:$(pwd) ./geostream.pl $1 </pre>
+<p>The geo-pack.tgz tarball simply contains geostream.pl and Geo/IP/PurePerl.pm .</p>
+<p>We also want to make the GeoLiteCity.dat file available to all of our nodes. It would be inefficient to simply drop the file in HDFS and reference it directly from every mapper, as this would cause unnecessary network traffic.  Instead, we can instruct Pig to cache a file from HDFS locally, and use the local copy.</p>
+<p>We can relate all of the above to Pig in a single instruction:<br /> <pre class='prettyprint lang-sql'> DEFINE iplookup `ipwrapper.sh $GEO` ship ('ipwrapper.sh') cache('/home/dvryaboy/tmp/$GEO#$GEO'); </pre></p>
+<p>We can now write our main Pig script. The objective here is to load the logs, filter out obviously non-human traffic, and using the rest, calculate the distribution of downloads by country and by Apache project.</p>
+<p>Load the logs:<br /> <pre class='prettyprint lang-sql'> logs = LOAD '$LOGS' USING LogLoader as (remoteAddr, remoteLogname, user, time, method, uri, proto, status, bytes, referer, userAgent); </pre></p>
+<p>Filter out records that represent non-humans (Googlebot and such), aren&#8217;t Apache-related, or just check the headers and do not download contents.</p>
+<pre class='prettyprint lang-sql'> logs = FILTER logs BY bytes != '-' AND uri matches '/apache.*';
+
+-- project just the columns we will need logs = FOREACH logs GENERATE remoteAddr, DayExtractor(time) as day, uri, bytes, userAgent;
+
+-- The filtering function is not actually in the PiggyBank. -- We plan on contributing it soon. notbots = FILTER logs BY (NOT org.apache.pig.piggybank.filtering.IsBotUA(userAgent)); </pre>
+<p>Get country information, group by country code, aggregate.<br /> <pre class='prettyprint lang-sql'> with_country = STREAM notbots THROUGH `ipwrapper.sh $GEO` AS (country_code, country, state, city, ip, time, uri, bytes, userAgent);
+
+geo_uri_groups = GROUP with_country BY country_code;
+
+geo_uri_group_counts = FOREACH geo_uri_groups GENERATE group, COUNT(with_country) AS cnt, SUM(with_country.bytes) AS total_bytes;
+
+geo_uri_group_counts = ORDER geo_uri_group_counts BY cnt DESC;
+
+STORE geo_uri_group_counts INTO 'by_country.tsv'; </pre></p>
+<p>The first few rows look like:</p>
+<table>
+<tbody>
+<tr>
+<th>Country</th>
+<th>Hits</th>
+<th>Bytes</th>
+</tr>
+<tr>
+<td>USA</td>
+<td>8906</td>
+<td>2.0458781232E10</td>
+</tr>
+<tr>
+<td>India</td>
+<td>3930</td>
+<td>1.5742887409E10</td>
+</tr>
+<tr>
+<td>China</td>
+<td>3628</td>
+<td>1.6991798253E10</td>
+</tr>
+<tr>
+<td>Mexico</td>
+<td>595</td>
+<td>1.220121453E9</td>
+</tr>
+<tr>
+<td>Colombia</td>
+<td>259</td>
+<td>5.36596853E8</td>
+</tr>
+</tbody>
+</table>
+<p>At this point, the data is small enough to plug into your favorite visualization tools. We wrote a <a href="http://gist.github.com/131367">quick-and-dirty python script</a> to take logarithms and use the <a href="http://code.google.com/apis/chart/">Google Chart API</a> to draw this map:</p>
+<p><img src="http://chart.apis.google.com/chart?cht=t&amp;chs=440x220&amp;chco=FFFFFF,FFFFFF,148BCF&amp;chtm=world&amp;chld=USINCNMXCOVENLMYMANZPHSKDETNIRMGGBEGBDSAKEJPGPEESEEUPELKPKECRUFRVNDZNGUYMMCYCHRSAEGTILLYSVPSTWTRBEJOMNBOKRNPCATTKWMDNIALPYUZBNAUKZATDOHUJMIDSNSYUGA2QASIVGBHBRMOBBESHKITMTAPMKSGCMISPRSDUACZFIKGMUYEBFCLCVNAREADHTKHMWNCOMPLTHARAWAZBGBJBZCFCIDKETFJGHLALBLTMEMLMRSRTZ&amp;chd=e:..--.R1LyBqSquvqu-uSvjt8uItsrpsdsHtEufwHpttzpqsHo5rWvjrwsdp6mrrypCoWt0rsowrMmprWoCinoop0mZjQcikqoxvdluqkhHr6h5f-nsnWfon6gdL1gdkktbIKmBIDlaMEl5iRmcjQLKZzm0j6jgokLTbwiPjkmXfwisF8lUgblQjxjFiUIEb5uyhMDIIOhLlFjRauFlgviBg5fmFlIGC7C7C7AAC7C7UMC7SIC7C7C7C7C7C7C7czC7C7C7" alt="Bytes by Country" /></p>
+<p>This is pretty interesting. Let&#8217;s do a breakdown by US states.</p>
+<p>Note that with the upcoming Pig 0.3 release, you will be able to have multiple stores in the same script, allowing you to re-use the loading and filtering results from earlier steps. With Pig 0.2, this needs to go in a separate script, with all the required DEFINEs, LOADs, etc.</p>
+<pre class='prettyprint lang-sql'> us_only = FILTER with_country BY country_code == 'US';
+
+by_state = GROUP us_only BY state;
+
+by_state_cnt = FOREACH by_state GENERATE group, COUNT(us_only.state) AS cnt, SUM(us_only.bytes) AS total_bytes;
+
+by_state_cnt = ORDER by_state_cnt BY cnt DESC;
+
+store by_state_cnt into 'by_state.tsv'; </pre>
+<p>Theoretically, Apache selects an appropriate server based on the visitor&#8217;s location, so our logs should show a heavy skew towards California. Indeed, they do (recall that the intensity of the blue color is based on a log-scale).</p>
+<p><img src="http://chart.apis.google.com/chart?cht=t&amp;chs=440x220&amp;chco=FFFFFF,FFFFFF,148BCF&amp;chtm=usa&amp;chld=WACATXNYMNORVAMAGAOHFLMDCONJILPANCAZMIMOTNUTINNEWICTNHOKKSNMLAMTALARHIIASCRIDCKYMEDEIDMSNVVTAKSD&amp;chd=e:zC..6G38rQlM2l0.9SwS18wGypwKtJv.smwOshq4oJvQvBqcnljPkdgtnEdKhUeadydHZio0dAYacAdEOWWFSPSOXfWRAAYy" alt="Bytes by US State" /></p>
+<p>Now, let&#8217;s get a breakdown by project. To get a rough mapping of URI to Project, we simply get the directory name after /apache in the URI. This is somewhat inaccurate, but good for quick prototyping. This time around, we won&#8217;t even bother writing a separate script &#8212; this is a simple awk job, after all! Using streaming, we can process data the same way we would with basic Unix utilities connected by pipes.</p>
+<pre class='prettyprint lang-sql'> uris = FOREACH notbots GENERATE uri;
+
+-- note that we have to escape the dollar sign for $3, -- otherwise Pig will attempt to interpret this as a Pig variable. project_map = STREAM uris THROUGH `awk -F '/' '{print \$3;}'` AS (project);
+
+project_groups = GROUP project_map BY project;
+
+project_count = FOREACH project_groups GENERATE group, COUNT(project_map.project) AS cnt;
+
+project_count = ORDER project_count BY cnt DESC;
+
+STORE project_count INTO 'by_project.tsv'; </pre>
+<p>We can now take the by_project.tsv file and plot the results (in this case, we plotted the top 18 projects, by number of downloads).<br /> <img src="http://blog.cloudera.com/blog/wp-content/uploads/downloads_by_project.jpg" alt="Downloads by Project" /></p>
+<p>We can see that Tomcat and Httpd dwarf the rest of the projects in terms of file downloads, and the distribution appears to follow a <a href="http://en.wikipedia.org/wiki/Power_law">power-law</a>.</p>
+<p>We&#8217;d love to hear how folks are using Pig to analyze their data. <a href="mailto:info@cloudera.com">Drop us a line</a>, or comment below!</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/data-collection/" title="View all posts in Data Collection" rel="category tag">Data Collection</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/pig/" title="View all posts in Pig" rel="category tag">Pig</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>9 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">David Gwartney</a> /
+			June 18, 2009 / 12:30 PM		</em>
+		<p>This is great information. Its answered my question regarding streaming inside PIG that came up the other day.</p>
+<p>Thanks for the info.</p>
+<p>Dave</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://serialized.net">Joshua Barratt</a> /
+			June 28, 2009 / 11:35 AM		</em>
+		<p>Great article, have been looking at needing to process web logs on a large scale already and this is a very useful example.</p>
+<p>For the &#8216;packing and shipping a perl script&#8217; part, check out Par::Packer.</p>
+<p>It allows you to turn a perl script and all it&#8217;s dependencies into a single monolithic script file.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Mike</a> /
+			January 25, 2011 / 3:58 PM		</em>
+		<p>What&#8217;s the status of &#8220;org.apache.pig.piggybank.filtering&#8221; ? I don&#8217;t see it yet in piggybank, as of release 0.8</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">androm</a> /
+			July 11, 2011 / 2:02 PM		</em>
+		<p>Hi I was able to run this in local mode; but when I tried to run this in hadoop mode, I received the error msg &#8220;ERROR 2055: Received Error while processing the map plan: &#8216;ipwrapper.sh GeoLiteCity.dat &#8216; failed with exit status: 2&#8243;</p>
+<p>Any ideas? Thanks!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Dam</a> /
+			September 16, 2011 / 8:29 AM		</em>
+		<p>for my shiped script I build an auto extract bash script done this way (beside geostream.pl and its dependances)<br />
+wrapper.sh.template ( 755 mode ) :<br />
+#!/bin/bash<br />
+sed &#8217;0,/^__ARCHIVE_BELOW__$/d&#8217; $0 | tar xj<br />
+export PERL5LIB=$PERL5LIB:$(pwd)<br />
+./geostream.pl $1<br />
+rm -rf ./*<br />
+exit 0</p>
+<p>__ARCHIVE_BELOW__</p>
+<p>And then I build my script with this command :<br />
+cp wrapper.sh.template wrapper.sh; tar cjf &#8211; Geo geostream.pl &gt;&gt; wrapper.sh</p>
+<p>then I can use it in my pig script :<br />
+DEFINE iplookup `wrapper.sh $GEO`<br />
+ship (&#8216;wrapper.sh&#8217;)<br />
+cache(&#8216;/GeoIP/$GEO#$GEO&#8217;);</p>
+<p>The data file /GeoIP/GeoLiteCity.dat is stored on my hdfs storage. and copied with cache.</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='808' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="iXw=" />
+		<input type="hidden" name="cptch_time" value="1397910157" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &minus; &#102;o&#117;r = 0	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

@@ -1,0 +1,1024 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Hadoop at Twitter (part 1): Splittable LZO Compression | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Hadoop at Twitter (part 1): Splittable LZO Compression"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2009/11/hadoop-at-twitter-part-1-splittable-lzo-compression/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Hadoop at Twitter (part 1): Splittable LZO Compression Comments Feed" href="http://blog.cloudera.com/blog/2009/11/hadoop-at-twitter-part-1-splittable-lzo-compression/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Hadoop World: Rethinking the Data Warehouse with Hadoop and Hive from Ashish Thusoo' href='http://blog.cloudera.com/blog/2009/11/hadoop-world-rethinking-the-data-warehouse-with-hadoop-and-hive-from-ashish-thusoo/' />
+<link rel='next' title='Hadoop World: Protein Alignment from Paul Brown' href='http://blog.cloudera.com/blog/2009/11/hadoop-world-protein-alignment-from-paul-brown/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2009/11/hadoop-at-twitter-part-1-splittable-lzo-compression/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=1576' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-1576 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Hadoop at Twitter (part 1): Splittable LZO Compression</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/matt/" title="Posts by Matt Massie" rel="author">Matt Massie</a></li>
+				<li>November 17, 2009</li>
+				<li class="comment"><a href="#comments">16 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<blockquote><p>This summer I sent the following tweet, &#8220;<span class="status-body"><span class="entry-content">Had lunch today at Twitter HQ. Thanks for the invite, @<a class="tweet-url username" href="http://twitter.com/kevinweil">kevinweil</a>! Great lunch conversation. Smart, friendly and fun team.&#8221; </span></span>Kevin Weil leads the analytics team at Twitter and is an active member of the Hadoop community, and his colleague Eric Maland leads Operations.&#160; Needless to say, Twitter is doing amazing things with Hadoop.&#160; This guest blog from Kevin and Eric covers one of Twitter&#8217;s open-source projects which provides a solution for splittable LZO for Hadoop. &#8211; Matt</p></blockquote>
+<p>At Twitter we are significantly ramping up usage of Hadoop to help us analyze the massive amounts of data that our platform generates each day. &#160;We are happy users of&#160;<a href="http://blog.cloudera.com/blog/2009/09/10/cdh2-clouderas-distribution-for-hadoop-2/" target="_blank">Cloudera&#8217;s free distribution of Hadoop</a>; we&#8217;re currently running Hadoop 0.20.1 with Pig 0.4.&#160;&#160;In this first of a small series of posts about our architecture and the open source software we&#8217;re working on around it, we&#8217;d like to focus on an infrastructure-level solution we use to make our cluster more efficient:&#160;<a title="splittable LZO for Hadoop" href="http://www.github.com/kevinweil/hadoop-lzo" target="_blank">splittable LZO for Hadoop</a>.&#160;&#160;Using LZO compression in Hadoop allows for reduced data size and shorter disk read times, and LZO&#8217;s block-based structure allows it to be split into chunks for parallel processing in Hadoop. &#160;Taken together, these characteristics make LZO an excellent compression format to use in your cluster.</p>
+<h3>Splittable LZO and Hadoop</h3>
+<p>The original splittable LZO work was done by Johan Oskarsson, formerly of <a href="http://last.fm/" target="_blank">Last.fm</a> and soon to be joining us at <a href="http://twitter.com/" target="_blank">Twitter</a> (welcome, Johan!).&#160; Chris Goffinet also wrote <a href="http://blog.cloudera.com/blog/2009/06/24/parallel-lzo-splittable-compression-for-hadoop/">a blog post</a> on the topic for Cloudera a while back, but many people we&#8217;ve talked to don&#8217;t understand how the technique works, or why it&#8217;s effective.&#160; It&#8217;s worth mentioning that there are three different versions of the LZO code for Hadoop floating around: the original <a href="http://code.google.com/p/hadoop-gpl-compression/" target="_blank">Google Code project</a>, <a href="http://github.com/lenn0x/Hadoop-LZO" target="_blank">Chris Goffinet&#8217;s version</a>, and <a href="http://www.github.com/kevinweil/hadoop-lzo" target="_blank">our version</a>.&#160; Chris&#8217;s version is a backport of the Google Code project to Hadoop 0.18.3 with a couple of fixes.&#160; Our version works with Hadoop 0.20.1, has Chris&#8217;s fixes, and has other fixes as well from using the code at scale.&#160; Our repository also has InputFormats for both the new and the old MapReduce API, since you generally want to write jobs against the new API, but Hadoop streaming still requires the old API.&#160; Finally, we have refactored some of the core code to separate static inner classes into their own objects for better reuse.&#160; This code is currently running 24 hours a day at Twitter, and we look forward to working with Owen O&#8217;Malley and Arun Murthy to get it integrated back into the main Google Code project soon.</p>
+<p>Let&#8217;s back up one step and talk briefly about compression and Hadoop.&#160; Storing compressed data in HDFS allows your hardware allocation to go further since compressed data is often 25% of the size of the original data.&#160; Furthermore, since MapReduce jobs are nearly always IO-bound, storing compressed data means there is less overall IO to do, meaning jobs run faster.&#160; There are two caveats to this, however: some compression formats cannot be split for parallel processing, and others are slow enough at decompression that jobs become CPU-bound, eliminating your gains on IO.&#160; The gzip compression format illustrates the first caveat, and to understand why we need to go back to how Hadoop&#8217;s input splits work.&#160; Imagine you have a 1.1 GB gzip file, and your cluster has a 128 MB block size.&#160; This file will be split into 9 chunks of size approximately 128 MB.&#160; In order to process these in parallel in a MapReduce job, a different mapper will be responsible for each chunk. But this means that the second mapper will start on an arbitrary byte about 128MB into the file.&#160; The contextful dictionary that gzip uses to decompress input will be empty at this point, which means the gzip decompressor will not be able to correctly interpret the bytes.&#160; The upshot is that large gzip files in Hadoop need to be processed by a single mapper, which defeats the purpose of parallelism.&#160; For an example of the second caveat in which jobs become CPU-bound, we can look to the bzip2 compression format.&#160; Bzip2 files compress well and are even splittable, but the decompression algorithm is slow and cannot keep up with the streaming disk reads that are common in Hadoop jobs.&#160; While Bzip2 compression has some upside because it conserves storage space, running jobs now spend their time waiting on the CPU to finish decompressing data, which slows them down and offsets the other gains.</p>
+<p>So is there something that balances these two extremes and solves both problems at once?&#160; As you&#8217;ve probably guessed, the answer is LZO.&#160; The LZO compression format is composed of many smaller (~256K) blocks of compressed data, allowing jobs to be split along block boundaries.&#160; Moreover, it was designed with speed in mind: it decompresses about twice as fast as gzip, meaning it&#8217;s fast enough to keep up with hard drive read speeds.&#160; It doesn&#8217;t compress quite as well as gzip &#8212; expect files that are on the order of 50% larger than their gzipped version.&#160; But that is still 20-50% of the size of the files without any compression at all, which means that IO-bound jobs complete the map phase about four times faster.&#160; Here&#8217;s a typical example, starting with an 8.0 GB file containing some text-based log data:</p>
+<table border="0">
+<tbody>
+<tr>
+<th>Compression</th>
+<th>File</th>
+<th>Size (GB)</th>
+<th>Compression Time (s)</th>
+<th>Decompression Time (s)</th>
+</tr>
+<tr>
+<td>None</td>
+<td>some_logs</td>
+<td>8.0</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Gzip</td>
+<td>some_logs.gz</td>
+<td>1.3</td>
+<td>241</td>
+<td>72</td>
+</tr>
+<tr>
+<td>LZO</td>
+<td>some_logs.lzo</td>
+<td>2.0</td>
+<td>55</td>
+<td>35</td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, the LZO file is slightly larger than the corresponding gzip file, but both are much smaller than the original uncompressed file.&#160; Additionally, the LZO file compressed nearly five times faster, and decompressed over two times faster.</p>
+<p>We mentioned above that LZO files can be split as long as the splits occur on block boundaries, so how can we ensure that this occurs?&#160; If we go back to our hypothetical 1.1 GB file, assuming now that it&#8217;s LZO compressed instead, the mapper that gets the second 128 MB chunk needs to be able to identify the beginning of the next LZO block boundary to start decompressing.&#160; LZO does not not write any magic bytes in its block header, so a priori there is no way to identify the next header.&#160; The solution is to perform a one-time indexing of the LZO file, writing a foo.lzo.index file for each foo.lzo file.&#160; The index file simply contains the list of byte offsets for each block, and it&#8217;s fast to write because the indexing process is mostly seeking and thus moves at hard drive read speed.&#160; Typically we see 90-100 MB/s indexing speed, i.e. 10-12 seconds per GB.&#160; Once the index file has been created, any LZO-based input format can split compressed data by first loading the index, and then nudging the default input splits forward to the next block boundaries.&#160; With these nudged splits, each mapper gets an input split that is aligned to block boundaries, meaning it can more or less just wrap its <tt>InputStream</tt> in an <tt>LzopInputStream</tt> and be done.&#160; If you currently have a job that relies on <tt>TextInputFormat</tt>, for example, you can LZO-compress your data, make sure it&#8217;s indexed, rename <tt>TextInputFormat</tt> to <tt>LzoTextInputFormat</tt>, and your job will run just like before, only likely faster.&#160; Incidentally, it&#8217;s worth noting that unindexed LZO files will still work with MapReduce jobs, they just won&#8217;t be splittable.</p>
+<h3>Setting up LZO with Hadoop</h3>
+<p>The steps to setting up LZO with Hadoop are simple.</p>
+<ol>
+<li> Get the lzop native libraries.
+<dl>
+<dt>Installing on Mac</dt>
+<dd><code>sudo port install lzop lzo2</code></p>
+</dd>
+<dt>Installing on Redhat based systems</dt>
+<dd><code>sudo yum install liblzo-devel</code></p>
+</dd>
+<dt>Installing on Debian based systems</dt>
+<dd><code>sudo apt-get install liblzo2-dev</code></dd>
+</dl>
+</li>
+<li> Clone <a href="http://www.github.com/kevinweil/hadoop-lzo" target="_blank">our github repo</a> and build it according to the instructions in the <tt>README.</tt></li>
+<li> Place the <tt>hadoop-lzo-*.jar</tt> somewhere on your cluster nodes; we use <tt>/usr/local/hadoop/lib</tt></li>
+<li> Place the native hadoop-lzo binaries (which are JNI-based and used to interface with the lzo library directly) on your cluster as well; we use <tt>/usr/local/hadoop/lib/native/&lt;arch&gt;/</tt></li>
+<li> Add the following to your <tt>core-site.xml</tt>:
+<pre>&lt;property&gt;
+&lt;name&gt;io.compression.codecs&lt;/name&gt;
+&lt;value&gt;org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.BZip2Codec,com.hadoop.compression.lzo.LzoCodec,com.hadoop.compression.lzo.LzopCodec&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+&lt;name&gt;io.compression.codec.lzo.class&lt;/name&gt;
+&lt;value&gt;com.hadoop.compression.lzo.LzoCodec&lt;/value&gt;
+&lt;/property&gt;</pre>
+</li>
+<li> Add the following property to <tt>mapred-site.xml</tt>.&#160; We should note that the Cloudera guys backported <a href="https://issues.apache.org/jira/browse/HADOOP-2838" target="_blank">the patch implementing this</a> into their distribution for us to make configuration easier (thanks!).
+<pre>&lt;property&gt;
+  &lt;name&gt;mapred.child.env&lt;/name&gt;
+  &lt;value&gt;JAVA_LIBRARY_PATH=/path/to/your/native/hadoop-lzo/libs&lt;/value&gt;
+&lt;/property&gt;</pre>
+</li>
+<li> If you would like to use LZO to compress map outputs as well, add the following to your <tt>mapred-site.xml</tt>.&#160; This setting handles how and if the map output data, which must get sent over the network and then written to disk on the node running the reduce, is compressed.&#160; Since this is an IO-heavy operation, it is another area where LZO compression can make your job significantly faster.
+<pre>&lt;property&gt;
+  &lt;name&gt;mapred.map.output.compression.codec&lt;/name&gt;
+  &lt;value&gt;com.hadoop.compression.lzo.LzoCodec&lt;/value&gt;
+&lt;/property&gt;</pre>
+</li>
+</ol>
+<p>That&#8217;s it!&#160; Now upload a bunch of LZO files to your cluster; imagine you put them in <tt>/lzo_logs</tt>.&#160; Make sure that the hadoop jars are in your classpath (we export the directory, <tt>/usr/local/hadoop/lib</tt>, as part of <tt>HADOOP_CLASSPATH</tt> in <tt>hadoop-env.sh</tt>) and take any lzo file on your cluster.&#160; Run the following command to index your log files:</p>
+<pre>
+$ hadoop jar /path/to/hadoop-lzo.jar com.hadoop.compression.lzo.LzoIndexer /lzo_logs
+</pre>
+<p>Take any job you used to have running over those files, say a WordCount, and run it just like before but using the hadoop-lzo <tt>LzoTextInputFormat</tt> in place of the <tt>TextInputFormat</tt>.&#160; Voila, splittable LZO!</p>
+<p>All of our raw data at Twitter is stored in an LZO-compressed, splittable format. &#160;Since MapReduce jobs are generally IO-bound, storing data in compressed formats yields significantly faster computations. &#160;With splittable LZO, you can achieve the full parallelism offered by the MapReduce architecture in addition to saving on disk space. &#160;We hope the explanation and code help you to test out splittable LZO compression in your own Hadoop cluster!</p>
+<p>In a followup to this post, we&#8217;ll examine the structure of Hadoop InputFormats and Pig LoadFuncs for use with LZO-compressed data. For more about the kinds of analyses we do with Hadoop and Pig at Twitter, please see <a title="the slides from recent talk" href="http://www.slideshare.net/kevinweil/hadoop-pig-and-twitter-nosql-east-2009" target="_blank">the slides from my recent talk</a> at <a title="NoSQL East" href="http://www.nosqleast.com/2009" target="_blank">NoSQL East</a>.&#160; If this sounds like interesting work, Twitter is hiring engineers in Analytics, Infrastructure, Frontend, App Services, and Operations, and we&#8217;d love to talk to you.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>16 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jay</a> /
+			November 17, 2009 / 6:14 PM		</em>
+		<p>Nice work!</p>
+<p>I guess just using zip format will do. Since all the indexing stuffs are at the end of zip file, custom zip file input format can be made to split the file contents accordingly. Each  mapper can access the tail of the zip file and then access the region assigned for the map tasks.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.carrieriq.com">Vladimir Rodionov</a> /
+			November 20, 2009 / 2:24 PM		</em>
+		<p>Can you give us some numbers? What is the performance gain?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Maciej</a> /
+			November 25, 2009 / 10:22 AM		</em>
+		<p>Great. You start with 2 compression algorithms that are worthless here. Then claim that there&#8217;s a 3rd one and the fact that it beats them makes it great.<br />
+But really, if you&#8217;re going to compress log files and 256MB block is fine, LZO is a very poor option unless you *really* need *all* it&#8217;s speed.</p>
+<p>Something like Tornado (see: FreeArc) with 256MB block would be much stronger than anything you mention here and faster than gzip.<br />
+And would let you split the job.</p>
+<p>Oh, and it&#8217;s untrue that gzip decompression can&#8217;t be splitted. Just like with any compressor, it can. You just need a right container which will split the files before compression. FreeArc can do it, but really making a home-grown solution wouldn&#8217;t be hard at all.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://cloudepr.blogspot.com">schubertzhang</a> /
+			March 11, 2010 / 8:08 PM		</em>
+		<p>When using such spliting method, how do you deal with the record/row boundary?</p>
+<p>A record/row  may be truncated into two adjacent compression blocks. If the tow adjacent blocks are logically splited into different Mappers, it is difficult to determine the incomplete record/row and combine the to parts.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Lekhnath</a> /
+			July 07, 2010 / 5:34 AM		</em>
+		<p>Great work! Will love to test it</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.kailashbudhathoki.com.np">kailashbuki</a> /
+			December 20, 2010 / 10:28 PM		</em>
+		<p>Thanks for sharing your ideas!!!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Ravi</a> /
+			January 03, 2011 / 3:46 AM		</em>
+		<p>How do we test it whether LZO compression/decompression is correctly working or not.</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='1576' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="HNSf" />
+		<input type="hidden" name="cptch_time" value="1397910137" />
+		<input type="hidden" value="Version: 2.4" />
+		&#102;our &times; 3 =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

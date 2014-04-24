@@ -1,0 +1,1067 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Parquet at Salesforce.com | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Parquet at Salesforce.com"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/10/parquet-at-salesforce-com/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Parquet at Salesforce.com Comments Feed" href="http://blog.cloudera.com/blog/2013/10/parquet-at-salesforce-com/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Guide to Special Users in the Hadoop Environment' href='http://blog.cloudera.com/blog/2013/10/guide-to-special-users-in-the-hadoop-environment/' />
+<link rel='next' title='HBase 0.96.0 Released!' href='http://blog.cloudera.com/blog/2013/10/hbase-0-96-0-released/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/10/parquet-at-salesforce-com/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=23671' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-23671 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Parquet at Salesforce.com</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/jkestelyn/" title="Posts by Justin Kestelyn (@kestelyn)" rel="author">Justin Kestelyn (@kestelyn)</a></li>
+				<li>October 22, 2013</li>
+				<li class="comment"><a href="#comments">no comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><em>The following Parquet blog post was <a href="http://hadoopified.wordpress.com/2013/10/18/parquet-columnar-storage-hadoop/">originally published</a> by Salesforce.com Lead Engineer and Apache Pig Committer Prashant Kommireddi (<a href="https://twitter.com/pRaShAnT1784">@pRaShAnT1784</a>). Prashant has kindly given us permission to re-publish below. Parquet is an open source columnar storage format <a href="/blog/2013/03/introducing-parquet-columnar-storage-for-apache-hadoop/">co-founded by Twitter and Cloudera</a>.</em></p>
+<p>Parquet is a columnar storage format for Apache Hadoop that uses the concept of repetition/definition levels borrowed from <a href="http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/pubs/archive/36632.pdf">Google Dremel</a>. It provides efficient encoding and compression schemes, the efficiency being improved due to application of aforementioned on a per-column basis (compression is better as column values would all be the same type, encoding is better as values within a column could often be the same and repeated). <a href="https://blog.twitter.com/2013/dremel-made-simple-with-parquet">Here</a> is a nice blog post from Julien Le Dem of Twitter describing Parquet internals.</p>
+<p>Parquet can be used by any project in the Hadoop ecosystem, there are integrations provided for MR, Pig, Hive, Cascading, and Cloudera Impala.</p>
+<p>I am by no means an expert at this, and a lot of what I write here is based on my conversations with a couple of key contributors on the project (<a href="https://twitter.com/J_">@J_</a> and <a href="https://twitter.com/aniket486">@aniket486</a>). Also, most of the content mentioned on this post is based on Pig+Parquet integration. We at Salesforce.com have started using Parquet for application logs processing with Pig and are encouraged with the preliminary performance results.</p>
+<h2>Writing a Parquet File</h2>
+<p>There is <a href="https://github.com/Parquet/parquet-mr/blob/master/parquet-hadoop/src/main/java/parquet/hadoop/ParquetWriter.java">parquet.hadoop.ParquetWriter</a>. You need to decide which ObjectModel you want to use. It could be Thrift, Avro, Pig, or the <a href="https://github.com/Parquet/parquet-mr/blob/master/parquet-hadoop/src/main/java/parquet/hadoop/example/GroupWriteSupport.java">example model</a>. Here is a function for writing a file using the Pig model (TupleWriteSupport):</p>
+<pre class="code" style="padding-left: 10px;">private void write(String pigSchemaString, String writePath) throws Exception {
+     Schema pigSchema = Utils.getSchemaFromString(pigSchemaString);
+     TupleWriteSupport writeSupport = new TupleWriteSupport(pigSchema);
+     FileSystem fs = FileSystem.get(new Configuration());
+     Path path = new Path(writePath);
+     if(fs.exists(path)) {
+         fs.delete(path, true);
+     }
+     ParquetWriter writer = new ParquetWriter&lt;Tuple&gt;&gt;(path, writeSupport,       CompressionCodecName.UNCOMPRESSED,  ParquetWriter.DEFAULT_BLOCK_SIZE, ParquetWriter.DEFAULT_PAGE_SIZE, false, false);
+
+     TupleFactory tf = TupleFactory.getInstance();
+     for (int i = 0; i &lt; NUM_RECORDS; i++) {
+         Tuple t = tf.newTuple();
+         for(int j=0; j&lt;pigSchema.size(); j++) {
+         t.append(i+j);
+         }
+         writer.write(t);
+
+     }
+     writer.close();
+}
+</pre>
+<p>&nbsp;</p>
+<p>“pigSchemaString” is the schema for the parquet file. This could be any valid pig schema, such as “a:int, b:int, c:int”. Note that I insert integer values in the tuple and hence schema fields are defined to be int.</p>
+<p>So what exactly happened during the write? I use <a href="http://parquet.io/parquet-mr/site/1.0.0/apidocs/parquet/pig/TupleWriteSupport.html">TupleWriteSupport</a> which is a <a href="https://github.com/Parquet/parquet-mr/blob/master/parquet-hadoop/src/main/java/parquet/hadoop/api/WriteSupport.java">WriteSupport</a> implementation that helps us write parquet files compatible with Pig. I then use ParquetWriter passing in a few <a href="http://parquet.io/parquet-mr/site/1.0.0/apidocs/parquet/hadoop/ParquetWriter.html#ParquetWriter(org.apache.hadoop.fs.Path,%20parquet.hadoop.api.WriteSupport,%20parquet.hadoop.metadata.CompressionCodecName,%20int,%20int,%20boolean,%20boolean)">arguments</a>:</p>
+<ul>
+<li>
+<p>path – file path to write to</p>
+</li>
+<li>
+<p>writeSupport – TupleWriteSupport in this case</p>
+</li>
+<li>
+<p>compressionCodecName – could be UNCOMPRESSED, GZIP, SNAPPY, LZO</p>
+</li>
+<li>
+<p>blockSize – block size which is 128M by default. Total size used by a block</p>
+</li>
+<li>
+<p>pageSize –  from the parquet docs: “pages should be considered indivisible so smaller data pages allow for more fine grained reading (e.g. single row lookup). Larger page sizes incur less space overhead (less page headers) and potentially less parsing overhead (processing headers). Note: for sequential scans, it is not expected to read a page at a time; this is not the IO chunk.  We recommend 8KB for page sizes.” Default page size is 1MB</p>
+</li>
+<li>
+<p>enableDictionary – turn on/off dictionary encoding</p>
+</li>
+</ul>
+<p>At the end, I create tuples with a few elements and write to the parquet file.</p>
+<h2>Reading a Parquet File</h2>
+<p>There is a bug due to which trying to read Parquet files written using the Pig model (TupleWriteSupport) directly with ParquetReader fails. See <a href="https://github.com/Parquet/parquet-mr/issues/195">https://github.com/Parquet/parquet-mr/issues/195</a></p>
+<p>However, you can use Pig to read the file.</p>
+<pre class="code" style="padding-left: 10px;">A = load ‘parquet_file’ USING parquet.pig.ParquetLoader();
+
+describe A;
+
+{a: int, b: int, c: int}
+
+B = foreach A generate a;
+
+dump B;
+</pre>
+<p>&nbsp;</p>
+<h2>Initial Findings</h2>
+<p>I ran the PerfTest and noticed it takes longer to read 1 column and takes progressively less for more columns.</p>
+<pre class="code" style="padding-left: 10px;">Parquet file read took : 1790(ms) for 1 columns
+Parquet file read took : 565(ms) for 2 columns
+Parquet file read took : 560(ms) for 3 columns
+Parquet file read took : 544(ms) for 4 columns
+Parquet file read took : 554(ms) for 5 columns
+Parquet file read took : 550(ms) for 10 columns
+Parquet file read took : 545(ms) for 20 columns
+Parquet file read took : 563(ms) for 30 columns
+Parquet file read took : 1653(ms) for 40 columns
+Parquet file read took : 1049(ms) for 50 columns
+</pre>
+<p>&nbsp;</p>
+<p>That’s the JVM warmup phase!</p>
+<p>The <a href="http://techblug.wordpress.com/2013/08/19/java-jit-compiler-inlining/">JIT compiler will inline methods</a> based on how often they are called. So it waits before doing so to see what gets called often. Julien suggested I run it twice in a row (in the same process) and compare the times. This is generic and nothing in particular to Parquet, but I wanted to highlight in case you happen to run into similar perf numbers.</p>
+<p>Voila! The 2nd iteration did provide better results.</p>
+<pre class="code" style="padding-left: 10px;">Parquet file read took : 1809(ms) for 1 columns, iteration 0
+Parquet file read took : 563(ms) for 2 columns, iteration 0
+Parquet file read took : 562(ms) for 3 columns, iteration 0
+Parquet file read took : 548(ms) for 4 columns, iteration 0
+Parquet file read took : 548(ms) for 5 columns, iteration 0
+Parquet file read took : 554(ms) for 10 columns, iteration 0
+Parquet file read took : 548(ms) for 20 columns, iteration 0
+Parquet file read took : 550(ms) for 30 columns, iteration 0
+Parquet file read took : 1603(ms) for 40 columns, iteration 0
+Parquet file read took : 1054(ms) for 50 columns, iteration 0
+Parquet file read took : 536(ms) for 1 columns, iteration 1
+Parquet file read took : 531(ms) for 2 columns, iteration 1
+Parquet file read took : 527(ms) for 3 columns, iteration 1
+Parquet file read took : 532(ms) for 4 columns, iteration 1
+Parquet file read took : 527(ms) for 5 columns, iteration 1
+Parquet file read took : 533(ms) for 10 columns, iteration 1
+Parquet file read took : 537(ms) for 20 columns, iteration 1
+Parquet file read took : 534(ms) for 30 columns, iteration 1
+Parquet file read took : 538(ms) for 40 columns, iteration 1
+Parquet file read took : 1966(ms) for 50 columns, iteration 1
+Parquet file read took : 523(ms) for 1 columns, iteration 2
+Parquet file read took : 525(ms) for 2 columns, iteration 2
+Parquet file read took : 691(ms) for 3 columns, iteration 2
+Parquet file read took : 529(ms) for 4 columns, iteration 2
+Parquet file read took : 530(ms) for 5 columns, iteration 2
+Parquet file read took : 531(ms) for 10 columns, iteration 2
+Parquet file read took : 532(ms) for 20 columns, iteration 2
+Parquet file read took : 532(ms) for 30 columns, iteration 2
+Parquet file read took : 1032(ms) for 40 columns, iteration 2
+Parquet file read took : 1044(ms) for 50 columns, iteration 2
+</pre>
+<p>&nbsp;</p>
+<p>I ran another test – reading a regular text file vs parquet file. The file contained 20M rows and 6 columns. The results didn’t seem right, both storage and processing-wise. Was I missing something?</p>
+<pre class="code" style="padding-left: 10px;">Text file size : 513M
+Parquet file size : 895M
+
+Time taken to read, Text : 13784ms
+Time taken to read, Parquet: 19551ms
+</pre>
+<p>&nbsp;</p>
+<p>By default compression is not enabled, which is why the Parquet file is larger (footers, headers, summary files take up additional space. Note Parquet stores information regarding each page, column chunk, file to be able to determine the exact pages that need to be loaded by a query. You can find additional info <a href="https://github.com/Parquet/parquet-format">here</a>).</p>
+<p>Also if you are reading all the columns, it is expected that the columnar format will be slower as row storage is more efficient when you read all the columns. Project fewer columns and you should find a difference. You should see a projection pushdown message in the logs.</p>
+<p><em>Yes you need bigger files to get benefits from the columnar storage!</em></p>
+<p>At this point, I wanted to try out encoding and see how that plays out on the overall storage. My next question – Are different encoding (RLE, dictionary) to be provided by the client, or does Parquet figure out the right one to use based on the data? Turns out Parquet will use the dictionary encoding if it can but right now you need to <a href="http://parquet.io/parquet-mr/site/1.0.0-SNAPSHOT/apidocs/index.html">turn that on</a>:</p>
+<pre class="code" style="padding-left: 10px;">parquet.enable.dictionary=true
+</pre>
+<p>&nbsp;</p>
+<p>Finally did get some nice results after enabling dictionary encoding and filtering on a single column. It was a lot better storage wise too once Dictionary Encoding was enabled. (The following was run on a larger dataset)</p>
+<pre class="code" style="padding-left: 10px;">1st iteration:
+
+Text file read took : 42231ms
+Parquet file read took : 27853ms
+</pre>
+<p>&nbsp;</p>
+<p>Here are the numbers from 2nd iteration &#8211; just to negate the effects of JVM warmup, and to be fair to text-row format :)</p>
+<pre class="code" style="padding-left: 10px;">2nd iteration:
+
+Text file read took : 36555ms
+Parquet file read took : 27669ms
+</pre>
+<p>&nbsp;</p>
+<h2>Schema Management</h2>
+<p>Parquet can handle multiple schemas. This is important for our use-case at SFDC for log processing. We have several different types of logs, each with its own schema, and we have a few hundred of them. Most pig queries run against a few log types. Parquet merges schema and provides the ability to parse out columns from different files.</p>
+<ul>
+<li>LogType A : organizationId, userId, timestamp, recordId, cpuTime</li>
+<li>LogType V : userId, organizationId, timestamp, foo, bar</li>
+</ul>
+<p>A query that tries to parse the organizationId and userId from the 2 logTypes should be able to do so correctly, though they are positioned differently in the schema. With Parquet, it’s not a problem. It will merge ‘A’ and ‘V’ schemas and project columns accordingly. It does so by maintaining a file schema in addition to merged schema and parsing the columns by referencing the 2.</p>
+<h2>Projection Pushdown</h2>
+<p>One of the advantages of a columnar format is the fact that it can read only those parts from a file that are necessary. The columns not required are never read, avoiding unnecessary and expensive I/O.</p>
+<p>For doing this in Pig, just pass in the required schema in to the constructor of ParquetLoader.</p>
+<pre class="code" style="padding-left: 10px;">A = LOAD ‘/parquet/file’ USING parquet.pig.ParquetLoader.('a:int, b:int');
+</pre>
+<p>&nbsp;</p>
+<p>The above query loads columns ‘a’ and ‘b’ only. When you do so, you should find a message similar to the following in logs</p>
+<p><em>Assembled and processed 4194181 records from 2 columns in 2124 ms: 1974.6615 rec/ms, 1974.6615 cell/ms</em></p>
+<p>If you hadn’t done that, a file containing 16 columns would all be loaded</p>
+<p><em>Assembled and processed 4194181 records from 16 columns in 6313 ms: 664.3721 rec/ms, 10629.953 cell/ms</em></p>
+<h2>Summary Files</h2>
+<p>Parquet generates a summary file for all part files generated under a directory (job output). The summary file reduces the number of calls to the namenode and individual slaves while producing the splits which reduces the latency to start a job significantly. Otherwise it will have to open the footer of every part file which occasionally is slowed down by the namenode or a bad slave that we happen to hit. Reading one summary file reduces the risks to hit a slow slave and the load on the namenode.</p>
+<p>For example, if the output directory to which Parquet files are written by a Pig script is ‘/user/username/foo’.</p>
+<pre class="code" style="padding-left: 10px;">STORE someAlias INTO ‘/user/username/foo’ using parquet.pig.ParquetStorer();
+</pre>
+<p>&nbsp;</p>
+<p>This will create part files under ‘foo’, the number of these part files depends on the number of reducers.</p>
+<pre class="code" style="padding-left: 10px;">/user/username/foo/part-r-00000.parquet
+
+/user/username/foo/part-r-00001.parquet
+
+/user/username/foo/part-r-00002.parquet
+
+/user/username/foo/part-r-00003.parquet
+</pre>
+<p>&nbsp;</p>
+<p>The summary file is generated when the hadoop job writing the files is finished as it is in the outputCommitter of the output format (ParquetOutputCommitter.commitJob). It reads all footers in parallel and creates the summary file so all subsequent “LOAD” or reads on the directory ‘foo’ could be more efficient.</p>
+<p>There is one summary file for all the part files output by the same job. That is, one per directory containing multiple part files.</p>
+<h2>Hadoop Compatibility</h2>
+<p>Anyone who has been a part of a major hadoop upgrade should be familiar with how painful the process can be. At SFDC, we moved from a really old version 0.20.2 to 2.x (recently declared <a href="https://blogs.apache.org/foundation/entry/the_apache_software_foundation_announces48">GA</a>). This involved upgrading a ton of dependencies, making client side changes to use the newer APIs, bunch of new configurations, and eliminating a whole lot of deprecated stuff. Though this was a major upgrade and most upgrades here on should be smooth(er), it always helps if dependent and 3rd party libraries don’t need to be recompiled.</p>
+<p>With Parquet, you should not need to re-compile for hadoop 2. It hides all the hadoop 2 incompatibilities behind reflective calls so the same jars will work.</p>
+<h2>And Finally&#8230;</h2>
+<p>We at Salesforce.com have been early adopters of several big data open source technologies. Hadoop, Pig, HBase, Kafka, Zookeeper, Oozie to name a few either have been or are in the process of making it to production. <a href="https://github.com/forcedotcom/phoenix">Phoenix</a>, a SQL layer on top of HBase, is a project that was homegrown and is now open-sourced. Parquet is the latest addition, and we are looking forward to using it for more datasets (Oracle exports for example) in the near future and not just application logs. The Parquet community is helpful, open to new ideas and contributions, which is great for any open source project.</p>
+<p><em>Thanks, Prashant!</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/guest/" title="View all posts in Guest" rel="category tag">Guest</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/impala/" title="View all posts in Impala" rel="category tag">Impala</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>No Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='23671' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="a+P/" />
+		<input type="hidden" name="cptch_time" value="1397909799" />
+		<input type="hidden" value="Version: 2.4" />
+		9 &#43; &#101;i&#103;&#104;t =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

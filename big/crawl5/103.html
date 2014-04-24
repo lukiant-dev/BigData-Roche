@@ -1,0 +1,1035 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>What are HBase znodes? | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="What are HBase znodes?"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; What are HBase znodes? Comments Feed" href="http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='HBase 0.96.0 Released!' href='http://blog.cloudera.com/blog/2013/10/hbase-0-96-0-released/' />
+<link rel='next' title='Download the New Impala e-Book from O&#8217;Reilly Media' href='http://blog.cloudera.com/blog/2013/10/download-the-new-impala-e-book-from-oreilly-media/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=23635' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-23635 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">What are HBase znodes?</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/mbertozzi/" title="Posts by Matteo Bertozzi" rel="author">Matteo Bertozzi</a></li>
+				<li>October 23, 2013</li>
+				<li class="comment"><a href="#comments">2 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><a href="http:/zookeeper.apache.org/">Apache ZooKeeper</a> is a client/server system for distributed coordination that exposes an interface similar to a filesystem, where each node (called a <em>znode</em>) may contain data and a set of children. Each znode has a name and can be identified using a filesystem-like path (for example, /root-znode/sub-znode/my-znode).</p>
+<p>In Apache HBase, ZooKeeper coordinates, communicates, and shares state between the Masters and RegionServers. HBase has a design policy of using ZooKeeper only for transient data (that is, for coordination and state communication). Thus if the HBase’s ZooKeeper data is removed, only the transient operations are affected &#8211; data can continue to be written and read to/from HBase.</p>
+<p>In this blog post, you will get a short tour of HBase znodes usage. The version of HBase used for reference here is 0.94 (shipped inside CDH 4.2 and CDH 4.3), but most of the znodes are present in previous versions and also likely to be so in future versions.</p>
+<p>The HBase root znode path is configurable using hbase-site.xml, and by default the location is “/hbase”. All the znodes referenced below will be prefixed using the default /hbase location, and the configuration property that lets you rename the particular znode will be listed next to the default znode name and highlighted with bold type.</p>
+<p dir="ltr">ZooKeeper provides an interactive shell that allows you to explore the ZooKeeper state &#8212; run it by using <code>hbase zkcli</code> and walk through the znode via <code>ls</code>, as in a typical filesystem. You can also get some information about the znode content by using the <code>get</code> command.</p>
+<pre class="code" style="padding-left: 10px;">$ <strong>hbase zkcli</strong>
+[zk: localhost:2181(CONNECTED) 0] <strong>ls /</strong>
+[hbase, zookeeper]
+[zk: localhost:2181(CONNECTED) 1] <strong>ls /hbase</strong>
+[splitlog, online-snapshot, unassigned, root-region-server, rs, backup-masters, draining, table, master, shutdown, hbaseid]
+[zk: localhost:2181(CONNECTED) 2] <strong>get /hbase/root-region-server</strong>
+3008@u1310localhost,60020,1382107614265
+dataLength = 44
+numChildren = 0
+...
+</pre>
+<p>&nbsp;</p>
+<h2>Operations</h2>
+<p>The znodes that you&#8217;ll most often see are the ones that coordinate operations like Region Assignment, Log Splitting, and Master Failover, or keep track of the cluster state such as the ROOT table location, list of online RegionServers, and list of unassigned Regions.</p>
+<table width="90%" border="1" cellpadding="3">
+<tbody>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top" width="40%"><strong>/hbase</strong> (zookeeper.znode.parent)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top" width="60%">The root znode that will contain all the znodes created/used by HBase</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>hbaseid</strong> (zookeeper.znode.clusterId)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Initialized by the Master with the UUID that identifies the cluster. The ID is also stored on HDFS in hdfs:/&lt;namenode&gt;:&lt;port&gt;/hbase/hbase.id.</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/root-region-server (zookeeper.znode.rootserver)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Contains the location of the server hosting the ROOT region. It is queried by the client to identify the RegionServer responsible for ROOT and ask for the META locations. (In 0.96, the ROOT table was removed as part of HBASE-3171, and this znode is replaced by /hbase/meta-region-server [zookeeper.znode.metaserver] that contains the location of the server hosting META.)</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>rs</strong> (zookeeper.znode.rs)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">On startup each RegionServer will create a sub-znode (e.g. /hbase/rs/m1.host) that is supposed to describe the “online” state of the RegionServer. The master monitors this znode to get the “online” RegionServer list and use that during Assignment/Balancing.</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>unassigned</strong> (zookeeper.znode.unassigned)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Contains a sub-znode for each unassigned region (e.g. /hbase/unassigned/&lt;region name&gt;). This znode is used by the Assignment Manager to discover the regions to assign. (<a href="http://blog.cloudera.com/blog/2012/11/apache-hbase-assignmentmanager-improvements/">Read this</a> to learn more about the Assignment Manager.)</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>master</strong> (zookeeper.znode.master)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">The “active” master will register its own address in this znode at startup, making this znode the source of truth for identifying which server is the Master.</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>backup-masters</strong> (zookeeper.znode.backup.masters)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Each inactive Master will register itself as backup Master by creating a sub-znode (hbase/backup-master/m1.host). This znode is mainly used to track which machines are available to replace the Master in case of failure.</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>shutdown</strong> (zookeeper.znode.state)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Describes the cluster state, “Is the cluster up?” It is created by the Master on startup and deleted by the Master on shutdown. It is watched by the RegionServers.</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>draining</strong> (zookeeper.znode.draining.rs)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Used to decommission more than one RegionServer at a time by creating sub-znodes with the form <em>serverName,port,startCode</em> (for example, /hbase/draining/m1.host,60020,1338936306752). This lets you decommission multiple RegionServers without having the risk of regions temporarily moved to a RegionServer that will be decommissioned later. <a href="http://hbase.apache.org/book/node.management.html#draining.servers">Read this</a> to learn more about /hbase/draining.</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>table</strong> (zookeeper.znode.masterTableEnableDisable)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Used by the master to track the table state during assignments (disabling/enabling states, for example).</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>splitlog</strong> (zookeeper.znode.splitlog)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Used by the log splitter to track the pending log to replay and its assignment. (<a href="http:/blog.cloudera.com/blog/2012/07/hbase-log-splitting/">Read this</a> to learn more about log splitting).</td>
+</tr>
+</tbody>
+</table>
+<h2> </h2>
+<h2>Security</h2>
+<p>The Access Control List (ACL) and the Token Provider coprocessors add two more znodes: one to synchronize access to table ACLs and the other to synchronize the token encryption keys across the cluster nodes.</p>
+<table width="90%" border="1" cellpadding="3">
+<tbody>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top" width="40%">/hbase/<strong>acl</strong> (zookeeper.znode.acl.parent)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top" width="60%">The acl znode is used for synchronizing the changes made to the _acl_ table by the grant/revoke commands. Each table will have a sub-znode (/hbase/acl/tableName) containing the ACLs of the table. (<a href="http://blog.cloudera.com/blog/2012/09/understanding-user-authentication-and-authorization-in-apache-hbase/">Read this</a> for more information about the access controller and the ZooKeeper interaction.)</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>tokenauth</strong> (zookeeper.znode.tokenauth.parent)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">The token provider is usually used to allow a MapReduce job to access the HBase cluster. When a user asks for a new token the information will be stored in a sub-znode created for the key (/hbase/tokenauth/keys/key-id).</td>
+</tr>
+</tbody>
+</table>
+<h2> </h2>
+<h2>Replication</h2>
+<p>As general rule, all znodes are ephemeral, which means they are describing a “temporary” state &#8212; so, even if you remove everything from ZooKeeper, HBase should be able to recreate them. Although the Replication znodes do not describe a temporary state, they are meant to be the source of truth for the replication state, describing the replication state of each machine. (<a href="http:/blog.cloudera.com/blog/2012/07/hbase-replication-overview-2/">Read this</a> to learn more about replication).</p>
+<table width="90%" border="1" cellpadding="3">
+<tbody>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top" width="40%">/hbase/<strong>replication</strong> (zookeeper.znode.replication)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top" width="60%">Root znode that contains all HBase replication state information</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>replication/peers</strong> (zookeeper.znode.replication.peers)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Each peer will have a sub-znode (e.g. /hbase/replication/peers/&lt;ClusterID&gt;) containing the ZK ensemble&#8217;s addresses that allows the peer to be contacted.</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>replication/peers/&lt;ClusterId&gt;/peer-state</strong> (zookeeper.znode.replication.peers.state)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Mirror of the /hbase/replication/peers znode, but here each sub-znode (/hbase/replication/peer-state/&lt;ClusterID&gt;) will track the peer enabled/disabled state.</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>replication/state</strong> (zookeeper.znode.replication.state)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Indicates whether replication is enabled. Replication can be enabled by setting the hbase.replication configuration to true, or can be enabled/disabled by using the start/stop command in the HBase shell. (In 0.96, this znode was removed and the peer-state znode above is used as a reference.)</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>replication/rs</strong> (zookeeper.znode.replication.rs)</td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Contains the list of RegionServers in the main cluster (/hbase/replication/rs/&lt;region server&gt;). And for each RegionServer znode there is one sub-znode per peer to which it is replicating. Inside the peer sub-znode the hlogs are waiting to be replicated (/hbase/replication/rs/&lt;region server&gt;/&lt;ClusterId&gt;/&lt;hlogName&gt;).</td>
+</tr>
+</tbody>
+</table>
+<h2> </h2>
+<h2>Online Snapshot Procedures</h2>
+<p>Online snapshots are coordinated by the Master using ZooKeeper to communicate with the RegionServers using a two-phase-commit-like transaction. (<a href="http://blog.cloudera.com/blog/2013/06/introduction-to-apache-hbase-snapshots-part-2-deeper-dive/">Read this</a> for more details about snapshots.)</p>
+<table width="100%" border="1" cellpadding="3">
+<tbody>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top" width="40%">/hbase/<strong>online-snapshot/acquired</strong></td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top" width="60%">The acquired znode describes the first step of a snapshot transaction. The Master will create a sub-znode for the snapshot (/hbase/online-snapshot/acquired/&lt;snapshot name&gt;). Each RegionServer will be notified about the znode creation and prepare the snapshot; when done they will create a sub-znode with the RegionServer name meaning, “I’m done” (/hbase/online-snapshot/acquired/&lt;snapshot name&gt;/m1.host).</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>online-snapshot/reached</strong></td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">Once each RegionServer has joined the acquired znode, the Master will create the reached znode for the snapshot (/hbase/online-snapshot/reached/&lt;snapshot name&gt;) telling each RegionServer that it is time to finalize/commit the snapshot. Again, each RegionServer will create a sub-znode to notify the master that the work is complete.</td>
+</tr>
+<tr>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">/hbase/<strong>online-snapshot/abort </strong></td>
+<td style="font-family: Arial,sans-serif; font-size: 12px;" valign="top">If something fails on the Master side or the RegionServer side, the abort znode will be created for the snapshot telling everyone that something went wrong with the snapshot and to abort the job.</td>
+</tr>
+</tbody>
+</table>
+<h2> </h2>
+<h2>Conclusion</h2>
+<p>As you can see, ZooKeeper is a fundamental part of HBase. All operations that require coordination, such as Regions assignment, Master-Failover, replication, and snapshots, are built on ZooKeeper. (You can learn more about why/how you would use ZooKeeper in your applications <a title="How-to: Use Apache ZooKeeper to Build Distributed Apps (and Why)" href="http://blog.cloudera.com/blog/2013/02/how-to-use-apache-zookeeper-to-build-distributed-apps-and-why/">here</a>.)</p>
+<p>Although most znodes are only useful to HBase, some &#8212; such as the list of RegionServers (/hbase/rs) or list of Unassigned Regions (/hbase/unassigned) &#8212; may be used for debugging or monitoring purposes. Or, as in the case with /hbase/draining, you may interact with them to let HBase know what you’re doing with the cluster.</p>
+<p><em>Matteo Bertozzi is a Software Engineer at Cloudera and a Committer on the HBase project.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hbase/" title="View all posts in HBase" rel="category tag">HBase</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/zookeeper/" title="View all posts in ZooKeeper" rel="category tag">ZooKeeper</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>2 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Nikhil</a> /
+			January 15, 2014 / 4:00 PM		</em>
+		<p>&gt;&gt;<br />
+Once each RegionServer has joined the acquired znode, the Master will create the reached znode for the snapshot (/hbase/online-snapshot/acquired/) telling each RegionServer that it is time to finalize/commit the snapshot. Again, each RegionServer will create a sub-znode to notify the master that the work is complete.<br />
+&gt;&gt;</p>
+<p>There is a typo.  Master will create the reached znode for the snapshot (/hbase/online-snapshot/reached/) .</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			January 17, 2014 / 3:00 PM		</em>
+		<p>Thanks for reporting that. Corrected.</p>
+	</li>
+</li>
+</ul>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='23635' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="l7B7" />
+		<input type="hidden" name="cptch_time" value="1397909798" />
+		<input type="hidden" value="Version: 2.4" />
+		5 &#43; &#102;i&#118;&#101; =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

@@ -1,0 +1,1069 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Introduction to Apache HBase Snapshots | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Introduction to Apache HBase Snapshots"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/03/introduction-to-apache-hbase-snapshots/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Introduction to Apache HBase Snapshots Comments Feed" href="http://blog.cloudera.com/blog/2013/03/introduction-to-apache-hbase-snapshots/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='How-to: Set Up Cloudera Manager 4.5 for Apache Hive' href='http://blog.cloudera.com/blog/2013/03/how-to-set-up-cloudera-manager-4-5-for-apache-hive/' />
+<link rel='next' title='What the Hack! The Story of the Cloudera Hackathon' href='http://blog.cloudera.com/blog/2013/03/what-the-hack-the-story-of-the-cloudera-hackathon/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/03/introduction-to-apache-hbase-snapshots/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=20617' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-20617 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Introduction to Apache HBase Snapshots</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/mbertozzi/" title="Posts by Matteo Bertozzi" rel="author">Matteo Bertozzi</a></li>
+				<li>March 07, 2013</li>
+				<li class="comment"><a href="#comments">11 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>The current (4.2) release of CDH &#8212; Cloudera&#8217;s 100% open-source distribution of Apache Hadoop and related projects (including Apache HBase) &#8212; introduced a new HBase feature, recently landed in trunk, that allows an admin to take a snapshot of a specified table.</p>
+<p>Prior to CDH 4.2, the only way to back-up or clone a table was to use Copy/Export Table, or after disabling the table, copy all the hfiles in HDFS. Copy/Export Table is a set of tools that uses MapReduce to scan and copy the table but with a direct impact on Region Server performance. Disabling the table stops all reads and writes, which will almost always be unacceptable.</p>
+<p>In contrast, HBase snapshots allow an admin to clone a table without data copies and with minimal impact on Region Servers. Exporting the snapshot to another cluster does not directly affect any of the Region Servers; export is just a distcp with an extra bit of logic.</p>
+<p>Here are a few of the use cases for HBase snapshots:</p>
+<ul>
+<li>Recovery from user/application errors</li>
+<ul>
+<li>Restore/Recover from a known safe state.</li>
+<li>View previous snapshots and selectively merge the difference into production.</li>
+<li>Save a snapshot right before a major application upgrade or change.</li>
+</ul>
+<li>Auditing and/or reporting on views of data at specific time</li>
+<ul>
+<li>Capture monthly data for compliance purposes.</li>
+<li>Run end-of-day/month/quarter reports.</li>
+</ul>
+<li>Application testing</li>
+<ul>
+<li>Test schema or application changes on data similar to that in production from a snapshot and then throw it away. For example: take a snapshot, create a new table from the snapshot content (schema plus data), and manipulate the new table by changing the schema, adding and removing rows, and so on. (The original table, the snapshot, and the new table remain mutually independent.)</li>
+</ul>
+<li>Offloading of work</li>
+<ul>
+<li>Take a snapshot, export it to another cluster, and run your MapReduce jobs. Since the export snapshot operates at HDFS level, you don’t slow down your main HBase cluster as much as CopyTable does.</li>
+</ul>
+</ul>
+<h2>What is a Snapshot?</h2>
+<p>A snapshot is a set of metadata information that allows an admin to get back to a previous state of the table. A snapshot is not a copy of the table; it’s just a list of file names and doesn’t copy the data. A full snapshot restore means that you get back to the previous “table schema” and you get back your previous data losing any changes made since the snapshot was taken.</p>
+<p><strong>Operations</strong></p>
+<ul>
+<li>Take a snapshot: This operation tries to take a snapshot on a specified table. The operation may fail if regions are moving around during balancing, split or merge.</li>
+<li>Clone a snapshot: This operation creates a new table using the same schema and with the same data present in the specified snapshot. The result of this operation is a new fully functional table that can can be modified with no impact on the original table or the snapshot.</li>
+<li>Restore a snapshot: This operation brings the table schema and data back to the snapshot state. (Note: this operation discards any changes made since the snapshot was taken.) </li>
+<li>Delete a snapshot: This operation removes a snapshot from the system, freeing unshared disk space, without affecting any clones or other snapshots.</li>
+<li>Export a snapshot: This operation copies the snapshot data and metadata to another cluster. The operation only involves HDFS so there’s no communication with the Master or the Region Servers, and thus the HBase cluster can be down.</li>
+</ul>
+<h2>Zero-copy Snapshot, Restore, Clone</h2>
+<p>The main difference between a snapshot and a CopyTable/ExportTable is that the snapshot operations write only metadata. There are no massive data copies involved.</p>
+<p>One of the main HBase design principles is that once a file is written it will never be modified. Having immutable files means that a snapshot just keeps track of files used at the moment of the snapshot operation, and during a compaction it is the responsibility of the snapshot to inform the system that the file should not be deleted but instead it should be archived.</p>
+<p>The same principle applies to a Clone or Restore operation. Since the files are immutable a new table is created with just “links” to the files referenced by the snapshot.</p>
+<p>Export Snapshot is the only operation that require a copy of the data, since the other cluster doesn’t have the data files.</p>
+<h2>Export Snapshot vs Copy/Export Table</h2>
+<p>Aside from the better consistency guarantees that a snapshot can provide compared to a Copy/Export Job, the main difference between Exporting a Snapshot and Copying/Exporting a table is that ExportSnapshot operates at HDFS level. This means that Master and Region Servers are not involved in this operations. Consequently, no unnecessary caches for data are created and there is no triggering of additional GC pauses due to the number of objects created during the scan process. The performance impact on the HBase cluster stems from the extra network and disk workload experienced by the DataNodes.</p>
+<h2>HBase Shell: Snapshot Operations</h2>
+<p>Confirm that snapshot support is turned on by checking if the <code>hbase.snapshot.enabled</code> property in hbase-site.xml is set to true. To take a snapshot of a specified table, use the <code>snapshot</code> command. (No file copies are performed)</p>
+<pre class="code" style="padding-left: 10px;">hbase&gt; snapshot ‘tableName’, ‘snapshotName’
+</pre>
+<p>&nbsp;</p>
+<p>To list all the snapshots, use the <code>list_snapshot </code>command. it will display the snapshot name, the source table, and the creation date and time. </p>
+<pre class="code" style="padding-left: 10px;">hbase&gt; list_snapshots
+SNAPSHOT               TABLE + CREATION TIME
+ TestSnapshot          TestTable (Mon Feb 25 21:13:49 +0000 2013)
+</pre>
+<p>&nbsp;</p>
+<p>To remove a snapshot, use the <code>delete_snapshot </code>command. Removing a snapshot doesn’t impact cloned tables or other subsequent snapshots taken.</p>
+<pre class="code" style="padding-left: 10px;">hbase&gt; delete_snapshot 'snapshotName'
+</pre>
+<p>&nbsp;</p>
+<p>To create a new table from a specified snapshot (clone), use the <code>clone_snapshot </code>command. No data copies are performed, so you don’t end up using twice the space for the same data.</p>
+<pre class="code" style="padding-left: 10px;">hbase&gt; clone_snapshot 'snapshotName', 'newTableName'
+</pre>
+<p>&nbsp;</p>
+<p>To replace the current table schema/data with a specified snapshot content, use the <code>restore_snapshot </code>command.</p>
+<pre class="code" style="padding-left: 10px;">hbase&gt; restore_snapshot 'snapshotName'
+</pre>
+<p>&nbsp;</p>
+<p>To export an existing snapshot to another cluster, use the <code>ExportSnapshot</code> tool. The export doesn’t impact the RegionServers workload, it works at the HDFS level and you have to specify an HDFS location (the hbase.rootdir of the other cluster).</p>
+<pre class="code" style="padding-left: 10px;">hbase org.apache.hadoop.hbase.snapshot.ExportSnapshot -snapshot
+SnapshotName -copy-to hdfs:///srv2:8082/hbase
+</pre>
+<p>&nbsp;</p>
+<h2>Current Limitations</h2>
+<p>Snapshots rely on some assumptions, and currently there are a couple of tools that are not fully integrated with the new feature:</p>
+<ul>
+<li dir="ltr">Merging regions referenced by a snapshots causes data loss on the snapshot and on cloned tables.</li>
+<li dir="ltr">Restoring a table with replication on for the table restored ends up with the two cluster out of synch. The table is not restored on the replica.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>Currently the snapshot feature includes all the basic required functionality, but there’s still much work to do, including metrics, Web UI integration, disk usage optimizations and more.</p>
+<p>To learn more about how to configure HBase and use snapshots, review the <a href="https://ccp.cloudera.com/display/CDH4DOC/Configuring+HBase+Snapshots">documentation</a>.</p>
+<p><em>Matteo Bertozzi is a Software Engineer on the Platform team, and an HBase committer.</em></p>
+<p>&nbsp;</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cdh/" title="View all posts in CDH" rel="category tag">CDH</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hbase/" title="View all posts in HBase" rel="category tag">HBase</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>11 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.worldcat.org/">Ron Buckley</a> /
+			March 08, 2013 / 5:49 AM		</em>
+		<p>How long is a snapshot &#8216;good&#8217; for?  Is it just the time the HFiles are in the main /hbase directory  or the .archive, or is there some other retention at play? Is seems like a snapshot is going to be good for as long as &#8216;hbase.master.hfilecleaner.ttl&#8217;  is configured for?</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Matteo Bertozzi</a> /
+			March 08, 2013 / 5:54 AM		</em>
+		<p>A snapshot is &#8216;good&#8217; until you remove it. Once the files get compacted, instead of being removed they are moved to the archive. And from the archive they are not deleted if a snapshot or a cloned table is referencing them.</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Ted Yu</a> /
+			March 09, 2013 / 2:44 PM		</em>
+		<p>bq. Merging regions referenced by a snapshots causes data loss</p>
+<p>Were you talking about offline merge ?<br />
+The online merge tool developed in HBASE-7403 creates reference files of the regions to be merged. Meaning online merge is compatible with snapshotting.</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Matteo Bertozzi</a> /
+			March 09, 2013 / 2:47 PM		</em>
+		<p>sure, HBASE-7403 will fix the online merge case. But HBASE-7403 is not in apache trunk or CDH yet</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://seznam.cz">digri</a> /
+			March 11, 2013 / 4:36 AM		</em>
+		<p>Sounds great. Could someone please explain the differences between online/offline/timestamp-consistent/globally-consistent snapshots?</p>
+<p>How is snapshotting of updates present in memstores handled?</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Matteo Bertozzi</a> /
+			March 11, 2013 / 2:17 PM		</em>
+		<p>The current implementation has only offline and online snapshot with flush. The timestamp and globally consistent snapshot were discussed, tried and not completed for the first cut.<br />
+Offline means, table disabled. so if your table is disabled and you run the &#8220;snapshot&#8221; command described in the post all the operations are performed by the master. Online means that your table is enabled, and you may have read and writes going on during the snapshot. In this case the master ask each region server to take a snapshot of the regions that they handle. The RS snapshot procedure is pluggable, but at the moment the only available is the one that flushes the memstore before taking the snapshot.</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://sematext.com/">Otis Gospodnetic</a> /
+			March 11, 2013 / 1:51 PM		</em>
+		<p>Great news! :)</p>
+<p>Can you give us any sense of how fast snapshots are?  Maybe a few data points from your experiments?</p>
+<p>How about data size?<br />
+Do they &#8220;run at full speed&#8221;, thus taking all the disk/net IO and CPU they can get?</p>
+<p>And are there plans for incremental snapshots that contain only the delta since some other snapshot?</p>
+<p>Thanks.</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Matteo Bertozzi</a> /
+			March 11, 2013 / 2:11 PM		</em>
+		<p>The time limit for a snapshot to be considered successful is 60sec, but it should take few seconds. At the moment a flush is performed, so it&#8217;s the time required by the slowest Region Server to flush, dump the list of hfiles and report back to the Master.</p>
+<p>Since a snapshot is not a copy of the data, there&#8217;s not much heavy disk I/O involved. It&#8217;s basically just a for loop to store the file names of the store files available in the table. If you take two snapshots and there&#8217;re no compactions on the table between the two, you&#8217;re sharing the files so it&#8217;s kind of incremental, Keeping in mind that snapshots have the hfile granularity.</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://sematext.com/">Otis Gospodnetic</a> /
+			March 11, 2013 / 9:21 PM		</em>
+		<p>Thanks Matteo.<br />
+If a snapshot doesn&#8217;t make a copy of the data, what happens when the original data get lost/corrupt?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">CS</a> /
+			June 17, 2013 / 6:27 PM		</em>
+		<p>Could you please clarify how to enable snapshots in CDH4.2. </p>
+<p>According to <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/4.2.0/CDH4-Installation-Guide/cdh4ig_topic_20_12.html" rel="nofollow">http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/4.2.0/CDH4-Installation-Guide/cdh4ig_topic_20_12.html</a>, a property &#8220;hbase.snapshot.enabled&#8221; need to be set in hbase-site.xml. Configuring this in &#8220;/etc/hbase/conf.cloudera.hbase1/hbase-site.xml&#8221; is not being picked up after restarting hbase1 service. A new file is getting regenerated: <!--Autogenerated by Cloudera CM on 2013-06-18T01:05:33.142Z--> on each deploy client configurations. Could you pls point in the right direction? </p>
+<p>Thanks,<br />
+cs</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Alex</a> /
+			August 05, 2013 / 6:04 AM		</em>
+		<p>@CS : don&#8217;t know if you find the solution for your problem, but if anyone need this, you have to do the change on Cloudera Manager :<br />
+ &#8211; go to service Hbase &#8211;&gt; Configuration &#8211;&gt; Service-Wide &#8211;&gt; Advanced &#8211;&gt; HBase Service Configuration Safety Valve for hbase-site.xml<br />
+And then add those lines (&#8220;angle brackets&#8221; replaced with @):</p>
+<p>@property@<br />
+    @name@hbase.snapshot.enabled@/name@<br />
+    @value@true@/value@<br />
+@/property@</p>
+<p>This should do the trick !</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='20617' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="UxM=" />
+		<input type="hidden" name="cptch_time" value="1398162771" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &#43; eig&#104;t = 17	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

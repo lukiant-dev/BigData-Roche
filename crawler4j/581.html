@@ -1,0 +1,1049 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>New Features in Apache Pig 0.8 | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="New Features in Apache Pig 0.8"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2010/12/new-features-in-apache-pig-0-8/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; New Features in Apache Pig 0.8 Comments Feed" href="http://blog.cloudera.com/blog/2010/12/new-features-in-apache-pig-0-8/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='A profile of Apache Hadoop MapReduce computing efficiency (continued)' href='http://blog.cloudera.com/blog/2010/12/a-profile-of-hadoop-mapreduce-computing-efficiency-continued/' />
+<link rel='next' title='Map-Reduce With Ruby Using Apache Hadoop' href='http://blog.cloudera.com/blog/2011/01/map-reduce-with-ruby-using-apache-hadoop/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2010/12/new-features-in-apache-pig-0-8/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=5691' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-5691 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">New Features in Apache Pig 0.8</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/john/" title="Posts by John Kreisa" rel="author">John Kreisa</a></li>
+				<li>December 21, 2010</li>
+				<li class="comment"><a href="#comments">2 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<h2 id="post-104">This is a guest post contributed by Dmitriy Ryaboy (@squarecog) and was originally published in his <a href="http://squarecog.wordpress.com/2010/12/19/new-features-in-apache-pig-0-8/" target="_blank">blog </a>on December 19th. We thought&#160;the information&#160;was&#160;valuable enough&#160;that it was worth&#160;reposting to spread the word even further.&#160;</h2>
+<div>
+<p>The Pig 0.8 release includes a large number of bug fixes and optimizations, but at the core it is a feature release. It&#8217;s been in the works for almost a full year (most of the work on 0.7 was completed by January of 2009, although it took a while to actually get the release out), and the amount of time spent on 0.8 really shows.</p>
+<p>I <a href="http://squarecog.wordpress.com/2010/08/20/upcoming-features-in-pig-0-8-dynamic-invokers/">meant</a> to describe these in detail in a series of posts, but it seems blogging regularly is not my forte. This release is so chock-full of great new features, however, that I feel compelled to at least list them. So, behold, in no particular order, a non-exhaustive list of new features I am excited about in Pig 0.8:</p>
+<li><strong>Support for UDFs in scripting languages</strong></li>
+<p>This is exactly what it sounds like &#8212; if your favorite language has a JVM implementation, it can be used to create Pig UDFs.</p>
+<p>Pig now ships with support for UDFs in Jython, but other languages can be supported by implementing a few interfaces. Details about the Pig UDFs in Python can be found here: <a href="http://pig.apache.org/docs/r0.8.0/udf.html#Python+UDFs">http://pig.apache.org/docs/r0.8.0/udf.html#Python+UDFs</a></p>
+<p>This is the outcome of <a href="http://issues.apache.org/jira/browse/PIG-928">PIG-928</a>; it was quite a pleasure to watch this develop over time &#8212; while most Pig tickets wind up getting worked on by at most one or two people, this turned into a collaboration of quite a few developers, many of them new to the project &#8212; Kishore Gopalakrishna&#8217;s patch was the initial conversation starter, which was then hacked on or merged into similar work by Woody Anderson, Arnab Nandi, Julien Le Dem, Ashutosh Chauhan and Aniket Mokashi (Aniket deserves an extra shout-out for patiently working to incorporate everyone&#8217;s feedback and pushing the patch through the last mile).</p>
+<li><strong>PigUnit</strong></li>
+<p>A contribution by Romain Rigaux, PigUnit is exactly what it sounds like &#8212; a tool that simplifies the Pig users&#8217; lives by giving them a simple way to unit test Pig scripts.</p>
+<p>The documentation at <a href="http://pig.apache.org/docs/r0.8.0/pigunit.html">http://pig.apache.org/docs/r0.8.0/pigunit.html</a> and the code at <a href="http://svn.apache.org/viewvc/pig/trunk/test/org/apache/pig/test/pigunit/TestPigTest.java?view=markup">http://svn.apache.org/viewvc/pig/trunk/test/org/apache/pig/test/pigunit/TestPigTest.java?view=markup</a> speak for themselves as far as usage.</p>
+<li><strong>PigStats</strong></li>
+<p>Pig can now provide much better visibility into what is going on inside a Pig job than it ever did before, thanks to extensive work by Richard Ding (see <a href="http://issues.apache.org/jira/browse/PIG-1333">PIG-1333</a> and <a href="http://issues.apache.org/jira/browse/PIG-1478">PIG-1478</a>). This feature is a feature in three parts:</p>
+<p>1. Script statistics.<br />
+This is the most easily visible change. At the end of running a script, Pig will output a table with some basic statistics regarding the jobs that it ran. It looks something like this:</p>
+<p>Job Stats (time in seconds):</p>
+<table>
+<tbody>
+<tr>
+<td>JobId</td>
+<td>Maps</td>
+<td>Reduces</td>
+<td>Max<br />
+Map<br />
+Time</td>
+<td>Min<br />
+Map<br />
+Time</td>
+<td>Avg<br />
+Map<br />
+Time</td>
+<td>Max<br />
+Reduce<br />
+Time</td>
+<td>Min<br />
+Reduce<br />
+Time</td>
+<td>Avg<br />
+Reduce<br />
+Time</td>
+<td>Alias</td>
+<td>Feature</td>
+<td>Outputs</td>
+</tr>
+<tr>
+<td>job_xxx</td>
+<td>1654</td>
+<td>218</td>
+<td>84</td>
+<td>6</td>
+<td>14</td>
+<td>107</td>
+<td>87</td>
+<td>99</td>
+<td>counted_data,<br />
+data,<br />
+grouped_data</td>
+<td>GROUP_BY,<br />
+COMBINER</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>job_xxx</td>
+<td>2</td>
+<td>1</td>
+<td>9</td>
+<td>6</td>
+<td>7</td>
+<td>13</td>
+<td>13</td>
+<td>13</td>
+<td>ordered_data</td>
+<td>SAMPLER</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>job_xxx</td>
+<td>2</td>
+<td>1</td>
+<td>26</td>
+<td>18</td>
+<td>22</td>
+<td>31</td>
+<td>31</td>
+<td>31</td>
+<td>ordered_data</td>
+<td>ORDER_BY</td>
+<td>hdfs://tmp/out,</td>
+</tr>
+</tbody>
+</table>
+<p>This is extremely useful when debugging slow jobs, as you can immediately identify which stages of your script are slow, and correlate the slow Map-Reduce jobs with the actual Pig operators and relations in your script &#8212; something that was not trivial before (folks often resorted to setting parallelism to slightly different numbers for every join and group just to figure out which job was doing what. No more of this!)</p>
+<p>2. Data in Job XML</p>
+<p>Pig now inserts several interesting properties into the Hadoop jobs that it generates, including the relations being generated, Pig features being used, and ids of parent Hadoop jobs. This is quite helpful when monitoring a cluster, and is also handy when examining job history using the HadoopJobHistoryLoader , now part of piggybank (use Pig to mine your job history!).</p>
+<p>3. PigRunner API</p>
+<p>The same information that is printed out when Pig runs the script from a command line is available if one uses the Java API to start Pig jobs. If you start a script using the <code>PigRunner.run(String args[], ProgressNotificationListener listener)</code>, you will get as a result a <a href="http://pig.apache.org/docs/r0.8.0/api/org/apache/pig/tools/pigstats/PigStats.html">PigStats</a> object that gives you access to the job hierarchy, the Hadoop counters from each job, and so on. You can implement the optional <a href="http://pig.apache.org/docs/r0.8.0/api/org/apache/pig/tools/pigstats/PigProgressNotificationListener.html">ProgressNotificationListener</a> if you want to watch the job as it progresses; the listener will be notified as different component jobs start and finish.</p>
+<p>Documentation of the API, new properties in the Job XML, and more, is available at <a href="http://pig.apache.org/docs/r0.8.0/piglatin_ref1.html#Pig+Statistics">http://pig.apache.org/docs/r0.8.0/piglatin_ref1.html#Pig+Statistics</a></p>
+<li><strong>Scalar values</strong></li>
+<p>It&#8217;s very common to need to use some calculated statistic in a calculation to inform other calculations. For example, consider a data set that consists of people and their eye color; we want to calculate the fraction of the total population that has a given eye color. The script looks something like this:</p>
+<pre>people = LOAD '/data/people' using PigStorage()
+  AS (person_id:long, eye_color:chararray);
+num_people = FOREACH (group people all)
+  GENERATE COUNT(people) AS total;
+eye_color_fractions = FOREACH ( GROUP people BY eye_color )
+  GENERATE
+    group as eye_color,
+    COUNT(people) / num_people.total AS fraction;</pre>
+<p>&#160;</p>
+<p>Pretty straightforward, except it does not work. What&#8217;s happening in the above code is that we are referencing the relation <code>num_people</code> from inside another relation, <code>eye_color_fractions</code> and this doesn&#8217;t really make sense if Pig does not know that <code>num_people</code> only has one row.</p>
+<p>In the past you had to do something hacky like joining the two relations on a constant to replicate the total into each row, and then generate the division. Needless to say, this was not entirely satisfactory. In <a href="http://issues.apache.org/jira/browse/PIG-1434">PIG-1434</a> Aniket Mokashi tackled this, implementing an elegant solution that hides all of these details from the user &#8212; you can now simply cast a single-row relation as a scalar, and use it as desired. The above script becomes:</p>
+<pre>people = LOAD '/data/people' using PigStorage()
+  AS (person_id:long, eye_color:chararray);
+num_people = FOREACH (group people all)
+  GENERATE COUNT(people) AS total;
+eye_color_fractions = FOREACH ( GROUP people BY eye_color )
+  GENERATE
+    group as eye_color,
+    COUNT(people) / <strong>(long)</strong> num_people.total AS fraction;</pre>
+<p>&#160;</p>
+<p>This makes the casting explicit, but Pig is now smart enough to do this implicitly as well. A runtime exception is generated if the relation being used as a scalar contains more than one tuple.</p>
+<p>More documentation of this feature is available at <a href="http://pig.apache.org/docs/r0.8.0/piglatin_ref2.html#Casting+Relations+to+Scalars">http://pig.apache.org/docs/r0.8.0/piglatin_ref2.html#Casting+Relations+to+Scalars</a></p>
+<li><strong>Monitored UDFs</strong></li>
+<p>A new annotation has been added, <code>@MonitoredUDF</code>, which makes Pig spawn a watcher thread that kills an execution that is taking too long, and return a default value instead. This comes in handy when dealing with certain operations like complex regular expressions. More documentation is available at <a href="http://pig.apache.org/docs/r0.8.0/udf.html#Monitoring+long-running+UDFs">http://pig.apache.org/docs/r0.8.0/udf.html#Monitoring+long-running+UDFs</a></p>
+<li><strong>Automatic merge of small files</strong></li>
+<p>This is a simple one, but useful &#8212; when running Pig over many small files, instead of creating a map task per file (paying the overhead of scheduling and running a task for a computation that might only take a few seconds), we can merge the inputs and create a few map tasks that are a bit more hefty.</p>
+<p>Two properties control this behavior: <code>pig.maxCombinedSplitSize</code> controls the maximum size of the resulting split, and <code>pig.splitCombination</code> controls whether or not the feature is activated in the first place (it is on by default).</p>
+<p>This work is documented in the ticket <a href="http://issues.apache.org/jira/browse/PIG-1518">PIG-1518</a>; there are additional details in the release notes attached to the ticket.</p>
+<li><strong>Generic UDFs</strong></li>
+<p>I <a href="http://squarecog.wordpress.com/2010/08/20/upcoming-features-in-pig-0-8-dynamic-invokers/">wrote about this one</a> before &#8212; a small feature that allows you to invoke static Java methods as Pig UDFs without needing to wrap them in custom code.</p>
+<p>The official documentation is available at <a href="http://pig.apache.org/docs/r0.8.0/piglatin_ref1.html#Dynamic+Invokers">http://pig.apache.org/docs/r0.8.0/piglatin_ref1.html#Dynamic+Invokers</a></p>
+<li><strong>Safeguards against missing PARALLEL keyword</strong></li>
+<p>One of the more common mistakes people make when writing Pig scripts is forgetting to specify parallelism for operators that need it. The default behavior used to be that this means parallelism of 1, which can lead to extremely inefficient jobs. A patch by Jeff Zhang in <a href="http://issues.apache.org/jira/browse/PIG-1249">PIG-1249</a> changes this behavior to instead use a simple heuristic: if parallelism is not specified, derive the number of reducers by taking <code>MIN(max_reducers, total_input_size / bytes_per_reducer)</code>. Max number of reducers is controlled by the property <code>pig.exec.reducers.max</code> (default 999) and bytes per reducer are controlled by <code>pig.exec.reducers.bytes.per.reducer</code> (default 1GB).</p>
+<p>This is a safeguard, not a panacea; it only works with file-based input, estimates number of reducers based on input size, not the size of the intermediate data &#8212; so if you have a highly selective filter, or you are grouping a large dataset by a low-cardinality field, it will produce bad number &#8212; but it&#8217;s a nice safeguard against dramatic misconfigurations.</p>
+<blockquote><p>When porting to Apache Pig 0.8, remember to audit your scripts for parallelized operators that do not specify the <code>PARALLEL</code> keyword &#8212; if the intent is to use a single reducer, make this intent explicit by specifying <code>PARALLEL 1</code>.</p>
+</blockquote>
+<li><strong>HBaseStorage</strong></li>
+<p>HBaseStorage has been shored up in Pig 0.8. It can now read data stored in as bytes instead of requiring all numbers to be converted to Strings; it accepts a number of options &#8212; limit the number of rows returned, push down filters on HBase keys, etc. In addition, it can now be used to write to HBase in addition to reading from it. Details about the options, etc, can be found in the Release Notes section of <a href="http://issues.apache.org/jira/browse/PIG-1205">PIG-1205</a>.</p>
+<p>Note that at the moment this only works with the HBase 0.20.{4,5,6} releases, and does not work with 0.89+. There is a patch in <a href="http://issues.apache.org/jira/browse/PIG-1680">PIG-1680</a> that you can apply if you need 0.89 and 0.90 compatibility; it is not applied to the main codebase yet, as it is not backwards compatible.</p>
+<p>We are very interested in help making this Storage engine more featureful, please feel free to jump in and contribute!</p>
+<li><strong>Support for custom Map-Reduce jobs in the flow</strong></li>
+<p>Although we try to make these a rarity, sometimes cases come up in which a custom Map-Reduce job fits the bill better than Pig. Weaving a Map-Reduce job into the middle of a Pig workflow was awkward before &#8212; you had to use something like Oozie or Azkaban, or write your own workflow application. Pig 0.8 introduces a simple &#8220;MAPREDUCE&#8221; operator which allows you to invoke an opaque MR job in the middle of the flow, and continue with Pig:</p>
+<pre>text = load 'WordcountInput.txt';
+wordcount = MAPREDUCE wordcount.jar
+  STORE text INTO 'inputDir'
+  LOAD 'outputDir' AS (word:chararray, count: int)
+  `org.myorg.WordCount inputDir outputDir`;</pre>
+<p>&#160;</p>
+<p>Details are available on the wiki page: <a href="http://wiki.apache.org/pig/NativeMapReduce">http://wiki.apache.org/pig/NativeMapReduce</a></p>
+<p>The ticket for this one has been open for a while, since Pig 0.2 days, and it&#8217;s nice to see it finally implemented. Thumbs up to Aniket Mokashi for this one.</p>
+<li><strong>Custom Partitioners</strong></li>
+<p>This feature, also implemented by the amazingly productive Aniket Mokashi, is also a bit of a power-user thing (and also an ancient ticket, PIG-282). It allows the Pig script author to control the function used to distribute map output among reducers. By default, Pig uses a random hash partitioner, but sometimes a custom algorithm is required when the script author knows something particularly unique about the reduce key distribution. When that is the case, a user can now specify the Hadoop Partitioner to swap in instead of the default:</p>
+<p><code>B = group A by $0 PARTITION BY org.apache.pig.test.utils.SimpleCustomPartitioner parallel 2; </code></p>
+<p>More specific documentation can be found in the Release Notes section of <a href="http://issues.apache.org/jira/browse/PIG-282">PIG-282</a></p>
+</div>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/pig/" title="View all posts in Pig" rel="category tag">Pig</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>2 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Aniket Mokashi</a> /
+			December 21, 2010 / 6:17 PM		</em>
+		<p>Great work! Congratulations to Pig team at Yahoo for all the good features. Kudos to Alan, Olga, Daniel, Richard, Ashutosh, Pradeep and all the members of the Pig team!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">SC</a> /
+			March 15, 2011 / 2:58 PM		</em>
+		<p>I am tring to use HBaseStorage with Pig 0.8 on Hbase 0.90.1&#8230;. I tried using the PIG-1680 patch but it does does not seem to work (all the HUNKs of the patch fail). Did anybody else face the same problem or is there any other way to use HBaseStorage ?</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='5691' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="5so7" />
+		<input type="hidden" name="cptch_time" value="1398162957" />
+		<input type="hidden" value="Version: 2.4" />
+		7 &#43; th&#114;ee =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

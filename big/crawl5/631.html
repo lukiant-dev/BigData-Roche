@@ -1,0 +1,979 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Migrating to CDH | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Migrating to CDH"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2010/08/migrating-to-cdh3/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='How to Get a Job at Cloudera' href='http://blog.cloudera.com/blog/2010/07/how-to-get-a-job-at-cloudera/' />
+<link rel='next' title='Flume community update &#8211; the first 30 days!' href='http://blog.cloudera.com/blog/2010/08/flume-community-update-the-first-30-days/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2010/08/migrating-to-cdh3/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=4147' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-4147 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Migrating to CDH</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/esammer/" title="Posts by Eric Sammer" rel="author">Eric Sammer</a></li>
+				<li>August 02, 2010</li>
+				<li class="comment"><a href="#comments">no comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>With the <a href="http://blog.cloudera.com/blog/2010/06/cdhv3-and-cloudera-enterprise/">recent release of CDH3b2</a>, many users are more interested than ever to try out Cloudera&#8217;s Distribution for Hadoop (CDH). One of the questions we often hear is, &#8220;what does it take to migrate?&#8221;.</p>
+<h2>Why Migrate?</h2>
+<p>If you&#8217;re not familiar with CDH3b2, here&#8217;s what you need to know.</p>
+<p>All versions of CDH provide:</p>
+<ul>
+<li>RPM and Debian packages for simple installation and management.</li>
+<li>Clean integration with the host operating system. Logs are in <code>/var/log</code>, common binaries in <code>/usr/bin</code>, and configuration in <code>/etc</code>.</li>
+<li>A Cloudera support-ready distribution. As Hadoop becomes a mission critical component of your production infrastructure, you&#8217;ll want the option of engaging Cloudera for support or consulting services. Running CDH makes this process simple.</li>
+</ul>
+<p>CDH3b2 additionally is:</p>
+<ul>
+<li>A complete platform with smooth integration of popular projects such as Hive, HBase, Pig, Zookeeper, Flume, Sqoop, Oozie, and HUE. HDFS and Hadoop Map Reduce are only two parts of a larger system. CDH3b2 brings together tools frameworks to get data in and out of HDFS, coordinate complex processing pipelines, as well as process and analyze your data. <a href="http://blog.cloudera.com/blog/2010/07/more-on-clouderas-distribution-for-hadoop-3/">Learn more</a> about this.</li>
+<li>Based on Apache Hadoop 0.20.2 with 320 patches worth of feature back ports, stability enhancements, and bug fixes.</li>
+</ul>
+<h2>Overview</h2>
+<p>The migration process does require a moderate understanding of Linux system administration. You should make a plan before you start. You will be restarting some critical services such as the name node and job tracker, so some downtime is necessary. Given the value of the data on your cluster, you&#8217;ll also want to be careful to take recent back ups of any mission-critical data sets as well as the name node meta-data.</p>
+<p>Backing up your data is most important if you&#8217;re upgrading from a version of Hadoop based on an Apache Software Foundation release earlier than 0.20. There were changes in the open source HDFS implementation prior to 0.20 that force this upgrade. See the section below on compatibility for more details.</p>
+<p>The process I&#8217;ll outline here is as follows:</p>
+<ul>
+<li>CDH version selection</li>
+<li>Options for installation</li>
+<li>Installation process</li>
+<li>Migration of configuration data</li>
+<li>Testing your cluster</li>
+</ul>
+<h2>Selecting a Branch</h2>
+<p>One of the first questions you should ask yourself is what level of stability versus new features you require from Hadoop. If you&#8217;re managing a production Hadoop cluster with jobs with SLAs, you need a rock solid, production-proven Hadoop distribution. This is Cloudera&#8217;s stable or production branch. At the time of this writing, this is CDH2 based on Hadoop 0.20.1+169.89. In certain cases, features may be of greater priority, in which case, CDH3 0.20.2+320 is appropriate.</p>
+<p>It&#8217;s important to note that both CDH2 and CDH3 pass all functional and unit tests at Cloudera. The real difference between them is that CDH2 has been in the field longer. We generally promote a release to stable when we&#8217;ve seen it running production workloads for a substantial period of time, and when the rate of issues opened against the distro in our support group tails off. We have customers running in production today on both CDH2 an CDH3.</p>
+<h2>On Compatibility</h2>
+<p>Before we dive into the installation process I&#8217;ll highlight some points on compatibility. When upgrading to CDH from an older version or another distribution of Hadoop, it&#8217;s possible that HDFS data needs to be taken through an upgrade process. This is relatively simple, but as with any upgrade of critical data, it is absolutely necessary to back up your data.</p>
+<p>Currently, it is not necessary to perform an HDFS upgrade if you&#8217;re upgrading to CDH3 from CDH2 or Apache Hadoop versions 0.20.0 or later. In fact, any distribution of Hadoop based on Apache 0.20.0 is likely to be a clean transition without an update to HDFS required, but you should always check with the distributor.</p>
+<p>During RPC operations, all Hadoop daemons will check to ensure they are speaking to the same exact version as themselves. This means that you cannot, at present, perform a rolling upgrade of CDH. There has been some discussion about relaxing this requirement so compatible versions of Hadoop can communicate, but this has not yet been implemented.</p>
+<h2>Installation Options</h2>
+<p>CDH is available in three forms: RPMs, debs, and tarball distributions. The preferred method of installation is usually the RPM or deb packages as they automate a lot of the work required to get CDH up and running quickly. Tarballs of CDH are useful for users on systems that do not use yum/rpm or apt/dpkg, or where you do not have root access to the host operating system.</p>
+<h2>Installing CDH</h2>
+<p>When installing CDH from from RPMs or Debian packages you will definitely want to take advantage of Cloudera&#8217;s yum or apt repository support. If you&#8217;re on a system that is not rpm or deb format packages, you can still use Cloudera&#8217;s binary tarball packages.</p>
+<p>You should follow the normal process for installing CDH on your systems. The CDH packages should be installed on all nodes in the cluster. The rpm and deb packages of CDH will automatically create a hadoop user and group as well as SYSV init scripts as part of the install process. The CDH tarballs do not contain the init scripts and obviously do not create the hadoop user and group.</p>
+<p>Detailed <a href="https://docs.cloudera.com/display/DOC/CDH3+Installation+Guide">installation instructions</a> for all formats of CDH are available.</p>
+<p>After the packages are installed, you&#8217;ll want to make sure you set the proper daemons to start on the proper machines upon boot. There is a separate init script for each Hadoop daemon so only what is necessary is started.</p>
+<p>Redhat example:<br />
+<code>% chkconfig --level 3 hadoop-0.20-namenode on</code></p>
+<p>Debian example:<br />
+<code>% update-rc.d hadoop-0.20-namenode start 80 3 .</code></p>
+<p>Make sure you specify the correct run level. While run level 3 is common for multiuser Linux servers, this may not be the case in your installation. You can use the runlevel command to find the currently active run level.</p>
+<p>For now, do not start any of the Hadoop daemons.</p>
+<h2>Migrating Your Configuration</h2>
+<p>If you&#8217;re coming from older version of CDH, your configuration should already be setup with alternatives. If not, now is a good time to bring your configuration layout in line with CDH by moving your conf directory to <code>/etc/hadoop-0.20/conf.mycluster</code>. You should also configure alternatives to know about your new configuration. The <a href="https://docs.cloudera.com/display/DOC/CDH3+Installation">CDH documentation</a> covers this in detail. For now, register your new configuration with alternatives and set it to be the preferred configuration.</p>
+<p><code><br />
+% alternatives --install /etc/hadoop-0.20/conf hadoop-0.20-conf /etc/hadoop-0.20/conf.mycluster 100<br />
+% alternatives --set hadoop-0.20-conf /etc/hadoop-0.20/conf.mycluster<br />
+</code></p>
+<p>Users who are on systems that don&#8217;t have alternatives or who are installing CDH from tarballs should simply update the configuration files in <code>$HADOOP_HOME/conf</code>. Normally, <code>$HADOOP_HOME</code> is <code>/usr/local/hadoop-$VERSION</code> or <code>/opt/hadoop-$VERSION</code> but you can put it wherever it makes sense. This includes running CDH from your home directory if you don&#8217;t have root access.</p>
+<h2>Testing CDH</h2>
+<p>Now that CDH is installed and you&#8217;ve migrated your cluster configuration it&#8217;s time to fire up a few nodes and make sure everything is working as expected. Rather than bring up all the daemons at once, let&#8217;s focus on the name node first.</p>
+<p>Start by logging on to the name node machine. You may want to manually rotate the log file just to minimize the noise during testing. You can do this by simply moving today&#8217;s log file to a different name.</p>
+<p><code>% mv /var/log/hadoop/hadoop-hadoop-namenode-nn.mycompany.com.log \<br />
+/var/log/hadoop/hadoop-hadoop-namenode-nn.mycompany.com.log.old</code></p>
+<p>Next, start the CDH name node daemon using the provided init script. If an HDFS upgrade is required, you can use the <code>upgrade</code> argument in place of <code>start</code> below. This will be your last chance to grab a backup of the name node&#8217;s metadata prior to starting the daemon.</p>
+<p><code>% /etc/init.d/hadoop-0.20-namenode start</code></p>
+<p>Note that the CDH init scripts require you to be root whereas the Apache Hadoop start-all.sh / stop-all.sh scripts should <em>not</em> be run as root.</p>
+<p>It&#8217;s a good idea to check the contents of the name node log file now to ensure it has come up cleanly. You should see a warning about the name node being in safe mode due to missing blocks. This is OK because we haven&#8217;t brought up any data nodes yet. If something doesn&#8217;t look right, jump ahead to the getting help section before proceeding.</p>
+<p>Before you start any of your data nodes, you&#8217;ll want to place the name node in safe mode manually. This will prevent the name node from &#8220;panicking&#8221; and trying to repair missing block replicas as data nodes begin to register themselves. You&#8217;ll need to run this command as the hadoop user.</p>
+<p><code>% hadoop dfsadmin -safemode enter</code></p>
+<p>Next start one of the data nodes and watch its logs as you did for the name node.</p>
+<p><code>% /etc/init.d/hadoop-0.20-datanode start</code></p>
+<p>If everything is setup correctly, you should see the data node start up, register with the name node, and start its periodic block scanner thread. You should also check the name node logs to confirm you see the data node registration message there as well. Once you&#8217;ve confirmed that things look good, you should move on to starting additional data nodes checking them in batches as you go.</p>
+<p>After all data nodes are up and running, you can use the Hadoop fsck tool to confirm that the file system is healthy.</p>
+<p><code>% hadoop fsck /</code></p>
+<p>Your cluster should still be in safe mode. If the file system is healthy, you can go ahead and take it out of safe mode.</p>
+<p><code>% hadoop dfsadmin -safemode leave</code></p>
+<p>Follow this with a quick test of HDFS by copying a file into the file system.</p>
+<p><code>% date > now.txt<br />
+% hadoop fs -put now.txt /now.txt<br />
+% hadoop fs -cat /now.txt<br />
+% hadoop fs -rm /now.txt<br />
+% rm now.txt</code></p>
+<p>Congratulations! You now have HDFS running on CDH.</p>
+<p>If you had to upgrade the HDFS data &#8211; that is, you started the init script with the <code>upgrade</code> option &#8211; you should do some more extensive testing of your data. Once you&#8217;ve confirmed everything is working as expected, finalize the HDFS upgrade.</p>
+<p><code>% hadoop namenode -finalize</code></p>
+<p>Starting and testing the map reduce daemons follows a similar procedure but is a bit simpler. Start the job tracker daemon on the proper machine and monitor the logs as you did with the name node. Once you&#8217;ve confirmed the job tracker is running, proceed with starting the task tracker daemons in groups checking the job tracker UI as you go. You should see the map and reduce task capacity increasing with each node you start. Don&#8217;t panic if the job tracker doesn&#8217;t see the nodes immediately; it can take a few seconds.</p>
+<p>Don&#8217;t forget to start the secondary name node daemon as well. It&#8217;s usually a good idea to wait an hour or so and check the modification time on the files in the configured fs.checkpoint.dir. You should see that the files have been updated within the last hour. You can also check the secondary name node logs; you&#8217;ll see an indication things are working there as well in the form of some log messages about performing the checkpoint.</p>
+<h2>Documentation and References</h2>
+<p>In addition to the community articles and blog posts on Hadoop, Cloudera provides CDH-specific documentation at <a href="http://docs.cloudera.com">docs.cloudera.com</a>. Here you can find information on CDH including all of its components like Hadoop, Hive, Flume, Sqoop, HUE, and others.</p>
+<h2>How to Get Help</h2>
+<p>There are a number of ways to get help if you run into trouble during your migration or if you just have questions.</p>
+<ul>
+<li><a href="http://docs.cloudera.com">Cloudera Documentation</a></li>
+<li><a href="http://groups.google.com/a/cloudera.org/groups/dir">Cloudera mailing lists</a></li>
+<li><a href="http://www.cloudera.com/resources/?media=Video">Cloudera videos</a></li>
+<li>IRC users can join #cloudera on <a href="http://freenode.net">freenode</a></li>
+</ul>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/distribution/" title="View all posts in Distribution" rel="category tag">Distribution</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hbase/" title="View all posts in HBase" rel="category tag">HBase</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hdfs/" title="View all posts in HDFS" rel="category tag">HDFS</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hive/" title="View all posts in Hive" rel="category tag">Hive</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/mapreduce/" title="View all posts in MapReduce" rel="category tag">MapReduce</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/pig/" title="View all posts in Pig" rel="category tag">Pig</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/zookeeper/" title="View all posts in ZooKeeper" rel="category tag">ZooKeeper</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>No Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='4147' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="ctY=" />
+		<input type="hidden" name="cptch_time" value="1397910097" />
+		<input type="hidden" value="Version: 2.4" />
+		8 &minus; &#102;iv&#101; =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

@@ -1,0 +1,1308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Map-Reduce With Ruby Using Apache Hadoop | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Map-Reduce With Ruby Using Apache Hadoop"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2011/01/map-reduce-with-ruby-using-apache-hadoop/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Map-Reduce With Ruby Using Apache Hadoop Comments Feed" href="http://blog.cloudera.com/blog/2011/01/map-reduce-with-ruby-using-apache-hadoop/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='New Features in Apache Pig 0.8' href='http://blog.cloudera.com/blog/2010/12/new-features-in-apache-pig-0-8/' />
+<link rel='next' title='Configuring Security Features in CDH3' href='http://blog.cloudera.com/blog/2011/01/configuring-security-features-in-cdh3/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2011/01/map-reduce-with-ruby-using-apache-hadoop/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=5775' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-5775 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Map-Reduce With Ruby Using Apache Hadoop</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/jzuanich/" title="Posts by Jon Zuanich (@jonzuanich)" rel="author">Jon Zuanich (@jonzuanich)</a></li>
+				<li>January 05, 2011</li>
+				<li class="comment"><a href="#comments">7 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><em><strong>Guest re-post from Phil Whelan, a large-scale web-services consultant based in Vancouver, BC.</strong></em></p>
+<p><img class="alignleft size-full wp-image-605" style="float: left; margin-right: 10px; margin-top: 5px; border: none;" title="hadoop-ruby" src="http://www.philwhln.com/wp-content/uploads/2010/12/hadoop-ruby.png" alt="Map-Reduce With Hadoop Using Ruby" width="202" height="189" /><br />
+ Here I demonstrate, with repeatable steps, how to fire-up a Hadoop cluster on Amazon EC2, load data onto the HDFS (Hadoop Distributed File-System), write map-reduce scripts in Ruby and use them to run a map-reduce job on your Hadoop cluster. You will&#160;<em>not</em> need to ssh into the cluster, as all tasks are run from your local machine. Below I am using my MacBook Pro as my local machine, but the steps I have provided should be reproducible on other platforms running bash and Java.</p>
+<p><br class="spacer_" /></p>
+<ul style="margin-left: 20px; margin-top: 1px; margin-bottom: 1px;">
+<li><a href="http://www.philwhln.com/map-reduce-with-ruby-using-hadoop#fire-up-your-hadoop-cluster">Fire-Up Your Hadoop Cluster</a></li>
+<li><a href="http://www.philwhln.com/map-reduce-with-ruby-using-hadoop#setting-up-your-local-hadoop-client">Setting Up Your Local Hadoop Client</a></li>
+<li><a href="http://www.philwhln.com/map-reduce-with-ruby-using-hadoop#defining-the-map-reduce-task">Defining The Map-Reduce Task</a></li>
+<li><a href="http://www.philwhln.com/map-reduce-with-ruby-using-hadoop#uploading-your-data-to-hdfs">Uploading Your Data To HDFS (Hadoop Distributed FileSystem)</a></li>
+<li><a href="http://www.philwhln.com/map-reduce-with-ruby-using-hadoop#coding-your-map-and-reduce-scripts-in-ruby">Coding Your Map And Reduce Scripts in Ruby</a></li>
+<li><a href="http://www.philwhln.com/map-reduce-with-ruby-using-hadoop#running-the-hadoop-job">Running The Hadoop Job</a></li>
+<li><a href="http://www.philwhln.com/map-reduce-with-ruby-using-hadoop#the-results">The Results</a></li>
+<li><a href="http://www.philwhln.com/map-reduce-with-ruby-using-hadoop#conclusion">Conclusion</a></li>
+<li><a href="http://www.philwhln.com/map-reduce-with-ruby-using-hadoop#resources">Resources</a></li>
+</ul>
+<p><a name="fire-up-your-hadoop-cluster"></a></p>
+<h2>Fire-Up Your Hadoop Cluster</h2>
+<p>I chose <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','www.cloudera.com']);" href="http://www.cloudera.com/hadoop/">Cloudera&#8217;s Distribution for Apache Hadoop</a> which is 100% Apache licensed, but has some additional benefits. One of these benefits is that it is released by <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','en.wikipedia.org']);" href="http://en.wikipedia.org/wiki/Doug_Cutting">Doug Cutting</a>, who started Hadoop and drove it&#8217;s development at Yahoo! He also started <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','lucene.apache.org']);" href="http://lucene.apache.org/">Lucene</a>, which is another of my favourite Apache Projects, so I have good faith that he knows what he is doing. Another benefit, as you will see, is that it is simple to fire-up a Hadoop cluster.</p>
+<p>I am going to use Cloudera&#8217;s <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','archive.cloudera.com']);" href="http://archive.cloudera.com/cdh/3/whirr/">Whirr script</a>, which will allow me to fire up a production ready Hadoop cluster on <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','aws.amazon.com']);" href="http://aws.amazon.com/ec2/">Amazon EC2</a> directly from my laptop. Whirr is built on <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','code.google.com']);" href="http://code.google.com/p/jclouds/">jclouds</a>, meaning other cloud providers should be supported, but only Amazon EC2 has been tested. Once we have Whirr installed, we will configure a <em>hadoop.properties</em> file with our Amazon EC2 credentials and the details of our desired Hadoop cluster. Whirr will use this <em>hadoop.properties</em> file to build the cluster.</p>
+<p>If you are on Debian or Redhat you can use either apt-get or yum to install whirr, but since I&#8217;m on Mac OS X, I&#8217;ll need to <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','www.apache.org']);" href="http://www.apache.org/dyn/closer.cgi/incubator/whirr/">download the Whirr script</a>.</p>
+<p>The current version of Whirr 0.2.0, hosted on the Apache Incubator site, is not compatible with Cloudera&#8217;s Distribution for Hadoop (CDH), so I&#8217;m am downloading <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','archive.cloudera.com']);" href="http://archive.cloudera.com/cdh/3/whirr-0.1.0+23.tar.gz">version 0.1.0+23</a>.</p>
+<p>
+<pre class="code">mkdir ~/src/cloudera
+cd ~/src/cloudera
+wget http://archive.cloudera.com/cdh/3/whirr-0.1.0+23.tar.gz
+tar -xvzf whirr-0.1.0+23.tar.gz</pre>
+</p>
+<p>To build Whirr you&#8217;ll need to install Java (version 1.6), <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','maven.apache.org']);" href="http://maven.apache.org/download.html">Maven</a> ( >= 2.2.1) and <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','www.ruby-lang.org']);" href="http://www.ruby-lang.org/en/">Ruby</a> ( >= 1.8.7). If you&#8217;re running with the latest Mac OS X, then you should have the latest Java and I&#8217;ll assume, due to the title of this post, that you can manage the Ruby version. If you are not familiar with Maven, you can install it via Homebrew on Mac OS X using the brew command below. On Debian use <em>apt-get install maven2</em>.</p>
+<p>
+<pre class="code">sudo brew update
+sudo brew install maven</pre>
+</p>
+<p>Once the dependencies are installed we can build the whirr tool.</p>
+<p>
+<pre class="code">cd whirr-0.1.0+23
+mvn clean install
+mvn package -Ppackage</pre>
+</p>
+<p>In true Maven style, it will download a long list of dependencies the first time you build this. Be patient.</p>
+<p>Ok, it should be built now and if you&#8217;re anything like me, you would have used the time to get a nice cuppa tea or a sandwich. Let&#8217;s sanity check the whirr script&#8230;</p>
+<p>
+<pre class="code">bin/whirr version</pre>
+</p>
+<p>You should see something like &#8220;Apache Whirr 0.1.0+23? output to the terminal.</p>
+<p>Create a <em>hadoop.properties</em> file with the following content.</p>
+<p>
+<pre class="code">whirr.service-name=hadoop
+whirr.cluster-name=myhadoopcluster
+whirr.instance-templates=1 jt+nn,1 dn+tt
+whirr.provider=ec2
+whirr.identity=
+whirr.credential=
+whirr.private-key-file=${sys:user.home}/.ssh/id_rsa
+whirr.public-key-file=${sys:user.home}/.ssh/id_rsa.pub
+whirr.hadoop-install-runurl=cloudera/cdh/install
+whirr.hadoop-configure-runurl=cloudera/cdh/post-configure</pre>
+</p>
+<p>Replace <em> </em> and <em> </em> with your Amazon EC2 Access Key ID and Amazon EC2 Secret Access Key (I will not tell you what mine is).</p>
+<p>This configuration is a little boring with only two machines. One machine for the master and one machine for the worker. You can get more creative once you are up and running. Let&#8217;s fire up our &#8220;cluster&#8221;.</p>
+<p>
+<pre class="code">bin/whirr launch-cluster --config hadoop.properties</pre>
+</p>
+<p>This is another good time to put the kettle on, as it takes a few minutes to get up and running. If you are curious, or worried that things have come to a halt then Whirr outputs a whirr.log in the current directory. Fire-up another terminal window and tail the log.</p>
+<p>
+<pre class="code">cd ~/src/cloudera/whirr-0.1.0+23
+tail -F whirr.log</pre>
+</p>
+<p>16 minutes (and several cups of tea) later the cluster is up and running. Here is the output I saw in my terminal.</p>
+<p>
+<pre class="code">Launching myhadoopcluster cluster
+Configuring template
+Starting master node
+Master node started: [[id=us-east-1/i-561d073b, providerId=i-561d073b, tag=myhadoopcluster, name=null, location=[id=us-east-1d, scope=ZONE, description=us-east-1d, parent=us-east-1], uri=null, imageId=us-east-1/ami-d59d6bbc, os=[name=null, family=amzn-linux, version=2010.11.1-beta, arch=paravirtual, is64Bit=false, description=amzn-ami-us-east-1/amzn-ami-2010.11.1-beta.i386.manifest.xml], userMetadata={}, state=RUNNING, privateAddresses=[10.113.23.123], publicAddresses=[72.44.45.199], hardware=[id=m1.small, providerId=m1.small, name=m1.small, processors=[[cores=1.0, speed=1.0]], ram=1740, volumes=[[id=null, type=LOCAL, size=10.0, device=/dev/sda1, durable=false, isBootDevice=true], [id=null, type=LOCAL, size=150.0, device=/dev/sda2, durable=false, isBootDevice=false]], supportsImage=Not(is64Bit())]]]
+Authorizing firewall
+Starting 1 worker node(s)
+Worker nodes started: [[id=us-east-1/i-98100af5, providerId=i-98100af5, tag=myhadoopcluster, name=null, location=[id=us-east-1d, scope=ZONE, description=us-east-1d, parent=us-east-1], uri=null, imageId=us-east-1/ami-d59d6bbc, os=[name=null, family=amzn-linux, version=2010.11.1-beta, arch=paravirtual, is64Bit=false, description=amzn-ami-us-east-1/amzn-ami-2010.11.1-beta.i386.manifest.xml], userMetadata={}, state=RUNNING, privateAddresses=[10.116.147.148], publicAddresses=[184.72.179.36], hardware=[id=m1.small, providerId=m1.small, name=m1.small, processors=[[cores=1.0, speed=1.0]], ram=1740, volumes=[[id=null, type=LOCAL, size=10.0, device=/dev/sda1, durable=false, isBootDevice=true], [id=null, type=LOCAL, size=150.0, device=/dev/sda2, durable=false, isBootDevice=false]], supportsImage=Not(is64Bit())]]]
+Completed launch of myhadoopcluster
+Web UI available at http://ec2-72-44-45-199.compute-1.amazonaws.com
+Wrote Hadoop site file /Users/phil/.whirr/myhadoopcluster/hadoop-site.xml
+Wrote Hadoop proxy script /Users/phil/.whirr/myhadoopcluster/hadoop-proxy.sh
+Started cluster of 2 instances
+HadoopCluster{instances=[Instance{roles=[jt, nn], publicAddress=ec2-72-44-45-199.compute-1.amazonaws.com/72.44.45.199, privateAddress=/10.113.23.123}, Instance{roles=[tt, dn], publicAddress=/184.72.179.36, privateAddress=/10.116.147.148}], configuration={fs.default.name=hdfs://ec2-72-44-45-199.compute-1.amazonaws.com:8020/, mapred.job.tracker=ec2-72-44-45-199.compute-1.amazonaws.com:8021, hadoop.job.ugi=root,root, hadoop.rpc.socket.factory.class.default=org.apache.hadoop.net.SocksSocketFactory, hadoop.socks.server=localhost:6666}}</pre>
+</p>
+<p>Whirr has created a directory with some files in our home directory&#8230;</p>
+<pre class="code">~/.whirr/myhadoopcluster/hadoop-proxy.sh
+~/.whirr/myhadoopcluster/hadoop-site.xml</pre>
+<p>This hadoop-proxy.sh is used to access the web interface of Hadoop securely. When we run this it will tunnel through to the cluster and give us access in the web browser via a SOCKS proxy.</p>
+<p>You need to configure the SOCKS proxy in either your web browser or, in my case, the Mac OS X settings menu.</p>
+<div id="attachment_508" class="wp-caption alignnone" style="width: 720px;">
+<p><a rel="attachment wp-att-508" href="http://www.cloudera.com/?attachment_id=508"><img class="size-full wp-image-508" title="SOCKS Proxy Configuration" src="http://www.philwhln.com/wp-content/uploads/2010/12/Screen-shot-2010-12-28-at-3.15.55-PM.png" alt="Hadoop SOCKS Proxy Configuration for Mac OS X" width="710" height="360" /></a></p>
+<p class="wp-caption-text">Hadoop SOCKS Proxy Configuration for Mac OS X</p>
+</div>
+<p>Now start the proxy in your terminal&#8230;</p>
+<p><em>(Note: There has still been no need to ssh into the cluster. Everything in this post is done on our local machine)</em></p>
+<p>
+<pre class="code">sh ~/.whirr/myhadoopcluster/hadoop-proxy.sh
+<em>
+   Running proxy to Hadoop cluster at
+   ec2-72-44-45-199.compute-1.amazonaws.com.
+   Use Ctrl-c to quit.</em></pre>
+</p>
+<p>The above will output the hostname that you can access the cluster at. On Amazon EC2 it looks something like <em>http://ec2-72-44-45-199.compute-1.amazonaws.com:50070/dfshealth.jsp</em>. Use this hostname to view the cluster in your web browser.</p>
+<p>
+<pre class="code">http://<hostname>:50070/dfshealth.jsp</pre>
+</p>
+<div id="attachment_502" class="wp-caption alignnone" style="width: 588px;">
+<p><a rel="attachment wp-att-502" href="http://www.cloudera.com/?attachment_id=502"><img class="size-full wp-image-502" title="Screen shot 2010-12-28 at 3.50.23 PM" src="http://www.philwhln.com/wp-content/uploads/2010/12/Screen-shot-2010-12-28-at-3.50.23-PM.png" alt="dfshealth.jsp" width="578" height="643" /></a></p>
+<p class="wp-caption-text">HDFS Health Dashboard</p>
+</div>
+<p>If you click on the link to &#8220;Browse the filesystem&#8221; then you will notice the hostname changes. This will jump around the data-nodes in your cluster, due to HDFS&#8217;s distributed nature. You only currently have one data-node. On Amazon EC2 this new hostname will be the internal hostname of data-node server, which is visible because you are tunnelling through the SOCKS proxy.</p>
+<div id="attachment_505" class="wp-caption alignnone" style="width: 670px;">
+<p><a rel="attachment wp-att-505" href="http://www.cloudera.com/?attachment_id=505"><img class="size-full wp-image-505" title="Screen shot 2010-12-28 at 3.36.08 PM" src="http://www.philwhln.com/wp-content/uploads/2010/12/Screen-shot-2010-12-28-at-3.36.08-PM.png" alt="browseDirectory.jsp" width="660" height="391" /></a></p>
+<p class="wp-caption-text">HDFS File Browser</p>
+</div>
+<p>Ok! It looks as though our Hadoop cluster is up and running. Let&#8217;s upload our data.</p>
+<p><a name="setting-up-your-local-hadoop-client"></a></p>
+<h2>Setting Up Your Local Hadoop Client</h2>
+<p>To run a map-reduce job on your data, your data needs to be on the Hadoop Distributed File-System. Otherwise known as HDFS. You can interact with Hadoop and HDFS with the <em>hadoop</em> command. We do not have Hadoop installed on our local machine. Therefore, we can either log into one of our Hadoop cluster machines and run the hadoop command from there, or install hadoop on our local machine. I&#8217;m going to opt for installing Hadoop on my local machine (recommended), as it will be easier to interact with the HDFS and start the Hadoop map-reduce jobs directly from my laptop.</p>
+<p>Cloudera does not, unfortunately, provide a release of Hadoop for Mac OS X. Only debians and RPMs. They do provide a .tar.gz download, which we are going to use to install Hadoop locally. Hadoop is built with Java and the scripts are written in bash, so there should not be too many problems with compatibility across platforms that can run Java and bash.</p>
+<p>Visit <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','docs.cloudera.com']);" href="https://docs.cloudera.com/display/DOC/Downloading+CDH+Releases">Cloudera CDH Release</a> webpage and select <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','archive.cloudera.com']);" href="http://archive.cloudera.com/cdh/3/">CDH3 Patched Tarball</a>.  I downloaded the same version <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','archive.cloudera.com']);" href="http://archive.cloudera.com/cdh/3/hadoop-0.20.2+737.tar.gz ">hadoop-0.20.2+737.tar.gz</a> that Whirr installed on the cluster.</p>
+<pre class="code">tar -xvzf hadoop-0.20.2+737.tar.gz
+sudo mv hadoop-0.20.2+737 /usr/local/
+cd /usr/local
+sudo ln -s hadoop-0.20.2+737 hadoop
+echo 'export HADOOP_HOME=/usr/local/hadoop' >> ~/.profile
+echo 'export PATH=$PATH:$HADOOP_HOME/bin' >> ~/.profile
+source ~/.profile
+which hadoop # should output "/usr/local/hadoop/bin/hadoop"
+hadoop version # should output "Hadoop 0.20.2+737 ..."
+cp ~/.whirr/myhadoopcluster/hadoop-site.xml /usr/local/hadoop/conf/</pre>
+<p>Now run your first command from your local machine to interact with HDFS. This following command is similar to &#8220;ls -l /&#8221; in bash.</p>
+<p>
+<pre class="code">hadoop fs -ls /</pre>
+</p>
+<p>You should see the following output which lists the root on the Hadoop filesystem.</p>
+<pre class="code">10/12/30 18:19:59 WARN conf.Configuration: DEPRECATED: hadoop-site.xml found in the classpath. Usage of hadoop-site.xml is deprecated. Instead use core-site.xml, mapred-site.xml and hdfs-site.xml to override properties of core-default.xml, mapred-default.xml and hdfs-default.xml respectively
+Found 4 items
+drwxrwxrwx   - hdfs supergroup          0 2010-12-28 10:33 /hadoop
+drwxrwxrwx   - hdfs supergroup          0 2010-12-28 10:33 /mnt
+drwxrwxrwx   - hdfs supergroup          0 2010-12-28 10:33 /tmp
+drwxrwxrwx   - hdfs supergroup          0 2010-12-28 10:33 /user</pre>
+<p>Yes, you will see a depreciation warning, since hadoop-site.xml configuration has been split into multiple files. We will not worry about this here.</p>
+<p><a name="defining-the-map-reduce-task"></a></p>
+<h2>Defining The Map-Reduce Task</h2>
+<p>We are going write a map-reduce job that scans all the files in a given directory, takes the words found in those files and then counts the number of times words begin with any two characters.</p>
+<p>For this we&#8217;re going to use a dictionary file found on my Mac OS X /usr/share/dict/words. It contains 234936 words, each on a newline. <a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','en.wikipedia.org']);" href="http://en.wikipedia.org/wiki/Words_(Unix)">Linux has a similar dictionary file</a>.</p>
+<p><a name="uploading-your-data-to-hdfs"></a></p>
+<h2>Uploading Your Data To HDFS (Hadoop Distributed FileSystem)</h2>
+<pre class="code">hadoop fs -mkdir input
+hadoop fs -put /usr/share/dict/words input/
+hadoop fs -ls input</pre>
+<p>You should see output similar to the following, which list the <em>words</em> file on the remote HDFS. Since my local user is &#8220;phil&#8221;, Hadoop has added the file under /user/phil on HDFS.</p>
+<p><br class="spacer_" /></p>
+<p>
+<pre class="code">Found 1 items
+-rw-r--r--   3 phil supergroup    2486813 2010-12-30 18:43 /user/phil/input/words</pre>
+</p>
+<p>Congratulations! You have just uploaded your first file to the Hadoop Distributed File-System on your cluster in the cloud.</p>
+<p><a name="coding-your-map-and-reduce-scripts-in-ruby"></a></p>
+<h2>Coding Your Map And Reduce Scripts in Ruby</h2>
+<p>Map-Reduce can actually be thought of as map-group-reduce. The &#8220;map&#8221; sucks in the raw data, cuts off the fat, removes the bones and outputs the smallest possible piece of output data for each piece of input data. The &#8220;map&#8221; also outputs the key of the data. Our key will be the two-letter prefix of each word. These keys are used by Hadoop to &#8220;group&#8221; the data together. The &#8220;reduce&#8221; then takes each group of data and &#8220;reduces&#8221; it. In our case the &#8220;reduce&#8221; will be the counting occurrences of the two-letter prefixes.</p>
+<p>Hadoop will do much of the work for us. It will recurse the input directory, open the files and stream the files one line at a time into our &#8220;map&#8221; script via STDIN. We will output zero, one or many output lines to STDOUT for each line of input. Since we know that our input file has exactly one word per line, we can simplify our script and always output exactly one two-letter prefix for each input line. (EDIT: words with one letter will not result in any output).</p>
+<p>The output of our &#8220;map&#8221; script to STDOUT will have to be Hadoop friendly. This means we will output our &#8220;key&#8221;, then a tab character then our value and then a newline. This is what the streaming interface expects. Hadoop needs to extract the key to be able to sort and organise the data based on this key.</p>
+<p>
+<pre class="code"><key><tab><value><newline></pre>
+</p>
+<p>Our value will always be &#8220;1?, since each line has only one word with only once instance of the two-letter prefix of that word.</p>
+<p>For instance, if the input was &#8220;Apple&#8221; then we would output the key &#8220;ap&#8221; and value &#8220;1?. We have seen the prefix &#8220;ap&#8221; only once in this input.</p>
+<p>You should note that the value can be anything that your reduce script can interpret. For instance, the value could be a string of JSON. Here, we are keeping it very simple.</p>
+<p>
+<pre class="code">ap<tab>1<newline></pre>
+</p>
+<p>Let&#8217;s code up the mapper as <em>map.rb</em></p>
+<p>
+<pre class="code"># Ruby code for map.rb
+
+ARGF.each do |line|
+
+   # remove any newline
+   line = line.chomp
+
+   # do nothing will lines shorter than 2 characters
+   next if ! line || line.length < 2
+
+   # grab our key as the two-character prefix (lower-cased)
+   key = line[0,2].downcase
+
+   # value is a count of 1 occurence
+   value = 1
+
+   # output to STDOUT
+   #
+   puts key + "\t" + value.to_s
+
+end</pre>
+</p>
+<p>Now we have our mapper script, let&#8217;s write the reducer.</p>
+<p>Remember, the reducer is going to count up the occurences for each two-character prefix (our &#8220;key&#8221;). Hadoop will have already grouped our keys together, so even if the mapper output is in shuffled order, the reducer will now see the keys in sorted order. This means that the reducer can watch for when the key changes and know that it has seen all of the possible values for the previous key.</p>
+<p>Here is an example of the STDIN and STDOUT that map.rb and reduce.rb might see. The data flow goes from left to right.</p>
+<table>
+<tbody>
+<tr>
+<th>map.rb<br />
+ STDIN</th>
+<th>map.rb<br />
+ STDOUT</th>
+<th>Hadoop<br />
+ sorts<br />
+ keys</th>
+<th>reduce.rb<br />
+ STDIN</th>
+<th>reduce.rb<br />
+ STDOUT</th>
+</tr>
+<tr>
+<td>Apple<br />
+ Monkey<br />
+ Orange<br />
+ Banana<br />
+ APR<br />
+ Bat<br />
+ appetite</td>
+<td>ap 1<br />
+ mo 1<br />
+ or 1<br />
+ ba 1<br />
+ ap 1<br />
+ ba 1<br />
+ ap 1</td>
+<td></td>
+<td>ap 1<br />
+ ap 1<br />
+ ap 1<br />
+ ba 1<br />
+ ba 1<br />
+ mo 1<br />
+ or 1</td>
+<td>ap 3<br />
+ ba 2<br />
+ mo 1<br />
+ or 1</td>
+</tr>
+</tbody>
+</table>
+<p>Let&#8217;s code up the reducer as <em>reduce.rb</em></p>
+<p>
+<pre class="code"># Ruby code for reduce.rb
+
+prev_key = nil
+key_total = 0
+
+ARGF.each do |line|
+
+   # remove any newline
+   line = line.chomp
+
+   # split key and value on tab character
+   (key, value) = line.split(/\t/)
+
+   # check for new key
+   if prev_key &amp;&amp; key != prev_key &amp;&amp; key_total > 0
+
+      # output total for previous key
+
+      #
+      puts prev_key + "\t" + key_total.to_s
+
+      # reset key total for new key
+      prev_key = key
+      key_total = 0
+
+   elsif ! prev_key
+      prev_key = key
+
+   end
+
+   # add to count for this current key
+   key_total += value.to_i
+
+end</pre>
+</p>
+<p>You can test out your scripts on a small sample by using the &#8220;sort&#8221; command in replacement for Hadoop.</p>
+<p><pre class="code">cat /usr/share/dict/words | ruby map.rb | sort | ruby reduce.rb</pre>
+</p>
+<p>The start of this output looks like this&#8230;</p>
+<p>
+<pre class="code">aa	13
+ab	666
+ac	1491
+ad	867
+ae	337
+af	380</pre>
+</p>
+<p><a name="running-the-hadoop-job"></a></p>
+<h2>Running The Hadoop Job</h2>
+<p>I wrote this bash-based runner script to start the job. It uses Hadoop&#8217;s streaming service. This streaming service is what allows us to write our map-reduce scripts in Ruby. It <em>streams</em> to our script&#8217;s STDIN and reads our script&#8217;s output from our script&#8217;s STDOUT.</p>
+<p>
+<pre class="code">#!/bin/bash
+
+HADOOP_HOME=/usr/local/hadoop
+JAR=contrib/streaming/hadoop-streaming-0.20.2+737.jar
+
+HSTREAMING="$HADOOP_HOME/bin/hadoop jar $HADOOP_HOME/$JAR"
+
+$HSTREAMING \
+ -mapper  'ruby map.rb' \
+ -reducer 'ruby reduce.rb' \
+ -file map.rb \
+ -file reduce.rb \
+ -input '/user/phil/input/*' \
+ -output /user/phil/output</pre>
+</p>
+<p>We specify the command to run for the mapper and reducer and use the &#8220;-file&#8221; parameter twice to attach our two Ruby scripts. It is assumed that all other dependencies are already installed on the machine. In this case we are using no Ruby imports or requires and the Ruby interpreter is already installed on the machines in the Hadoop cluster (it came with the Cloudera Amazon EC2 image). Things become more complicated when you start to run jobs with more dependencies that are not already installed on the Hadoop cluster. This is a topic for another post.</p>
+<p>&#8220;-input&#8221; and &#8220;-output&#8221; specify which files to read from for input and the directoty to send the output to. You can also specify a deeper level of recursion with more wildcards (e.g. &#8220;/user/phil/input/*/*/*&#8221;).</p>
+<p>Once again, it is important that our SOCKS proxy is running, as this is the secure way that we communicate through to our Hadoop cluster.</p>
+<p>
+<pre class="code">sh ~/.whirr/myhadoopcluster/hadoop-proxy.sh
+    <em>Running proxy to Hadoop cluster at ec2-72-44-45-199.compute-1.amazonaws.com. Use Ctrl-c to quit.</em></pre>
+</p>
+<p>Now we can start the Hadoop job by running our above bash script. Here is the output the script gave me at the terminal.</p>
+<p>
+<pre class="code">packageJobJar: [map.rb, reduce.rb, /tmp/hadoop-phil/hadoop-unjar3366245269477540365/] [] /var/folders/+Q/+QReZ-KsElyb+mXn12xTxU+++TI/-Tmp-/streamjob5253225231988397348.jar tmpDir=null
+10/12/30 21:45:32 INFO mapred.FileInputFormat: Total input paths to process : 1
+10/12/30 21:45:37 INFO streaming.StreamJob: getLocalDirs(): [/tmp/hadoop-phil/mapred/local]
+10/12/30 21:45:37 INFO streaming.StreamJob: Running job: job_201012281833_0001
+10/12/30 21:45:37 INFO streaming.StreamJob: To kill this job, run:
+10/12/30 21:45:37 INFO streaming.StreamJob: /usr/local/hadoop/bin/hadoop job  -Dmapred.job.tracker=ec2-72-44-45-199.compute-1.amazonaws.com:8021 -kill job_201012281833_0001
+10/12/30 21:45:37 INFO streaming.StreamJob: Tracking URL: http://ec2-72-44-45-199.compute-1.amazonaws.com:50030/jobdetails.jsp?jobid=job_201012281833_0001
+10/12/30 21:45:38 INFO streaming.StreamJob:  map 0%  reduce 0%
+10/12/30 21:45:55 INFO streaming.StreamJob:  map 42%  reduce 0%
+10/12/30 21:45:58 INFO streaming.StreamJob:  map 100%  reduce 0%
+10/12/30 21:46:14 INFO streaming.StreamJob:  map 100%  reduce 88%
+10/12/30 21:46:19 INFO streaming.StreamJob:  map 100%  reduce 100%
+10/12/30 21:46:22 INFO streaming.StreamJob: Job complete: job_201012281833_0001
+10/12/30 21:46:22 INFO streaming.StreamJob: Output: /user/phil/output</pre>
+</p>
+<p>This is reflected if you visit the job tracker console in web browser.</p>
+<div id="attachment_577" class="wp-caption alignnone" style="width: 996px;">
+<p><a rel="attachment wp-att-577" href="http://www.cloudera.com/?attachment_id=577"><img class="size-full wp-image-577" title="Screen shot 2010-12-30 at 10.12.46 PM" src="http://www.philwhln.com/wp-content/uploads/2010/12/Screen-shot-2010-12-30-at-10.12.46-PM.png" alt="jobTracker after successful run" width="986" height="783" /></a></p>
+<p class="wp-caption-text">jobTracker after successful run</p>
+</div>
+<p>If you click on the job link you can see lots of information on this job. This job is completed in these images, but with a longer running job you would see the progress as the job runs. I have split the job tracker page into the following three images.</p>
+<div id="attachment_578" class="wp-caption alignnone" style="width: 762px;">
+<p><a rel="attachment wp-att-578" href="http://www.cloudera.com/?attachment_id=578"><img class="size-full wp-image-578" title="Screen shot 2010-12-30 at 10.15.55 PM" src="http://www.philwhln.com/wp-content/uploads/2010/12/Screen-shot-2010-12-30-at-10.15.55-PM.png" alt="Map-Reduce Job Tracker Page (part 1)" width="752" height="361" /></a></p>
+<p class="wp-caption-text">Map-Reduce Job Tracker Page (part 1)</p>
+</div>
+<div id="attachment_579" class="wp-caption alignnone" style="width: 720px;">
+<p><a rel="attachment wp-att-579" href="http://www.cloudera.com/?attachment_id=579"><img class="size-full wp-image-579" title="Screen shot 2010-12-30 at 10.16.17 PM" src="http://www.philwhln.com/wp-content/uploads/2010/12/Screen-shot-2010-12-30-at-10.16.17-PM.png" alt="Map-Reduce Job Tracker Page (part 2)" width="710" height="616" /></a></p>
+<p class="wp-caption-text">Map-Reduce Job Tracker Page (part 2)</p>
+</div>
+<div id="attachment_580" class="wp-caption alignnone" style="width: 772px;">
+<p><a rel="attachment wp-att-580" href="http://blog.cloudera.com/blog/2011/01/map-reduce-with-ruby-using-apache-hadoop/what%e2%80%99s-new-in-hadoop-core-020/"><img class="size-full wp-image-580" title="Screen shot 2010-12-30 at 10.16.44 PM" src="http://www.philwhln.com/wp-content/uploads/2010/12/Screen-shot-2010-12-30-at-10.16.44-PM.png" alt="Map-Reduce Job Tracker Page (part 3) Graphs" width="762" height="551" /></a></p>
+<p class="wp-caption-text">Map-Reduce Job Tracker Page (part 3) Graphs</p>
+</div>
+<p><a name="the-results"></a></p>
+<h2>The Results</h2>
+<p>Our map-reduce job has run successfully using Ruby. Let&#8217;s have a look at the output.</p>
+<p>
+<pre class="code">hadoop fs -ls output
+
+Found 3 items
+-rw-r--r--   3 phil supergroup          0 2010-12-30 21:46 /user/phil/output/_SUCCESS
+drwxrwxrwx   - phil supergroup          0 2010-12-30 21:45 /user/phil/output/_logs
+-rw-r--r--   3 phil supergroup       2341 2010-12-30 21:46 /user/phil/output/part-00000</pre>
+</p>
+<p>Hadoop output is written in chunks to sequential files part-00000, part-00001, part-00002 and so on. Our dataset is very small, so we only have one 2kb file called part-00000.</p>
+<p>
+<pre class="code">hadoop fs -cat output/part-00000 | head
+aa	13
+ab	666
+ac	1491
+ad	867
+ae	337
+af	380
+ag	507
+ah	46
+ai	169
+aj	14</pre>
+</p>
+<p>Our map-reduce script counted 13 words starting with &#8220;aa&#8221;, 666 words starting with &#8220;ab&#8221; and 1491 words starting with &#8220;ac&#8221;.</p>
+<p><a name="conclusion"></a></p>
+<h2>Conclusion</h2>
+<p>Yes, it is an overkill to use Hadoop and a (very small) cluster of cloud-based machines for this example, but I think it demonstrates how you can quickly get your Hadoop cluster up and running map-reduce jobs written in Ruby. You can use the same procedure to fire-up a much larger and more powerful Hadoop cluster with a bigger dataset and more complex Ruby scripts.</p>
+<p><strong>Please post any questions or suggestions you have in the comments below. They are always highly appreciated.</strong></p>
+<p><a name="resources"></a></p>
+<h2>Resources</h2>
+<ul>
+<li><a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','hadoop.apache.org']);" href="http://hadoop.apache.org/">Apache Hadoop</a></li>
+<li><a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','www.cloudera.com']);" href="http://www.cloudera.com/hadoop/">Cloudera&#8217;s Distribution for Apache Hadoop (CDH)</a></li>
+<li><a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','www.cloudera.com']);" href="http://www.cloudera.com/downloads/virtual-machine/">Cloudera Hadoop Training VMWare Image</a></li>
+<li><a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','www.slideshare.net']);" href="http://www.slideshare.net/philwhln/map-reduce-using-perl">Map-Reduce Using Perl</a></li>
+<li><a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','code.google.com']);" href="http://code.google.com/p/jclouds/">jclouds </a></li>
+<li><a onclick="javascript:_gaq.push(['_trackEvent','outbound-article','en.wikipedia.org']);" href="http://en.wikipedia.org/wiki/Words_(Unix)">Words file on Unix-like operating systems</a></li>
+</ul>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/mapreduce/" title="View all posts in MapReduce" rel="category tag">MapReduce</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>7 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Shai Rosenfeld</a> /
+			January 05, 2011 / 2:02 PM		</em>
+		<p>Great post!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Ruben</a> /
+			February 09, 2011 / 1:02 AM		</em>
+		<p>Very helpful example!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Adam</a> /
+			February 09, 2012 / 11:55 AM		</em>
+		<p>FYI- Your reduce script omits the last key. can be fixed by adding</p>
+<p>puts key + &#8220;\t&#8221; + key_total.to_s</p>
+<p>to the end of the file.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Drew</a> /
+			March 20, 2012 / 11:19 PM		</em>
+		<p>@adam, your fix didn&#8217;t work as is for me. I added</p>
+<p>puts prev_key + &#8220;\t&#8221; + key_total.to_s</p>
+<p>to the end of the file. It should also be noted that the input should not end with a blank new line.</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='5775' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="Rp8=" />
+		<input type="hidden" name="cptch_time" value="1398162956" />
+		<input type="hidden" value="Version: 2.4" />
+		9 &#43; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  &#102;&#111;&#117;rte&#101;n	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

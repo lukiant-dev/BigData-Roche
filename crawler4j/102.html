@@ -1,0 +1,979 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Collection Aliasing: Near Real-Time Search for Really Big Data | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Collection Aliasing: Near Real-Time Search for Really Big Data"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/10/collection-aliasing-near-real-time-search-for-really-big-data/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Collection Aliasing: Near Real-Time Search for Really Big Data Comments Feed" href="http://blog.cloudera.com/blog/2013/10/collection-aliasing-near-real-time-search-for-really-big-data/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Download the New Impala e-Book from O&#8217;Reilly Media' href='http://blog.cloudera.com/blog/2013/10/download-the-new-impala-e-book-from-oreilly-media/' />
+<link rel='next' title='See You Next Week at Strata + Hadoop World 2013!' href='http://blog.cloudera.com/blog/2013/10/see-you-next-week-at-strata-hadoop-world-2013/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/10/collection-aliasing-near-real-time-search-for-really-big-data/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=23720' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-23720 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Collection Aliasing: Near Real-Time Search for Really Big Data</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Mark Miller</li>
+				<li>October 25, 2013</li>
+				<li class="comment"><a href="#comments">2 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>The rise of Big Data has been pushing search engines to handle ever-increasing amounts of data. While building <a href="http://www.cloudera.com/content/cloudera/en/products/cdh/search.html">Cloudera Search</a>, one of the things we considered in Cloudera Engineering was how we would incorporate <a href="https://cwiki.apache.org/confluence/display/solr/SolrCloud">Apache Solr</a> with Apache Hadoop in a way that would enable near-real-time indexing and searching on <em>really</em> big data.</p>
+<p>Eventually, we built Cloudera Search on Solr and <a href="http://lucene.apache.org">Apache Lucene</a>, both of which have been adding features at an ever-faster pace to aid in handling more and more data. However, there is no silver bullet for dealing with extremely large-scale data. A common answer in the world of search is “it depends,” and that answer applies in large-scale search as well. The right architecture for your use case depends on many things, and your choice will generally be guided by the requirements and resources for your particular project.</p>
+<p>We wanted to make sure that one simple scaling strategy that has been commonly used in the past for large amounts of time-series data would be fairly simple to set up with Cloudera Search. By “time-series data,” I mean logs, tweets, news articles, market data, and so on &#8212; data that is continuously being generated and is easily associated with a current timestamp.</p>
+<p>One of the keys to this strategy is a feature that Cloudera recently contributed to Solr: <a href="https://issues.apache.org/jira/browse/SOLR-4497">collection aliasing</a>. The approach involves using collection aliases to juggle collections in a very scalable little “dance.” The architecture has some limitations, but for the right use cases, it’s an extremely scalable option. I also think there are some areas of the dance that we can still add value to, but you can already do quite a bit with the current functionality.</p>
+<h2>Inside Collection Aliasing</h2>
+<p>Collection aliasing allows you to setup a virtual collection that actually points to one or more real collections. For example, you could have an alias called “articles” that when queried actually searched “magazines” and “blogs”. Aliases meant for read operations can refer to one or more real collections. Aliases meant for updates should only map to one real collection. You may use a collection alias in any place that you would normally specify a real collection name.</p>
+<p>One of the main benefits to aliases is that you can use the aliases from any search client applications and then switch which actual collections those aliases refer to on the fly without requiring updates to the clients.</p>
+<p>Collection aliases are only available when using SolrCloud mode and are manipulated via a simple HTTP API:</p>
+<ul>
+<li><code>Create</code><br /> <code>http://localhost:8983/solr/admin/collections?action=CREATEALIAS&amp;name=AliasName&amp;collection=ListOfCollections</code></li>
+<li><code>Delete</code><br /> <code>http://localhost:8983/solr/admin/collections?action=DELETEALIAS&amp;name=AliasName</code></li>
+<li><code>List</code><br /> To be done: <a href="https://issues.apache.org/jira/browse/SOLR-4968">SOLR-4968</a></li>
+</ul>
+<h2>A Collection Composed of Collections</h2>
+<p>One way to take advantage of Collections Aliases is to make a virtual collection out of multiple real SolrCloud collections. Each real collection will act as a logical shard of the full virtual collection. As you will be putting time-series data into this virtual collection, this approach allows you to treat the collection for different time ranges differently. It also allows you to control the size of the single collection that will be accepting new data and providing near-real-time search. A smaller near-real-time collection will perform better and independently of the total size of the virtual collection.</p>
+<p align="center"><img title="miller1" src="http://blog.cloudera.com/wp-content/uploads/2013/10/miller1.png" alt="" width="333" height="119" /></p>
+<p>Initially, there will be just one collection. You can use a variety of naming patterns for the real collection names. For illustrative purposes, I’ve simply chosen to use ColN as the collection names.</p>
+<p>Each of these collections should use the same set of configurations files &#8211; they are in fact, many collections acting as a single collection, so this makes sense. Using a single set of config files will ensure you can search across the collections and lets you update settings for the virtual collection in a single place.</p>
+<p align="center"><img title="miller2" src="http://blog.cloudera.com/wp-content/uploads/2013/10/miller2.png" alt="" width="333" height="137" /></p>
+<p>The first collection is the one that will collect all the incoming time series data. You will likely be using something like Apache Flume with <a href="https://github.com/cloudera/cdk/tree/master/cdk-morphlines">Cloudera Morphlines</a> to load in the data, but the following technique is not specific to any particular data loading method.</p>
+<p>You will want at least two aliases to control access to your large virtual collection: an update alias and a read alias.</p>
+<p>Note: This technique is meant for cases where the data is coming in live &#8211; not for bulk loading existing data. You can bulk load and use this architecture with further effort, but it is beyond the scope of this post.</p>
+<h2>Update Alias</h2>
+<p><code>Create alias TSCUpdate -&gt; Col1</code></p>
+<p><code>http://localhost:8983/solr/admin/collections?action=CREATEALIAS&amp;name=TSCUpdate&amp;collection=Col1</code></p>
+<p>Whatever the manner you are loading in the data, you will want to create a single update alias to use as the configured collection name to send updates to. In the diagram below, I have chosen TSCUpdate as the name of the update alias.</p>
+<p align="center"><img title="miller3" src="http://blog.cloudera.com/wp-content/uploads/2013/10/miller3.png" alt="" width="333" height="122" /></p>
+<p>You can use this update alias to seamlessly switch which physical collection actually receives the incoming updates. In the above diagram, Col1 is the only physical collection and so that is what the TSCUpdate points to.</p>
+<p>As the data comes in, it will be directed at the update alias and fill the Col1 collection for X amount of time. At time X, Col2 will be created and the update alias set to it. Col1 is now a static index with older data and Col2 accepts all the incoming data. One of the simplifying features of this strategy is that data updates are not generally expected. Rather than update existing documents, new documents just keep flowing in.</p>
+<p>Note: To update an alias, you simply use <code>CREATEALIAS</code> again on an existing alias.</p>
+<p><code>http://localhost:8983/solr/admin/collections?action=CREATEALIAS&amp;name=TSCUpdate&amp;collection=Col2</code></p>
+<p align="center"><img title="miller4" src="http://blog.cloudera.com/wp-content/uploads/2013/10/miller4.png" alt="" width="333" height="119" /></p>
+<p>After another interval of X, Col3 will be created and the update alias TSCUpdate directed to it.</p>
+<p><code>http://localhost:8983/solr/admin/collections?action=CREATEALIAS&amp;name=TSCUpdate&amp;collection=Col3</code></p>
+<p align="center"><img title="miller5" src="http://blog.cloudera.com/wp-content/uploads/2013/10/miller5.png" alt="" width="333" height="115" /></p>
+<p>The newest data that is coming in will often also be the most searched data. With this strategy, you can keep the most recent data in a relatively small collection while older data is kept in static collections that can be packed onto fewer machines and/or merged together. Static data is very friendly to caching. The collections with more recent data might have higher replication than older data to support a higher throughput. You could remove extra replicas for older collections. In general, you can tune different time regions by collection for your use case. You can also explicitly and flexibly leave large time regions out of queries.</p>
+<p>Note: It may take a while to <a href="https://cwiki.apache.org/confluence/display/solr/Collections+API#CollectionsAPI-CreateanAliasforaCollection">create</a> and <a href="https://cwiki.apache.org/confluence/display/solr/Collections+API#CollectionsAPI-DeleteaCollectionAlias">delete</a> collections when it’s time to update the update collection alias. You might want to schedule the heavy lifting to happen before your time interval is up, and then simply do the alias updating (which is very fast) on the interval.</p>
+<h2>Read Alias</h2>
+<p><code>Create Alias - TSC -&gt; Col1.</code></p>
+<p><code>http://localhost:8983/solr/admin/collections?action=CREATEALIAS&amp;name=TSC&amp;collection=Col1</code></p>
+<p>You will also want to use read side aliases. With read size aliases, you can explicitly leave large sections of the total data out of your queries as well as search all of the data using a single virtual collection name. You might set up a few of these aliases to allow clients to search over different time windows of the data.</p>
+<p>To search Time Series Collection in the figure below, you would have to search over Col1, Col2, and Col3. With our read side alias, you could easily do this by simply specifying a collection of TSC.</p>
+<p><code>http://localhost:8983/solr/admin/collections?action=CREATEALIAS&amp;name=TSC&amp;collection=Col2,Col3</code></p>
+<p align="center"><img title="miller6" src="http://blog.cloudera.com/wp-content/uploads/2013/10/miller6.png" alt="" width="333" height="105" /></p>
+<p>Because Col1, Col2, and Col3 will hold essentially ordered time series data, you can also search a smaller index by ignoring older data. For example, you could only search over Col2 and Col3, ignoring the data that first filled up Col1 for most queries. If you think about something like Twitter or a large news aggregator, you can imagine that most inquires will be directed at newer data, and so most searches might not need to touch data from 2005.</p>
+<p>For queries that must go back further, you can explicitly search over Col1, Col2, and Col3.</p>
+<p><code>http://localhost:8983/solr/admin/collections?action=CREATEALIAS&amp;name=TSC&amp;collection=Col1,Col2,Col3</code></p>
+<p align="center"><img title="miller7" src="http://blog.cloudera.com/wp-content/uploads/2013/10/miller7.png" alt="" width="333" height="105" /></p>
+<p>The most common read side alias would probably be a rolling window that was always updated to reference the most recent N collections.</p>
+<p>Note: If your use case is very sensitive to the boundary of the time intervals of your collections, you may have to include another collection on either end of your search window and use range queries against the timestamp field to narrow in on the small number of updates that may have missed the boundary window.</p>
+<h2>Merging</h2>
+<p>Because all collections but the current one are static, merging collections becomes relatively straightforward. You might do this so that older data is hosted on less hardware or so that you won’t have to search across so many collections. Older data might not see the same load as more recent data, and a slightly worse response time for older data might be reasonable in any case. For example, you might have a single collection for the most recent day, then weekly collections for the past year, then monthly or yearly collections for data older than that. To turn the single day collections into collections that span multiple days, you will have to periodically merge indexes in the background. You can use static indexes and collection aliasing to do this.</p>
+<h2>How to Merge</h2>
+<p>Solr has a feature for <a href="https://cwiki.apache.org/confluence/display/solr/Merging+Indexes">merging</a> each shard in a collection via an HTTP API call. Typically, the merge has to use local indexes. With Cloudera Search, the command is more powerful because collections live in HDFS, and so merges can easily be done with remote collections.</p>
+<p>You can easily move collections by creating an empty matching collection and merging into it, and you can easily combine collections by merging two into a single new matching empty collection.</p>
+<p>We are currently missing some sugar in that you will have to manually merge each shard in a collection. I’m sure Solr and Cloudera Search will eventually offer the ability to merge by collection name and automatically figure out and execute the correct shard merges.</p>
+<p>Some useful Java example code to look at is our GoLive feature in the <a href="https://github.com/cloudera/search/tree/master/search-mr">Solr-MR contrib</a>, which Cloudera is contributing to Solr. It looks up the right shard urls for a collection and individually merges each shard. MapReduceIndexerTool is one such informative class to explore.</p>
+<ul>
+<li><a href="https://github.com/cloudera/search/blob/master/search-mr/src/main/java/org/apache/solr/hadoop/MapReduceIndexerTool.java">https://github.com/cloudera/search/blob/master/search-mr/src/main/java/org/apache/solr/hadoop/MapReduceIndexerTool.java</a> and ZooKeeperInspector</li>
+<li><a href="https://github.com/cloudera/search/blob/master/search-mr/src/main/java/org/apache/solr/hadoop/ZooKeeperInspector.java">https://github.com/cloudera/search/blob/master/search-mr/src/main/java/org/apache/solr/hadoop/ZooKeeperInspector.java</a></li>
+</ul>
+<h2>Optimizing</h2>
+<p>Collections perform better when each shard of the collection is made up of as few index segments as possible. When you add data to a Solr index, new segments are created and merged together over time. If you have a static index, it often makes a lot of sense to merge each shard down to one segment. This is what an optimize does.</p>
+<p>One strategy to handle this transparently is to merge the collection into a new collection that is located on separate machines and then optimize that new collection while still serving requests against the first collection. You can optimize in place, but it can be a fairly resource intensive operation. When the optimize is done, update the read alias to reference the new collection and remove the first collection.</p>
+<h2>Re-indexing</h2>
+<p>Collection aliases are also useful for re-indexing &#8211; especially when dealing with static indices. You can re-index in a new collection while serving from the existing collection. Once the re-index is complete, you simply swap in the new collection and then remove the first collection using your read side aliases.</p>
+<h2>Scheduling</h2>
+<p>This strategy begs for you to schedule collection creation and deletion, collection alias updates, and possibly an optimize and/or merging step. The scheduled logic that is kicked off can range from very simple to very complicated, but in either case, it’s probably best to contain it in it a small driver program or two. The driver(s) can be either very simple or very sophisticated depending on your needs. You may want to write the driver(s) in Java as you can reuse Solr’s Java code to read from ZooKeeper about the cluster. However, for the simplest setups, anything will do: a shell script, python, perl, whatever you have that can execute basic http requests against your cluster.</p>
+<p>You can then use your favorite scheduler to kick off “intervals” of your driver &#8211; cron is a reliable and popular option for scheduling on UNIX/Linux, and there&#8217;s always <a href="http://oozie.apache.org">Apache Oozie</a>.</p>
+<h2>Conclusion</h2>
+<p>Here you have learned a simple but very effective architecture for handling huge amounts of some near-real-time data. The techniques are not necessarily specific to time series data either; that is just one of the simpler applications.</p>
+<p>Keep an eye out for enhanced support for this strategy in the future &#8211; perhaps even the ability to accomplish something similar within a single collection using custom sharding. Finally, for someone willing to dig in a little, these techniques can also be used in a wide range of use cases beyond those described above.</p>
+<p><em>Mark Miller (@heismark) is a Software Engineer at Cloudera and a Committer/PMC Member of the Solr project.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/kite-sdk/" title="View all posts in Kite SDK" rel="category tag">Kite SDK</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/search/" title="View all posts in Search" rel="category tag">Search</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>2 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://noodle.org">Anis</a> /
+			February 25, 2014 / 8:13 PM		</em>
+		<p>Hi Mike,<br />
+for the reindexing part </p>
+<p>&#8216;Collection aliases are also useful for re-indexing – especially when dealing with static indices. You can re-index in a new collection while serving from the existing collection. Once the re-index is complete, you simply swap in the new collection and then remove the first collection using your read side aliases&#8217;</p>
+<p>Say I have a collection=collection1 and I create an alias called &#8216;myalias&#8217;, myalias collectoin is pointing to the physical collection1 right?</p>
+<p>How do re-index in a new collection? I mean can you give am example command? </p>
+<p>I understand the process you explained, can you give a simple example, please?</p>
+<p>Thanks</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			February 26, 2014 / 10:09 AM		</em>
+		<p>Anis,</p>
+<p>Blog comments are a bit restrictive for this type of thread. I suggest that you post your question to the &#8220;Search&#8221; area at cloudera.com/community.</p>
+	</li>
+</li>
+</ul>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='23720' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="2vTF" />
+		<input type="hidden" name="cptch_time" value="1398162666" />
+		<input type="hidden" value="Version: 2.4" />
+		7 &#43; &#115;ix =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

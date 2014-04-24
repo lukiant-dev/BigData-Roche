@@ -1,0 +1,970 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-to: Set Up a Hadoop Cluster with Network Encryption | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-to: Set Up a Hadoop Cluster with Network Encryption"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/03/how-to-set-up-a-hadoop-cluster-with-network-encryption/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Meet the Instructor: Glynn Durham' href='http://blog.cloudera.com/blog/2013/03/meet-the-instructor-glynn-durham/' />
+<link rel='next' title='How-to: Set Up Cloudera Manager 4.5 for Apache Hive' href='http://blog.cloudera.com/blog/2013/03/how-to-set-up-cloudera-manager-4-5-for-apache-hive/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/03/how-to-set-up-a-hadoop-cluster-with-network-encryption/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=20634' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-20634 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-to: Set Up a Hadoop Cluster with Network Encryption</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Alejandro Abdelnur & Aaron T. Myers</li>
+				<li>March 05, 2013</li>
+				<li class="comment"><a href="#comments">no comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>Hadoop network encryption is a feature introduced in Apache Hadoop 2.0.2-alpha and in CDH4.1.</p>
+<p>In this blog post, we’ll first cover Hadoop’s pre-existing security capabilities. Then, we’ll explain why network encryption may be required. We’ll also provide some details on how it has been implemented. At the end of this blog post, you&#8217;ll get step-by-step instructions to help you set up a Hadoop cluster with network encryption.</p>
+<h2>A Bit of History on Hadoop Security</h2>
+<p>Starting with Apache Hadoop 0.20.20x and available in Hadoop 1 and Hadoop 2 releases (as well as CDH3 and CDH4 releases), Hadoop supports <a href="http://en.wikipedia.org/wiki/Kerberos_(protocol)">Kerbero</a><a href="http://en.wikipedia.org/wiki/Kerberos_(protocol)">s</a>-based authentication. This is commonly referred to as Hadoop Security. When Hadoop Security is enabled it requires users to authenticate (using Kerberos) in order to read and write data in HDFS or to submit and manage MapReduce jobs. In addition, all Hadoop services authenticate with each other using Kerberos.</p>
+<p>Kerberos authentication is available for Hadoop&#8217;s RPC protocol as well as the HTTP protocol. The latter is done using the <a href="http://en.wikipedia.org/wiki/SPNEGO">Kerberos HTTP SPNEGO</a> authentication standard, and it can be used to protect Hadoop’s Web UIs, WebHDFS, and HttpFS.</p>
+<h2>Why Network Encryption?</h2>
+<p>While Hadoop Security provides Kerberos authentication, it does not protect data as it travels through the network; all network traffic still goes on the clear. Hadoop is a distributed system typically running on several machines, which means that data must be transmitted over the network on a regular basis.</p>
+<p>If your Hadoop cluster holds sensitive information (financial data, credit card transactions, healthcare information, etc.), it may be required to ensure that data is also protected while in transit through the network (to avoid eavesdropping and <a href="http://en.wikipedia.org/wiki/Man-in-the-middle_attack">man-in-the-middle attacks</a>). This is no different than accessing your bank’s website using a secure connection (using <a href="http://en.wikipedia.org/wiki/HTTP_Secure">HTTPS</a>) when you connect to it.</p>
+<p>To address these kinds of use cases, network encryption was added to Hadoop.</p>
+<h2>Securing Hadoop’s Network Interactions</h2>
+<p>First, let&#8217;s review the different types of network interactions found in Hadoop:</p>
+<ul>
+<li>Hadoop RPC calls &#8211; These are performed by clients using the Hadoop API, by MapReduce jobs, and among Hadoop services (JobTracker, TaskTrackers, NameNodes, DataNodes).</li>
+<li>HDFS data transfer &#8211; Done when reading or writing data to HDFS, by clients using Hadoop API, by MapReduce jobs and among Hadoop services. HDFS data transfers are done using TCP/IP sockets directly.</li>
+<li>MapReduce Shuffle &#8211; The shuffle part of a MapReduce job is the process of transferring data from the Map tasks to Reducer tasks. As this transfer is typically between different nodes in the cluster, the shuffle is done using the HTTP protocol.</li>
+<li>Web UIs &#8211; The Hadoop daemons provide Web UIs for users and administrators to monitor jobs and the status of the cluster. The Web UIs use the HTTP protocol.</li>
+<li>FSImage operations &#8211; These are metadata transfers between the NameNode and the Secondary NameNode. They are done using the HTTP protocol.</li>
+</ul>
+<p>This means that Hadoop uses three different network communication protocols:</p>
+<ul>
+<li>Hadoop RPC</li>
+<li>Direct TCP/IP</li>
+<li>HTTP</li>
+</ul>
+<p>Hadoop RPC already had support for <a href="http://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer">SASL</a> for network encryption. Thus, we only needed to worry about securing HDFS data transfers and securing HTTP.</p>
+<p><strong>Hadoop RPC Encryption</strong></p>
+<p>When authentication support was added to Hadoop’s RPC protocol, SASL was used as the security protocol. SASL, or the Simple Authentication and Security Layer, is a framework which abstracts away the actual security implementation details for those higher-level protocols which want to support authentication, message integrity verification, or encryption. SASL does not specify a wire format or the protocols that implement it, but rather it specifies a handshake system whereby the parties involved in a SASL connection (the client and server) will iteratively exchange messages when a connection is first established.</p>
+<p>SASL allows for the use of several different security mechanisms for different contexts, e.g. MD5-DIGEST, GSSAPI, or the SASL PLAIN mechanism. For protocols that properly implement the SASL framework, any of these mechanisms can be used interchangeably. Separately from the details of how a given SASL mechanism implements its security constructs, most SASL mechanisms are capable of providing several different levels of quality of protection, or QoP. This allows a single SASL mechanism, e.g. MD5-DIGEST, to optionally provide only authentication (auth), message integrity verification (auth-int), or full message confidentiality/encryption (auth-conf).</p>
+<p>What does all of this mean in the context of Hadoop RPC? Since the Hadoop RPC system implements the SASL framework, we can utilize all of these features without any additional implementation complexity. When a Hadoop client that has Kerberos credentials available (e.g. a user running <code>hadoop fs -ls ...</code>) connects to a Hadoop daemon, the SASL GSSAPI mechanism will be used for authentication. Not all clients have direct access to Kerberos credentials; however, and in these cases, those clients will use Delegation Tokens issued by either the JobTracker or NameNode. When a Hadoop client which has Hadoop token credentials available (e.g. a MapReduce task reading/writing to HDFS) connects to a Hadoop daemon, the SASL MD5-DIGEST mechanism will be used for authentication. Though the default is only to authenticate the connection, in either of these cases the QoP can be optionally set via the <code>hadoop.rpc.protection</code> configuration property to additionally cause the RPCs to have their integrity verified, or fully encrypted while being transmitted over the wire.</p>
+<p><strong>Direct TCP/IP (HDFS Data Transfer Encryption)</strong></p>
+<p>Though Hadoop RPC has always supported encryption since the introduction of Hadoop Security, the actual reading and writing of file data between clients and DataNodes does not utilize the Hadoop RPC protocol. Instead, file data sent between clients and DNs is transmitted using the Hadoop Data Transfer Protocol, which does not utilize the SASL framework for authentication. Instead, clients are issued Block Tokens by the NameNode when requesting block locations for a given file, and the client will then present these tokens to the DN when connecting to read or write data. The DN is capable of verifying the authenticity of these Block Tokens by utilizing a secret key shared between the NameNode and DataNodes in the cluster.</p>
+<p>Though this system is perfectly sufficient to authenticate clients connecting to DataNodes, the fact that the Data Transfer Protocol does not use SASL means that we do not get the side benefit of being able to set the QoP and trivially add integrity or confidentiality to the protocol.</p>
+<p>To address this deficiency of the Data Transfer Protocol, we chose to wrap the existing Data Transfer Protocol with a SASL handshake. We wrapped the existing protocol, instead of wholesale replacing the existing protocol with SASL, in order to maintain wire compatibility in the normal case where wire encryption is disabled. This optional SASL wrapper can be enabled by setting <code>dfs.encrypt.data.transfer</code> to <code>true</code> in the NameNode and DN configurations and restarting the daemons. When this is enabled, the NameNode will generate and return to clients Data Encryption Keys which can be used as credentials for the MD5-DIGEST SASL mechanism and whose authenticity can be verified by DataNodes based on a shared key between the NameNode and DataNodes, similarly to the way Block Tokens are when only authentication is enabled. Note that, since the Data Encryption Keys are themselves sent to clients over Hadoop RPC, it is necessary to also set the <code>hadoop.rpc.protection</code> setting to <code>privacy</code> in order for the system to actually be secure.</p>
+<p>For the full details of the HDFS encrypted transport implementation, check out <a href="https://issues.apache.org/jira/browse/HDFS-3637">HDFS-3637</a>.</p>
+<p><strong>HTTP Encryption</strong></p>
+<p>The solution for HTTP encryption was clear: HTTPS. HTTPS is a proven and widely adopted standard for HTTP encryption. Java supports HTTPS, browsers support HTTPS, and many libraries and tools in most operating systems have built in support for HTTPS.</p>
+<p>As mentioned before, Hadoop uses HTTP for its Web UIs, for the MapReduce shuffle phase and for FSImage operations between the NameNode and the Secondary Name node. Because the Hadoop HttpServer (based on <a href="http://jetty.codehaus.org/jetty/">Jetty</a>) already supports HTTPS, the required changes were minimal. We just had to ensure the HttpServer used by Hadoop  is started using HTTPS.</p>
+<p>Nodes in a cluster are added and removed dynamically. For each node that is added to the cluster the certificate public key has be added to all other nodes. Similarly, for each node that is removed from the cluster its certificate public key has to be removed from all other nodes.  This addition and removal of public key certificates must be done in running tasks without any disruption. Because the default Java keystore only loads the certificates at initialization time, we needed to implement a custom Java keystore to reload certificate public keys if the certificate&#8217;s keystore file changed.</p>
+<p>In addition, we had to modify the Hadoop HttpServer, the MapReduce shuffle HTTP client, and the FSImage HTTP client code to use the new custom Java keystore.</p>
+<p>The HTTP encryption work was done in two Apache JIRAs, <a href="https://issues.apache.org/jira/browse/MAPREDUCE-4417">MAPREDUCE-4417</a> and <a href="https://issues.apache.org/jira/browse/HADOOP-8581">HADOOP-8581</a>.</p>
+<h2>Setting up Network Encryption with CDH4</h2>
+<p>Now we’ll explain how to create HTTPS certificates using the Java <code>Keytool</code> for a Hadoop cluster. Once the certificates have been created and made available to all nodes in the Hadoop cluster, refer to <a href="https://ccp.cloudera.com/display/CDH4DOC/Configuring+Encrypted+Shuffle,+Encrypted+Web+UIs,+and+Encrypted+HDFS+Transport">CDH4 documentation</a>to complete Hadoop configuration for network encryption.</p>
+<p>The following steps explain how to create the HTTPS certificates and the required keystore and truststore files, assuming we have a cluster consisting of two machines &#8212; h001.foo.com and h002.foo.com &#8212; and that all Hadoop services are started by a user belonging to the hadoop group.</p>
+<p>Each keystore file contains the private key for each certificate, the single truststore file contains all the keys of all certificates. The keystore file is used by the Hadoop HttpServer while the truststore file is used by the client HTTPS connections.</p>
+<p>For each node create a certificate for the corresponding host in a different keystore file:</p>
+<pre class="code" style="padding-left: 10px;">$ keytool -genkey -keystore  h001.keystore -keyalg RSA -alias h001 \
+-dname "CN=h001.foo.com,O=Hadoop"  -keypass pepepe -storepass pepepe
+$ keytool -genkey -keystore  h002.keystore -keyalg RSA -alias h002 \&gt;
+-dname "CN=h002.foo.com,O=Hadoop"  -keypass pepepe -storepass pepepe
+</pre>
+<p>&nbsp;</p>
+<p>For each node export the certificate&#8217;s public key in a different certificate file:</p>
+<pre class="code" style="padding-left: 10px;">$ keytool -exportcert -keystore  h001.keystore -alias h001 \
+-file h001.cert -storepass pepepe 
+$ keytool -exportcert -keystore  h002.keystore -alias h002 \
+-file h002.cert -storepass pepepe
+</pre>
+<p>&nbsp;</p>
+<p>Create a single truststore containing the public key from all certificates:</p>
+<pre class="code" style="padding-left: 10px;">$ keytool -import -keystore hadoop.truststore -alias h001 \
+-file h001.cert -noprompt -storepass pepepe
+$ keytool -import -keystore hadoop.truststore -alias h002 \
+-file h002.cert -noprompt -storepass pepepe
+</pre>
+<p>&nbsp;</p>
+<p>Copy the keystore and trutstore files to the corresponding nodes:</p>
+<pre class="code" style="padding-left: 10px;">$ scp h001.keystore hadoop.truststore root@h001.foo.com:/etc/hadoop/conf/
+$ scp h002.keystore hadoop.truststore root@h002.foo.com:/etc/hadoop/conf/
+</pre>
+<p>&nbsp;</p>
+<p>Change the permissions of the keystore files to be read only by user and group. Make their group the hadoop group; the truststore file should be made readable by everybody:</p>
+<pre class="code" style="padding-left: 10px;">$ ssh root@h001.foo.com "cd /etc/hadoop/conf;chgrp hadoop h001.keystore;\
+chmod 0440 h001.keystore;chmod 0444 hadoop.truststore"
+$ ssh root@h002.foo.com "cd /etc/hadoop/conf;chgrp hadoop h002.keystore;\
+chmod 0440 h002.keystore;chmod 0444 hadoop.truststore"
+</pre>
+<p>&nbsp;</p>
+<p>Generate public key certificates to install in your browser:</p>
+<pre class="code" style="padding-left: 10px;">$ openssl x509 -inform der -in h001.cert &gt;&gt; hadoop.PEM
+$ openssl x509 -inform der -in h002.cert &gt;&gt; hadoop.PEM
+</pre>
+<p>&nbsp;</p>
+<p>Follow the instructions of your browser/OS to install the hadoop.pem certificates file.</p>
+<p>Now that the HTTPS certificates have been created and distributed to the machines in the cluster, you&#8217;ll need to configure the Hadoop cluster with network encryption. Please refer to the CDH4 documentation, <a href="https://ccp.cloudera.com/display/CDH4DOC/Configuring+Encrypted+Shuffle,+Encrypted+Web+UIs,+and+Encrypted+HDFS+Transport">Configuring Encrypted Shuffle, Encrypted Web UIs, and Encrypted HDFS Transport</a>, for detailed instructions on how to configure network encryption in Hadoop.</p>
+<p>You have now set-up your cluster to use network encryption!</p>
+<p><em>Alejandro Abdelnur is a Software Engineer on the Platform team, and a PMC member of the Apache Oozie, Hadoop, and Bigtop projects.</em></p>
+<p><em>Aaron T. Myers (ATM) is also a Software Engineer on the Platform team and a PMC member for Hadoop.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cdh/" title="View all posts in CDH" rel="category tag">CDH</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/security-2/" title="View all posts in Security" rel="category tag">Security</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>No Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='20634' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="XzQ3" />
+		<input type="hidden" name="cptch_time" value="1397909899" />
+		<input type="hidden" value="Version: 2.4" />
+		f&#105;&#118;e &times; 8 =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

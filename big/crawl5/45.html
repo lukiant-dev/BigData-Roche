@@ -1,0 +1,976 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Best Practices for Deploying Cloudera Enterprise on Amazon Web Services | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Best Practices for Deploying Cloudera Enterprise on Amazon Web Services"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2014/02/best-practices-for-deploying-cloudera-enterprise-on-amazon-web-services/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Best Practices for Deploying Cloudera Enterprise on Amazon Web Services Comments Feed" href="http://blog.cloudera.com/blog/2014/02/best-practices-for-deploying-cloudera-enterprise-on-amazon-web-services/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Cloudera Enterprise 5 Beta 2 is Available: More New Features and Components' href='http://blog.cloudera.com/blog/2014/02/cloudera-enterprise-5-beta-2-is-available-more-new-features-and-components/' />
+<link rel='next' title='Getting MapReduce 2 Up to Speed' href='http://blog.cloudera.com/blog/2014/02/getting-mapreduce-2-up-to-speed/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2014/02/best-practices-for-deploying-cloudera-enterprise-on-amazon-web-services/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=25413' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-25413 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Best Practices for Deploying Cloudera Enterprise on Amazon Web Services</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/akhurana/" title="Posts by Amandeep Khurana" rel="author">Amandeep Khurana</a></li>
+				<li>February 12, 2014</li>
+				<li class="comment"><a href="#comments">2 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><strong>This FAQ contains answers to the most frequently asked questions about the architecture and configuration choices involved.</strong></p>
+<p>In December 2013, Cloudera and Amazon Web Services (AWS) <a href="http://www.cloudera.com/content/cloudera/en/solutions/partner/Amazon-Web-Services.html">announced a partnership</a> to support Cloudera Enterprise on AWS infrastructure. Along with this announcement, we released a <a href="http://www.cloudera.com/content/cloudera/en/resources/library/whitepaper/cloudera-enterprise-reference-architecture-for-aws-deployments.html">Deployment Reference Architecture Whitepaper</a>. In this post, you’ll get answers to the most frequently asked questions about the architecture and the configuration choices that have been highlighted in that whitepaper.</p>
+<p><strong>For what workloads is this deployment model designed?</strong></p>
+<p>This reference architecture is intended for long-running <a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise.html">Cloudera Enterprise Data Hub Edition</a> (EDH) clusters, where the source of data for your workloads is HDFS with S3 as a secondary storage system (used for backups). Different kinds of workloads can run in this environment, including batch processing (MapReduce), fast in-memory analytics (Apache Spark), interactive SQL (Impala), search, and low-latency serving using HBase.</p>
+<p>This deployment model is not designed for transient workloads such as spinning up a cluster, running a MapReduce job to process some data, and spinning it down; that model involves different considerations and design. Clusters with workflow-defined lifetimes (transient clusters) will be addressed in a future publication of the reference architecture.</p>
+<p><strong>Why support only VPC deployments?</strong></p>
+<p><a href="http://aws.amazon.com/vpc/">Amazon Virtual Private Cloud</a> (VPC) is the standard deployment model for AWS resources and the default for all new accounts that are being created now. Cloudera recommends deploying in VPC for the following reasons:</p>
+<ul>
+<li>The easiest way to deploy in AWS, where the AWS resources appear as an extension to the corporate network, is to do so inside a VPC, with a VPN/Direct Connect link to the particular AZ in which you are deploying.</li>
+<li>VPC has more advanced security options that you can use to comply with security policies.</li>
+<li>More advanced features, and better network performance for new instance types, are available.</li>
+</ul>
+<p><strong>Should I have one VPC per cluster? Or should I have one subnet per cluster in a single VPC? What about multiple clusters in a single subnet?</strong></p>
+<p>Some customers consider having one VPC per environment (dev, QA, prod). Within a single VPC, you can have independent subnets for different clusters &#8212; and in some cases, multiple subnets for each cluster, where each subnet is for instances playing a particular role (such as Flume nodes, cluster nodes, and so on).</p>
+<p>The easiest way to deploy a cluster is to deploy all nodes to a single subnet and use security groups to control ingress and egress in a single VPC. Keep in mind that it’s nontrivial to get instances in different VPCs to interact.</p>
+<p><strong>What about different subnets for different roles versus controlling access using security groups?</strong></p>
+<p>You have two models of deployment to consider, depending on your security requirements and policies:</p>
+<ol>
+<li><span style="text-decoration: underline;">Entire cluster within a single subnet</span> &#8212; this means that all the different role types that make up a cluster (slaves, masters, Flume nodes, edge nodes) will be deployed within a single subnet. In most cases, the network access rules for these nodes differ.  For example, users will be allowed to login to the edge nodes but not the slave or the master nodes. When deploying in a single subnet, the network rules can be modeled using security groups.</li>
+<li><span style="text-decoration: underline;">Subnet per role per cluster</span> &#8212; in this model, each of the different roles will have its own subnet in which to deploy. This is a more complex network topology and allows for finer-grained control over the network rules. In this case, you can use a combination of subnet route tables, security groups, and network ACLs to define your networking rules. However, just using security groups and defining the route tables appropriately is sufficient from a functionality standpoint.</li>
+</ol>
+<p>Both models are equally valid, but Model #1 is easier to manage.</p>
+<p><strong>I don’t want my instances to be accessible from the Internet. Do I HAVE to deploy them in a public subnet?</strong></p>
+<p>Currently, there are two ways an instance can get outbound access to the internet, which is required for it to access other AWS services like S3 (excluding RDS) or external repositories for software updates (find detailed documentation <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Internet_Gateway.html">here</a>):</p>
+<ol>
+<li><span style="text-decoration: underline;">By having a public IP address</span> &#8212; this allows the instance to initiate outgoing requests. You can block all incoming traffic using Network ACLs or Security Groups. In this case, you have to set up the routing within your VPC to permit traffic between the subnet hosting your instances and the Internet gateway.</li>
+<li><span style="text-decoration: underline;">By having a private IP address only but having a NAT instance in a different subnet through which to route traffic</span> &#8212; this allows for all traffic to be routed through the NAT instance. Similar to on-premise configurations, a NAT instance is typically a Linux EC2 instance configured to run as a NAT residing in a subnet that has access to the Internet.  You can direct public Internet traffic from subnets that can&#8217;t directly access the Internet to the NAT instance.</li>
+</ol>
+<p>If you just transfer any sizable amount of data to the public Internet domain (including S3), the recommended method is deployment Model 1. With Model 2, you will bottleneck on the NAT instance.</p>
+<p><strong>Why only choose cc2.8xlarge and hs1.8xlarge instances as the supported ones?</strong></p>
+<p>Cloudera Enterprise Data Hub Edition deployments have multiple kinds of workloads running in a long running cluster. To support these different workloads, the individual instances need to provide enough horsepower. The cc2.8xlarge and hs1.8xlarge instances make for the best choices amongst all EC2 instances for such deployments for the following reasons:</p>
+<ul>
+<li>Individual instance performance does not suffer from the problem of chatty neighboring applications on the same physical host.</li>
+<li>These instances are on a flat 10G network.</li>
+<li>They have a good amount of CPU and RAM available.</li>
+</ul>
+<p>For relatively low storage density requirements, the cc2.8xlarge are the recommended option, and where the storage requirement is high, the hs1.8xlarge are a better choice.</p>
+<p>Other instance types are reasonable options for specialized workloads and use cases. For example, a memcached deployment would likely benefit from the high-memory instances, and a transient cluster with only batch-processing requirements could probably leverage the m1 family instances (while having a higher number of them). However, as previously explained, those workloads are not addressed by this reference architecture, which is rather intended for long-running EDH deployments where the primary storage is HDFS on the instance stores, supporting multiple different kinds of workloads on the same cluster.</p>
+<p><strong>Why not EBS-backed HDFS?</strong></p>
+<p>There are multiple reasons why some people consider Amazon Elastic Block Storage (EBS). They include:</p>
+<p><span style="text-decoration: underline;">Increasing the storage density per node but using smaller instance types</span></p>
+<p>You can certainly increase the storage density per node by mounting EBS volumes. Having said that, there are a few reasons why doing so doesn’t help:</p>
+<ul>
+<li>Not many of the instance types are good candidates for running an EDH that can sustain different kinds of workloads predictably. Adding a bunch of network-attached storage does theoretically increase the storage capacity, but the other resources like CPU, memory, and network bandwidth don’t change. Therefore, it’s undesirable to use small instance types with EBS volumes attached to them.</li>
+<li>The bandwidth between the EC2 instances and EBS volumes is limited so you’ll likely be bottlenecked on that.</li>
+<li>EBS shines with random I/O. Sequential I/O, which is the predominant access pattern for Hadoop, is not EBS’s forte.</li>
+<li>You pay per IOP on EBS, and for workloads that require large amounts of I/O, that can get expensive to a point that having more instances might be more reasonable than adding EBS volumes and keeping the instance footprint small.</li>
+</ul>
+<p><span style="text-decoration: underline;">Allowing expansion of storage on existing instances in an existing cluster, thereby not having to add more instances if the storage requirements increase.</span></p>
+<p>The justifications for this requirement are similar to those above. Furthermore, adding storage to a cluster that is predominantly backed by the instance-stores would mean that you have heterogeneous storage options in the same cluster, with different performance and operational characteristics.</p>
+<p><span style="text-decoration: underline;">More EBS volumes means more spindles, and hence better performance.</span></p>
+<p><em></em>Adding EBS volumes does not necessarily mean better I/O performance. For example, EBS volumes are network attached &#8212; therefore, the performance is limited by the network bandwidth between the EC2 instances and EBS. Furthermore, as highlighted previously, EBS shines with random I/O in contrast to sequential I/O, which is the predominant access pattern for Hadoop.</p>
+<p><span style="text-decoration: underline;">Storing the actual files in EBS will enable pausing the cluster and bringing it back on at a later stage.</span></p>
+<p><em></em>Today, this is a complex requirement from an operational perspective. The only EC2 instances that can be stopped and later restarted are the EBS-backed ones; the others can only be terminated.</p>
+<p>If you mount a bunch of EBS volumes to the EBS-backed instances and use them as data directories, they remain there when the instances are started up again and the data in them stays intact. From that perspective, you’ll have all your data directories mounted just the way you left them prior to the restart, and HDFS should be able to resume operations.</p>
+<p>If you mount EBS volumes onto instance-store backed instances, restarting HDFS would mean un-mounting all the EBS volumes when you stop a cluster and then re-mounting them onto a new cluster later. This approach is operationally challenging as well as error-prone.</p>
+<p>Although both these options are plausible in theory, they are also not very well tested, and HDFS is not designed to leverage these features regardless.</p>
+<p><span style="text-decoration: underline;">EBS has higher durability than instance stores and we can reduce the HDFS replication if we use EBS.</span></p>
+<p><em></em>This is an interesting proposition and the arguments for and against it are the same as if you were to use NAS to back your HDFS on bare-metal deployments. While certainly doable, there are downsides:</p>
+<ul>
+<li>By reducing replication of HDFS, you are not only giving up on fault tolerance and fast recoverability but also performance. Because fewer copies of the blocks would be available with which to work, more data will move over the network.</li>
+<li>All your data will be going over the network between the EC2 instance and EBS volumes, thereby affecting performance.</li>
+</ul>
+<p>Using EBS to back HDFS certainly looks like an attractive option, but as you look at all the factors mentioned above, it should become clear that it has too many performance, cost, and operational drawbacks.</p>
+<p><strong>Can I pause my cluster in this deployment model? (Or, Can I stop a cluster when I’m not using it and save money?)</strong></p>
+<p>Clusters in which HDFS is backed by instance-stores cannot be paused. Pausing a cluster entails stopping the instances, and when you stop instances, the data on the instance-stores is lost. You can find more information about instance lifecycle <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">here</a>.</p>
+<p><strong>What if I don’t want connectivity back to my data center via VPN or Direct Connect?</strong></p>
+<p>You don’t have to have connectivity back to your data center if you don’t have to move data between your Hadoop cluster in AWS and other components that may be hosted in your data center.</p>
+<p><strong>What are “placement groups”, and why should I care?</strong></p>
+<p>As formally defined by AWS <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">documentation</a>:</p>
+<p style="padding-left: 30px;"><em>A placement group is a logical grouping of instances within a single Availability Zone. Using placement groups enables applications to get the full-bisection bandwidth and low-latency network performance required for tightly coupled, node-to-node communication typical of HPC applications.</em></p>
+<p>By deploying your cluster in a placement group, you are guaranteeing predictable network performance across your instances. Anecdotally, network performance between instances within a single Availability Zone that are not in a single placement group can be lower than if they were within the same placement group. As of today, our recommendation is to spin up your cluster (at least the slave nodes) within a placement group. Having said that, placement groups are more restrictive in terms of the capacity pool that you can use to provision your cluster, which can make expanding a cluster challenging.</p>
+<p><strong>The root volume is too small for the logs and parcels. What are my choices?</strong></p>
+<p>You can resize the root volume on instantiation. However, doing so is more challenging with some AMIs than others. The only reason to resize the root volume is to be able to have enough space to store the logs that Hadoop generates, as well as parcels. For those two purposes, our recommendation is to mount an additional EBS volume and use that instead. You can use the additional EBS volume by sym-linking the /var/logs and /opt/cloudera directories to that. You can also configure Cloudera Manager to use a different path than /var/logs for logs and /opt/cloudera for parcels.</p>
+<p>In a future post, we’ll cover options for backups, high availability, and disaster recovery in the context of deployments in AWS.</p>
+<p><em>Amandeep Khurana is a Principal Solutions Architect at Cloudera and has been heavily involved in Cloudera&#8217;s cloud efforts.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cdh/" title="View all posts in CDH" rel="category tag">CDH</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/cloud-2/" title="View all posts in Cloud" rel="category tag">Cloud</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/ops/" title="View all posts in Ops and DevOps" rel="category tag">Ops and DevOps</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>2 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Bertrand Dechoux</a> /
+			March 16, 2014 / 3:50 PM		</em>
+		<p>Amazon VPC = Amazon Virtual Private Cloud</p>
+<p>and not public</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			March 17, 2014 / 9:07 AM		</em>
+		<p>Thanks for pointing out that error.</p>
+	</li>
+</li>
+</ul>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='25413' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="RV0=" />
+		<input type="hidden" name="cptch_time" value="1397909766" />
+		<input type="hidden" value="Version: 2.4" />
+		4 &minus; &#111;&#110;e =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

@@ -1,0 +1,950 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Apache Hadoop Availability | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Apache Hadoop Availability"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2011/02/hadoop-availability/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Apache Hadoop Availability Comments Feed" href="http://blog.cloudera.com/blog/2011/02/hadoop-availability/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Distributed Flume Setup With an S3 Sink' href='http://blog.cloudera.com/blog/2011/02/distributed-flume-setup-with-an-s3-sink/' />
+<link rel='next' title='Wordnik Bypasses Processing Bottleneck with Apache Hadoop' href='http://blog.cloudera.com/blog/2011/02/wordnik-bypasses-processing-bottleneck-with-hadoop/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2011/02/hadoop-availability/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=6505' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-6505 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Apache Hadoop Availability</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/eli/" title="Posts by Eli Collins" rel="author">Eli Collins</a></li>
+				<li>February 10, 2011</li>
+				<li class="comment"><a href="#comments">7 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>A common question on the <a href="http://hadoop.apache.org/mailing_lists.html">Apache Hadoop mailing lists</a> is what&#8217;s going on with availability? This post takes a look at availability in the context of Hadoop, gives an overview of the work in progress and where things are headed.</p>
+<h3>Background</h3>
+<p>When discussing Hadoop availability people often start with the NameNode since it is a <a id="j.bf" title="single point of failure" href="http://en.wikipedia.org/wiki/Single_point_of_failure">single point of failure</a> (SPOF) in HDFS, and most components in the Hadoop ecosystem (MapReduce, Apache HBase, Apache Pig, Apache Hive etc) rely on HDFS directly, and are therefore limited by its availability. However, Hadoop availability is a larger, more general issue, so it&#8217;s helpful to establish some context before diving in.</p>
+<p>Availability is the proportion of time a system is functioning [1], which is commonly referred to as &#8220;uptime&#8221; (vs downtime, when the system is not functioning).</p>
+<p>Note that availability is a stricter requirement than fault tolerance &#8211; the ability for a system to perform as designed and degrade gracefully in the presence of failures. A system that requires an hour to restart (eg for a configuration change or software upgrade) but has no single point of failure is fault tolerant but not highly available (HA). Adding redundancy in all SPOFs is a common way to improve fault tolerance, which helps [2], but is just a part of, improving Hadoop availability. Note also that fault tolerance is distinct from durability, even though the NameNode is a SPOF no single failure results in data loss as copies of NameNode persistent state (the image and edit log) are replicated both within and across hosts.</p>
+<p>Availability is also often conflated with reliability. Reliability in distributed systems is a more general issue than availability [3]. A truly reliable distributed system must be highly available, fault tolerant, secure, scalable, and perform predictably, etc. I&#8217;ll limit this post to Hadoop availability.</p>
+<h3>Reasons for downtime</h3>
+<p>An important part of improving availability and articulating requirements is understanding the causes of downtime. There are many types of failures in distributed systems, ways to classify them, and analyses of how failures result in downtime. Rather than go into depth here, I&#8217;ll briefly summarize some general categories of issues that may cause downtime:</p>
+<p><strong>1. Maintenance</strong> &#8211; Hardware and software may need to be upgraded, configuration changes may require a system restart, and operational tasks for dependent systems. Hadoop can handle most maintenance to <a href="http://hadoop.apache.org/common/docs/current/cluster_setup.html#Slaves">slave hosts</a> without downtime; however maintenance to a master host normally requires a restart of the entire system.</p>
+<p><strong>2. Hardware failures</strong> &#8211; Hosts and their connections may fail. Without redundant devices, or redundant components within devices, a single component failure may cause the entire device to fail. Hadoop can tolerate hardware failures (even silent failures like corruption) to slave hosts without downtime; however some hardware failures on the master host (or a failure in the connection between the master and the majority of the slaves) can cause system downtime [4].</p>
+<p><strong>3. Software failures</strong> &#8211; Software bugs may cause a component in the system to stop functioning or require a restart. For example, a bug in upgrade code could result in downtime due to data corruption. A dependent software component may become unavailable (eg the Java garbage collector enters a stop-the-world phase). Hadoop can tolerate some software bugs without downtime; however components are generally designed to <a id="d_yo" title="fail-fast" href="http://en.wikipedia.org/wiki/Fail-fast">fail-fast</a> &#8211; to stop and notify other components of failure rather than attempt to continue a possibly-flawed process. Therefore a software bug in a master service will likely cause downtime.</p>
+<p><strong>4. Operator errors</strong> &#8211; People make mistakes. From disconnecting the wrong cable, to mis-configured hosts, to typos in configuration files, operator errors can cause downtime. Hadoop attempts to limit operator error by simplifying administration, validating its configuration, and providing useful messages in logs and UI components; however operator mistakes may still cause downtime.</p>
+<h3>Use cases</h3>
+<p>In order for a system to be highly available, its design needs to anticipate these various failures. Removing single points of failure, enabling rolling upgrades, faster restarts, making the system robust and user friendly, etc are all necessary to improve availability. Given that improving availability requires a multi-prong approach, let&#8217;s take a look at the relevant use cases for limiting downtime.</p>
+<p><strong>1. Host maintenance</strong> &#8211; If an operator needs to upgrade or replace the primary host hardware or upgrade its operating system, they should be able to manually fail over to a <a id="j_1t" title="hot standby" href="http://en.wikipedia.org/wiki/Hot_spare">hot standby</a>, perform the upgrade and optionally fail back to the primary. The fail-over should be transparent to clients accessing the system (eg active jobs continue to run). Host maintenance to slave hosts can be handled without downtime today by <a id="nmzh" title="de-commissioning" href="http://hadoop.apache.org/hdfs/docs/current/hdfs_user_guide.html">de-commissioning</a> the host.</p>
+<p><strong>2. Configuration changes</strong> &#8211; Ideally configuration changes to masters should not require a system restart &#8212; the configuration can be updated in-place or fail-over to a hot standby with an updated configuration is supported. In cases when they do, the operator should be able to restart the system with minimal impact to running workloads.</p>
+<p><strong>3. Software upgrades</strong> &#8211; An operator should be able to upgrade Hadoop&#8217;s software in-place (a &#8220;rolling upgrade&#8221;) on slave nodes and via fail-over on the master hosts so there is little or no downtime. If a restart is required it should be accelerated by quickly re-constructing the system&#8217;s state.</p>
+<p><strong>4. Host failures</strong> &#8211; If a non-redundant hardware component fails, the operating system crashes, a disk partition runs out of space, etc. the system should detect the failure, and, depending on the service and failure, (a) recover, (b) de-commission itself, or (c) fail over to a hot standby. Hadoop currently tolerates slave host failures without downtime, however master host failures often cause downtime. In practice, for a number of reasons, master hardware failures do not cause as much downtime as you might expect:</p>
+<div style="margin-left: 20px;">
+<ul>
+<li>In large clusters it is statistically improbable that a hardware failure impacts a machine running master services, and o<span style="font-size: small;">perations teams are often good at keeping a small number of well-known hosts healthy.</span></li>
+<li>Because there are few master hosts redundant hardware components can be used to limit the probability of a host failure without dramatically increasing the price of the overall system.</li>
+</ul>
+</div>
+<h3>Highly Available Hadoop</h3>
+<p>A number of efforts are under way to improve Hadoop availability, and implement missing functionality required by the above use cases. Tasks related to HDFS availability are <a id="xk.7" title="tracked here" href="https://issues.apache.org/jira/browse/HDFS-1064">tracked here</a>, tasks related to MapReduce availability are <a id="ntev" title="tracked here" href="https://issues.apache.org/jira/browse/MAPREDUCE-2288">tracked here</a>.</p>
+<p><strong>1.</strong> Improvements to Hadoop&#8217;s failure handling code. Hadoop&#8217;s native <a id="sd.5" title="fault injection frameworks" href="http://hadoop.apache.org/hdfs/docs/current/faultinject_framework.html">fault injection framework</a> and <a id="k-03" title="other frameworks" href="https://github.com/toddlipcon/gremlins#readme">other related frameworks</a> continue to make Hadoop more robust in the face of failures. Recent advances in failure testing applied have been successfully applied to Hadoop [5] to identify software bugs (eg <a id="nqtm" title="HDFS-1231" href="https://issues.apache.org/jira/browse/HDFS-1231">HDFS-1231</a>, <a id="b4m-" title="HDFS-1225" href="https://issues.apache.org/jira/browse/HDFS-1225">HDFS-1225</a>, and <a id="r8x:" title="HDFS-1228" href="https://issues.apache.org/jira/browse/HDFS-1228">HDFS-1228</a>).</p>
+<p><strong>2.</strong> Work was recently started to allow <a id="f1mv" title="Hadoop configuration changes without restart" href="https://issues.apache.org/jira/browse/HADOOP-7001">Hadoop configuration changes without restart</a>. As Hadoop <a id="gxty" title="incorporates this change" href="https://issues.apache.org/jira/browse/HDFS-1477">incorporates this change</a> configuration parameter changes will increasingly be possible without downtime.</p>
+<p><strong>3.</strong> A number of changes (eg <a id="wld7" title="HDFS-1070" href="https://issues.apache.org/jira/browse/HDFS-1070">HDFS-1070</a>, <a id="hy1e" title="HDFS-1295" href="https://issues.apache.org/jira/browse/HDFS-1295">HDFS-1295</a>, and <a id="kjsd" title="HDFS-1391" href="https://issues.apache.org/jira/browse/HDFS-1391">HDFS-1391</a>) are underway to significantly improve the time it takes to restart HDFS.</p>
+<p><strong>4.</strong> <a id="dz:d" title="Work has started" href="https://issues.apache.org/jira/browse/HADOOP-6904">Work has started</a> to allow Hadoop client and server software of different versions to co-exist, with the goal of enabling in-place Hadoop software upgrades.</p>
+<p><strong>5.</strong> There have been efforts to make existing releases of HDFS <a id="vuot" title="more highly-available" href="http://blog.cloudera.com/blog/2009/07/hadoop-ha-configuration">more highly-available</a>, as well as several research prototypes (eg <a id="gyzv" title="UpRight-HDFS" href="http://code.google.com/p/upright/wiki/HDFSUpRightOverview">UpRight-HDFS</a>, <a id="zw1c" title="NameNode Cluster" href="http://gnawux.info/hadoop/2010/01/pratice-of-namenode-cluster-for-hdfs-ha">NameNode Cluster</a>, and <a id="a4b-" title="HDFS-dnn" href="http://code.google.com/p/hdfs-dnn">HDFS-dnn</a>) that examine HDFS availability. HDFS developers are currently working on a hot standby for the NameNode to improve on the existing <a id="cf-p" title="NameNode fail-over" href="http://wiki.apache.org/hadoop/NameNodeFailover">NameNode fail-over</a>. Like the <a id="tn6q" title="Google File System's" href="http://labs.google.com/papers/gfs.html">Google File System</a> which has &#8220;shadow masters&#8221;, this allows HDFS to fail the NameNode process from one host to another by actively replicating all NameNode state required to quickly restart the process. Integrating the <a id="k5pw" title="BackupNode" href="http://hadoop.apache.org/hdfs/docs/current/hdfs_user_guide.html#Backup+Node">BackupNode</a> (edits are streamed from the primary NameNode to one or more BackupNodes) or using <a id="yrwj" title="integrating BookKeeper" href="https://issues.apache.org/jira/browse/HDFS-234">BookKeeper</a> (a replicated service to reliably log streams of records that can be used for the edits log) with the <a id="tywb" title="AvatarNode" href="http://hadoopblog.blogspot.com/2010/02/hadoop-namenode-high-availability.html">AvatarNode</a> (which replicates block reports across a primary and backup host) results in a standby NameNode that can be activated if the NameNode fails. Automatic hot fail-over can be achieved by integrating both clients and servers with <a id="yuh:" title="ZooKeeper" href="http://hadoop.apache.org/zookeeper">ZooKeeper</a>. A similar approach has been successfully used by Google to make GFS highly available [6]:</p>
+<blockquote>
+<p>Initially, GFS had no provision for automatic master failover. It was a manual process. Although it didn&#8217;t happen a lot, whenever it did, the cell might be down for an hour. Even our initial master-failover implementation required on the order of minutes. Over the past year, however, we&#8217;ve taken that down to something on the order of tens of seconds.</p>
+</blockquote>
+<p>This Active/Passive design enables both high availability and evolution towards being a better storage layer for systems like <a id="ez96" title="HBase" href="http://hbase.apache.org/">HBase</a>, which in turn could be used to store metadata for a new version of HDFS (similar to <a id="onl:" title="Google's Colossus" href="http://queue.acm.org/detail.cfm?id=1594206">Google&#8217;s GFS2</a>). Like <a id="l97v" title="HDFS federation" href="https://issues.apache.org/jira/browse/HDFS-1052">HDFS federation</a>, this provides an evolutionary path to high scalability without the complexity of modifying HDFS to use <a id="jf:c" title="multi-master replication" href="http://en.wikipedia.org/wiki/Multi-master_replication">multi-master replication</a>.</p>
+<p><strong>6.</strong> The MapReduce master (JobTracker) state is <a id="ohnp" title="available in HDFS" href="https://issues.apache.org/jira/browse/MAPREDUCE-863">stored in HDFS</a> and is therefore limited by its availability. The JobTracker can be-restarted, however works needs to be to integrate it with a service like ZooKeeper to handle fail-over to a separate host.</p>
+<p>Hopefully this post has helped frame the various tasks behind Hadoop&#8217;s march towards high availability in a useful context. The development community understands this is one of the most high priority issues for users, and is looking forward to providing a highly available Hadoop in up-coming releases. Similarly, Cloudera is committed to improving availability in CDH4 &#8211; it&#8217;s our primary focus for the release.</p>
+<p><em>Thanks to Dhruba Borthakur, Doug Cutting, Sanjay Radia, and Konstantin Shvachko for reading drafts of this post.</em></p>
+<hr />
+<h3>Footnotes</h3>
+<p>[1] A common way to define availability is the ratio of the expected value of the uptime of the system to the aggregate of the expected values of uptime and downtime. Common metrics used are:</p>
+<ul style="margin-left: 20px;">
+<li>Mean time between failures (MTBF) &#8211; the expected time between failures of a system during operation.</li>
+<li>Mean time to recovery (MTTR) &#8211; the average time the system will take to recover from any failure.</li>
+</ul>
+<p>Using these metrics availability can be defined as MTBF / (MTBF + MTTR).</p>
+<p>[2] I say &#8220;helps&#8221; because one the most common reasons for downtime (misconfiguration, operator error, and software bugs) are all exacerbated by system complexity, and making systems more fault tolerant often increases their complexity.</p>
+<p>[3] &#8220;Reliability and availability are different: Availability is doing the right thing within the specified response time. Reliability is not doing the wrong thing.&#8221; from WHY DO COMPUTERS STOP AND WHAT CAN BE DONE ABOUT IT? by Jim Gray</p>
+<p>[4] People often configure master hosts with redundant hardware components (nics, disks, IO controllers, and power units) so that an individual component failure does not cause the system to fail.</p>
+<p>[5] <a href="http://www.eecs.berkeley.edu/Pubs/TechRpts/2010/EECS-2010-98.html">Towards Automatically Checking Thousands of Failures with Micro-specifications</a>. H Gunawi, T Do, et al. UC Berkeley TR EECS-2010-98.</p>
+<p>[6] <a href="http://queue.acm.org/detail.cfm?id=1594206">GFS: Evolution on Fast-Forward</a>. Marshall Kirk McKusick, Sean Quinlan in the ACM Queue.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cdh/" title="View all posts in CDH" rel="category tag">CDH</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hdfs/" title="View all posts in HDFS" rel="category tag">HDFS</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/mapreduce/" title="View all posts in MapReduce" rel="category tag">MapReduce</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>7 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Allen Wittenauer</a> /
+			February 10, 2011 / 10:57 AM		</em>
+		<p>It is implied, but I think it should be stated explicitly: don&#8217;t over-estimate the reliability of the network. Line card failures for larger grids is not uncommon.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://maps.nokia.com">Sanji Fernando</a> /
+			September 26, 2012 / 6:43 AM		</em>
+		<p>Is there consensus on how to measure the availability of a hadoop cluster?  Would it be the name nodes or possibly ingestion points?  Also are there recommended tools?</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='6505' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="UU4=" />
+		<input type="hidden" name="cptch_time" value="1398162949" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &minus; 2 =  &#116;hr&#101;e	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

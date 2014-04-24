@@ -1,0 +1,1412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>A Guide to Python Frameworks for Hadoop | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="A Guide to Python Frameworks for Hadoop"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/01/a-guide-to-python-frameworks-for-hadoop/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; A Guide to Python Frameworks for Hadoop Comments Feed" href="http://blog.cloudera.com/blog/2013/01/a-guide-to-python-frameworks-for-hadoop/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Apache Bigtop 0.5.0 Has Been Released' href='http://blog.cloudera.com/blog/2013/01/apache-bigtop-0-5-0-has-been-released/' />
+<link rel='next' title='Meet the Engineer: Marcel Kornacker' href='http://blog.cloudera.com/blog/2013/01/meet-the-engineer-marcel-kornacker/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/01/a-guide-to-python-frameworks-for-hadoop/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=19840' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-19840 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">A Guide to Python Frameworks for Hadoop</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/laserson/" title="Posts by Uri Laserson (@laserson)" rel="author">Uri Laserson (@laserson)</a></li>
+				<li>January 07, 2013</li>
+				<li class="comment"><a href="#comments">33 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>I recently joined Cloudera after working in <a href="http://arep.med.harvard.edu/" target="_blank">computational biology/genomics</a> for close to a decade. My analytical work is primarily performed in <a href="http://www.python.org/" target="_blank">Python</a>, along with its <a href="http://pydata.org" target="_blank">fantastic scientific stack</a>. It was quite jarring to find out that the <a href="http://hadoop.apache.org/" target="_blank">Apache Hadoop</a> ecosystem is primarily written in/for Java. So my first order of business was to investigate some of the options that exist for working with Hadoop from Python.</p>
+<p>In this post, I will provide an unscientific, <em>ad hoc</em> review of my experiences with some of the Python frameworks that exist for working with Hadoop, including:</p>
+<ul>
+<li>Hadoop Streaming</li>
+<li>mrjob</li>
+<li>dumbo</li>
+<li>hadoopy</li>
+<li>pydoop</li>
+<li>and others</li>
+</ul>
+<p>Ultimately, in my analysis, Hadoop Streaming is the fastest and most transparent option, and the best one for text processing. mrjob is best for rapidly working on <a href="http://aws.amazon.com/elasticmapreduce/" target="_blank">Amazon EMR</a>, but incurs a significant performance penalty. dumbo is convenient for more complex jobs (objects as keys; multistep MapReduce) without incurring as much overhead as mrjob, but it&#8217;s still slower than Streaming.</p>
+<p>Read on for implementation details, performance comparisons, and feature comparisons.</p>
+<h2>Toy Problem Definition</h2>
+<p>To test out the different frameworks, we will <strong>not</strong> be doing &#8220;word count&#8221;. Instead, we will be transforming the <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html" target="_blank">Google Books Ngram data</a>. An <a href="http://en.wikipedia.org/wiki/N-gram" target="_blank">n-gram</a> is a synonym for a tuple of <em>n</em> words. The n-gram data set provides counts for every single 1-, 2-, 3-, 4-, and 5-gram observed in the Google Books corpus grouped by year. Each row in the n-gram data set is composed of 3 fields: the n-gram, the year, and the number of observations. (You can explore the data interactively <a href="http://books.google.com/ngrams" target="_blank">here</a>.)</p>
+<p>We would like to aggregate the data to count the number of times any pair of words are observed <em>near</em> each other, grouped by year. This would allow us to determine if any pair of words are statistically near each other more often than we would expect by chance. Two words are &#8220;near&#8221; if they are observed within 4 words of each other. Or equivalently, two words are near each other if they appear together in any 2-, 3-, 4-, or 5-gram. So a row in the resulting data set would be comprised of a 2-gram, a year, and a count.</p>
+<p>There is one subtlety that must be addressed. The n-gram data set for each value of n is computed across the whole Google Books corpus. In principle, given the 5-gram data set, I could compute the 4-, 3-, and 2-gram data sets simply by aggregating over the correct n-grams. For example, if the 5-gram data set contains</p>
+<pre class="code" style="padding-left: 10px;">(the, cat, in, the, hat)       1999     20
+(the, cat, is, on, youtube)    1999     13
+(how, are, you, doing, today)  1986   5000
+</pre>
+<p>&nbsp;</p>
+<p>then we could aggregate this into 2-grams which would result in records like</p>
+<pre class="code" style="padding-left: 10px;">(the, cat)  1999    33      // i.e., 20 + 13
+</pre>
+<p>&nbsp;</p>
+<p>However, in practice, Google only includes an n-gram if it is observed more than 40 times across the entire corpus. So while a particular 5-gram may be too rare to meet the 40-occurrence threshold, the 2-grams it is composed of may be common enough to break the threshold in the Google-supplied 2-gram data. For this reason, we use the 2-gram data for words that are next to each other, the 3-gram data for pairs of words that are separated by one word, the 4-gram data for pairs of words that are separated by 2 words, etc. In other words, given the 2-gram data, the only additional information the 3-gram data provide are the outermost words of the 3-gram. In addition to being more sensitive to potentially rare n-grams, using only the outermost words of the n-grams helps ensure we avoid double counting. In total, we will be running our computation on the combination of 2-, 3-, 4-, and 5-gram data sets.</p>
+<p>The MapReduce pseudocode to implement this solution would look like so:</p>
+<pre class="code" style="padding-left: 10px;">def map(record):
+    (ngram, year, count) = unpack(record)
+    // ensure word1 has the lexicographically first word:
+    (word1, word2) = sorted(ngram[first], ngram[last])
+    key = (word1, word2, year)
+    emit(key, count)
+
+def reduce(key, values):
+    emit(key, sum(values))
+</pre>
+<p>&nbsp;</p>
+<h2>Hardware</h2>
+<p>These MapReduce jobs are executed on a ~20 GB random subset of the data. The full data set is split across 1500 files; we select a random subset of the files using <a href="https://github.com/cloudera/python-ngrams/blob/master/send_data_to_hdfs.py" target="_blank">this script</a>. The filenames remain intact, which is important because the filename identifies the value of n in the n-grams for that chunk of data.</p>
+<p>The Hadoop cluster comprises five virtual nodes running CentOS 6.2 x64, each with 4 CPUs, 10 GB RAM, 100 GB disk, running CDH4. The cluster can execute 20 maps at a time, and each job is set to run with 10 reducers.</p>
+<p>The software versions I worked with on the cluster were as follows:</p>
+<ul>
+<li>Hadoop: 2.0.0-cdh4.1.2</li>
+<li>Python: 2.6.6</li>
+<li>mrjob: 0.4-dev</li>
+<li>dumbo: 0.21.36</li>
+<li>hadoopy: 0.6.0</li>
+<li>pydoop: 0.7 (PyPI) and the latest version on git repository</li>
+<li>Java: 1.6</li>
+</ul>
+<h2>Implementations</h2>
+<p>Most of the Python frameworks wrap <a href="http://hadoop.apache.org/docs/stable/streaming.html" target="_blank">Hadoop Streaming</a>, while others wrap <a href="http://hadoop.apache.org/docs/r0.20.1/api/org/apache/hadoop/mapred/pipes/package-summary.html" target="_blank">Hadoop Pipes</a> or implement their own alternatives. Below, I will discuss my experience with a number of tools for using Python to write Hadoop jobs, along with a final comparison of performance and features. One of the features I am interested in is the ease of getting up and running, so I did not attempt to optimize the performance of the individual packages.</p>
+<p>As with every large data set, there are bad records. We check for a few kinds of errors in each record including missing fields and wrong n-gram size. For the latter case, we must know the name of the file that is being processed in order to determine the expected n-gram size.</p>
+<p>All the code is available in <a href="https://github.com/cloudera/python-ngrams" target="_blank">this GitHub repo</a>.</p>
+<h2>Hadoop Streaming</h2>
+<p><a href="http://hadoop.apache.org/docs/r0.15.2/streaming.html" target="_blank">Hadoop Streaming</a> is the canonical way of supplying any executable to Hadoop as a mapper or reducer, including standard Unix tools or Python scripts. The executable must read from <code>stdin</code> and write to <code>stdout</code> using agreed-upon semantics. One of the disadvantages of using Streaming directly is that while the inputs to the reducer are grouped by key, they are still iterated over line-by-line, and the boundaries between keys must be detected by the user.</p>
+<p>Here is the code for the mapper:</p>
+<pre class="code" style="padding-left: 10px;">#! /usr/bin/env python
+
+import os
+import re
+import sys
+
+# determine value of n in the current block of ngrams by parsing the filename
+input_file = os.environ['map_input_file']
+expected_tokens = int(re.findall(r'([\d]+)gram', os.path.basename(input_file))[0])
+
+for line in sys.stdin:
+    data = line.split('\t')
+
+    # perform some error checking
+    if len(data) &lt; 3:
+        continue
+
+    # unpack data
+    ngram = data[0].split()
+    year = data[1]
+    count = data[2]
+
+    # more error checking
+    if len(ngram) != expected_tokens:
+        continue
+
+    # build key and emit
+    pair = sorted([ngram[0], ngram[expected_tokens - 1]])
+    print &gt;&gt;sys.stdout, "%s\t%s\t%s\t%s" % (pair[0], pair[1], year, count)
+</pre>
+<p>&nbsp;</p>
+<p>And here is the reducer:</p>
+<pre class="code" style="padding-left: 10px;">#! /usr/bin/env python
+
+import sys
+
+total = 0
+prev_key = False
+for line in sys.stdin:
+    data = line.split('\t')
+    curr_key = '\t'.join(data[:3])
+    count = int(data[3])
+
+    # found a boundary; emit current sum
+    if prev_key and curr_key != prev_key:
+        print &gt;&gt;sys.stdout, "%s\t%i" % (prev_key, total)
+        prev_key = curr_key
+        total = count
+    # same key; accumulate sum
+    else:
+        prev_key = curr_key
+        total += count
+
+# emit last key
+if prev_key:
+    print &gt;&gt;sys.stdout, "%s\t%i" % (prev_key, total)
+</pre>
+<p>&nbsp;</p>
+<p>Hadoop Streaming separates the key and value with a tab character by default. Because we also separate the fields of our key with tab characters, we must tell Hadoop that the first three fields are all part of the key by passing these options:</p>
+<pre class="code" style="padding-left: 10px;">-jobconf stream.num.map.output.key.fields=3
+-jobconf stream.num.reduce.output.key.fields=3
+</pre>
+<p>&nbsp;</p>
+<p>The command to execute the Hadoop job is</p>
+<pre class="code" style="padding-left: 10px;">hadoop jar /usr/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.0.0-mr1-cdh4.1.2.jar \
+        -input /ngrams \
+        -output /output-streaming \
+        -mapper mapper.py \
+        -combiner reducer.py \
+        -reducer reducer.py \
+        -jobconf stream.num.map.output.key.fields=3 \
+        -jobconf stream.num.reduce.output.key.fields=3 \
+        -jobconf mapred.reduce.tasks=10 \
+        -file mapper.py \
+        -file reducer.py
+</pre>
+<p>&nbsp;</p>
+<p>Note that the files <code>mapper.py</code> and <code>reducer.py</code> must be specified twice on the command line: the first time points Hadoop at the executables, while the second time tells Hadoop to distribute the executables around to all the nodes in the cluster.</p>
+<p>Hadoop Streaming is clean and very obvious/precise about what is happening under the hood. In contrast, the Python frameworks all perform their own <a href="http://en.wikipedia.org/wiki/Serialization" target="_blank">serialization/deserialization</a> that can consume additional resources in a non-transparent way. Also, if there is a functioning Hadoop distribution, then Streaming should just work, without having to configure another framework on top of it. Finally, it&#8217;s trivial to send Unix commands and/or Java classes as mappers/reducers.</p>
+<p>The disadvantage of Streaming is that everything must be done manually. The user must decide how to encode objects as keys/values (e.g., as JSON objects). Also, support for binary data is not trivial. And as mentioned above, the reducer must keep track of key boundaries manually, which can be prone to errors.</p>
+<h2>mrjob</h2>
+<p><a href="https://github.com/Yelp/mrjob" target="_blank">mrjob</a> is an open-source Python framework that wraps Hadoop Streaming and is actively developed by Yelp. Since Yelp operates entirely inside <a href="http://aws.amazon.com/" target="_blank">Amazon Web Services</a>, mrjob&#8217;s integration with EMR is incredibly smooth and easy (using the <a href="https://github.com/boto/boto" target="_blank">boto</a> package).</p>
+<p>mrjob provides a pythonic API to work with Hadoop Streaming, and allows the user to work with any objects as keys and mappers. By default, these objects are serialized as <a href="http://en.wikipedia.org/wiki/JSON" target="_blank">JSON objects</a> internally, but there is also support for <a href="http://docs.python.org/2/library/pickle.html" target="_blank">pickled objects</a>. There are no other binary I/O formats available out of the box, but there is a mechanism to implement a custom serializer.</p>
+<p>Significantly, mrjob appears to be very actively developed, and has great documentation.</p>
+<p>As with all the Python frameworks, the implementation looks like pseudocode:</p>
+<pre class="code" style="padding-left: 10px;">#! /usr/bin/env python
+
+import os
+import re
+
+from mrjob.job import MRJob
+from mrjob.protocol import RawProtocol, ReprProtocol
+
+class NgramNeighbors(MRJob):
+
+    # mrjob allows you to specify input/intermediate/output serialization
+    # default output protocol is JSON; here we set it to text
+    OUTPUT_PROTOCOL = RawProtocol
+
+    def mapper_init(self):
+        # determine value of n in the current block of ngrams by parsing filename
+        input_file = os.environ['map_input_file']
+        self.expected_tokens = int(re.findall(r'([\d]+)gram', os.path.basename(input_file))[0])
+
+    def mapper(self, key, line):
+        data = line.split('\t')
+
+        # error checking
+        if len(data) &lt; 3:
+            return
+
+        # unpack data
+        ngram = data[0].split()
+        year = data[1]
+        count = int(data[2])
+
+        # more error checking
+        if len(ngram) != self.expected_tokens:
+            return
+
+        # generate key
+        pair = sorted([ngram[0], ngram[self.expected_tokens - 1]])
+        k = pair + [year]
+
+        # note that the key is an object (a list in this case)
+        # that mrjob will serialize as JSON text
+        yield (k, count)
+
+    def combiner(self, key, counts):
+        # the combiner must be separate from the reducer because the input
+        # and output must both be JSON
+        yield (key, sum(counts))
+
+    def reducer(self, key, counts):
+        # the final output is encoded as text
+        yield "%s\t%s\t%s" % tuple(key), str(sum(counts))
+
+if __name__ == '__main__':
+    # sets up a runner, based on command line options
+    NgramNeighbors.run()
+</pre>
+<p>&nbsp;</p>
+<p>mrjob is only required to be installed on the client node where the job is submitted. Here are the commands to run it:</p>
+<pre class="code" style="padding-left: 10px;">export HADOOP_HOME="/usr/lib/hadoop-0.20-mapreduce"
+./ngrams.py -r hadoop --hadoop-bin /usr/bin/hadoop --jobconf mapred.reduce.tasks=10 -o hdfs:///output-mrjob hdfs:///ngrams
+</pre>
+<p>&nbsp;</p>
+<p>Writing MapReduce jobs is incredibly intuitive and simple. However, there is a significant cost incurred by the internal serialization scheme. A binary scheme would most likely need to be implemented by the user (e.g., to support <a href="https://github.com/klbostee/typedbytes" target="_blank">typedbytes</a>). There are also some built-in utilities for log file parsing. Finally, mrjob allows the user to write multi-step MapReduce workflows, where intermediate output from one MapReduce job is automatically used as input into another MapReduce job.</p>
+<p>(Note: The rest of the implementations are all highly similar, aside from package-specific implementation details. They can all be found <a href="http://github.com/cloudera/python-ngrams" target="_blank">here</a>.)</p>
+<h2>dumbo</h2>
+<p><a href="https://github.com/klbostee/dumbo/wiki" target="_blank">dumbo</a> is another Python framework that wraps Hadoop Streaming. It seems to enjoy relatively broad usage, but is not developed as actively as mrjob at this point. It is one of the earlier Python Hadoop APIs, and is very mature. However, its documentation is lacking, which makes it a bit harder to use.</p>
+<p>It performs serialization with typedbytes, which allows for more compact data transfer with Hadoop, and can natively read SequenceFiles or any other file type by specifying a Java <code>InputFormat</code>. In fact, dumbo enables the user to execute code from any Python egg or Java JAR file.</p>
+<p>In my experience, I had to manually install dumbo on each node of my cluster for it to work. It only worked if typedbytes and dumbo were built as Python eggs. Finally, it failed to run with a combiner, as it would terminate on <code>MemoryError</code>s.</p>
+<p>The command to run the job with dumbo is</p>
+<pre class="code" style="padding-left: 10px;">dumbo start ngrams.py \
+        -hadoop /usr \
+        -hadooplib /usr/lib/hadoop-0.20-mapreduce/contrib/streaming \
+        -numreducetasks 10 \
+        -input hdfs:///ngrams \
+        -output hdfs:///output-dumbo \
+        -outputformat text \
+        -inputformat text
+</pre>
+<p>&nbsp;</p>
+<h2>hadoopy</h2>
+<p><a href="https://github.com/bwhite/hadoopy" target="_blank">hadoopy</a> is another Streaming wrapper that is compatible with dumbo. Similarly, it focuses on typedbytes serialization of data, and directly writes typedbytes to HDFS.</p>
+<p>It has a nice debugging feature, in which it can directly write messages to <code>stdout</code>/<code>stderr</code> without disrupting the Streaming process. It feels similar to dumbo, but the documentation is better. The documentation also mentions experimental <a href="http://hbase.apache.org/" target="_blank">Apache HBase</a> integration.</p>
+<p>With hadoopy, there are two ways to launch jobs:</p>
+<ol>
+<li><code>launch</code> requires Python/hadoopy to be installed on each node in the cluster, but has very little overhead after that.</li>
+<li><code>launch_frozen</code> does not even require that Python is installed on the nodes, but it incurs a ~15 second penalty for PyInstaller to work. (It&#8217;s claimed that this can be somewhat mitigated by optimizations and caching tricks.)</li>
+</ol>
+<p>Jobs in hadoopy must be launched from within a Python program. There is no built-in command line utility.</p>
+<p>I launch hadoopy via the <code>launch_frozen</code> scheme using my own Python script:</p>
+<pre class="code" style="padding-left: 10px;">python launch_hadoopy.py
+</pre>
+<p>&nbsp;</p>
+<p>After running it with <code>launch_frozen</code>, I installed hadoopy on all nodes and used the <code>launch</code>method instead. The performance was not significantly different.</p>
+<h2>pydoop</h2>
+<p>In contrast to the other frameworks, <a href="http://pydoop.sourceforge.net/docs/" target="_blank">pydoop</a> wraps Hadoop Pipes, which is a C++ API into Hadoop. The project claims that they can provide a richer interface with Hadoop and HDFS because of this, as well as better performance, but this is not clear to me. However, one advantage is the ability to implement a Python <code>Partitioner</code>, <code>RecordReader</code>, and <code>RecordWriter</code>. All input/output must be strings.</p>
+<p>Most importantly, I could not successfully build pydoop via pip or directly from source.</p>
+<h2>Others</h2>
+<ul>
+<li><a href="http://code.google.com/p/happy/" target="_blank">happy</a> is a framework for writing Hadoop jobs through <a href="http://www.jython.org/" target="_blank">Jython</a>, but seems to be dead.</li>
+<li><a href="//discoproject.org/" target="_blank">Disco</a> is a full-blown non-Hadoop reimplementation of MapReduce. Its core is written in Erlang, with the primary API in Python. It is developed at Nokia, but is much less used than Hadoop.</li>
+<li><a href="http://code.google.com/p/octopy/" target="_blank">octopy</a> is a reimplementation of MapReduce purely in Python in a single source file. It is not intended for &#8220;serious&#8221; computation.</li>
+<li><a href="http://www.mortardata.com/" target="_blank">Mortar</a> is another option for working with Python that was just recently launched. Through a web app, the user can submit <a href="http://pig.apache.org/" target="_blank">Apache Pig</a> or Python jobs to manipulate data sitting in <a href="http://aws.amazon.com/s3/" target="_blank">Amazon S3</a>.</li>
+<li>There are several higher-level interfaces into the Hadoop ecosystem, such as <a href="http://hive.apache.org/" target="_blank">Apache Hive</a> and Pig. Pig provides the facility to write user-defined-functions with Python, but it appears to run them through Jython. Hive also has a Python wrapper called <a href="http://code.google.com/a/apache-extras.org/p/hipy/" target="_blank">hipy</a>.</li>
+<li><strong>(Added Jan. 7 2013)</strong> <a href="https://github.com/spotify/luigi">Luigi</a> is a Python framework for managing multistep batch job pipelines/workflows. It is probably a bit similar to <a href="http://oozie.apache.org">Apache Oozie</a> but it has some built-in functionality for wrapping Hadoop Streaming jobs (though it appears to be a light wrapper). Luigi has a nice feature of extracting out a Python traceback if your Python code crashes a job, and also has nice command-line features. It has a great introductory README file but seems to lack comprehensive reference documentation. Luigi is actively developed and used at Spotify for running many jobs there.</li>
+</ul>
+<h2>Native Java</h2>
+<p>Finally, I implemented the MR job using the new Hadoop Java API. After building it, I ran it like so:</p>
+<pre class="code" style="padding-left: 10px;">hadoop jar /root/ngrams/native/target/NgramsComparison-0.0.1-SNAPSHOT.jar NgramsDriver hdfs:///ngrams hdfs:///output-native
+</pre>
+<p>&nbsp;</p>
+<h2>A Note About Counters</h2>
+<p>In my initial implementations of these MR jobs, I used counters to keep track of the number of bad records. In Streaming, this requires writing messages to <code>stderr</code>. It turns out this incurs a significant overhead: the Streaming job took 3.4x longer than the native Java job. The frameworks were similarly penalized.</p>
+<h2>Performance Comparison</h2>
+<p>The MapReduce job was also implemented in Java as a baseline for performance. All values for the Python frameworks are ratios relative to the corresponding Java performance.</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/01/performance.png"><img src="http://blog.cloudera.com/wp-content/uploads/2013/01/performance.png" alt="" width="700" height="231" /></a></p>
+<p>Java is obviously the fastest, with Streaming taking 50% longer, and the Python frameworks taking substantially longer still. From a profile of the mrjob mapper, it appears a substantial amount of time is spent in serialization/deserialization. The binary formats in dumbo and hadoopy may ameliorate the problem. The dumbo implementation may have been faster if the combiner was allowed to run.</p>
+<h2>Feature Comparison</h2>
+<p>Mostly gleaned from the respective packages&#8217; documentation or code repositories.</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/01/features.png"><img src="http://blog.cloudera.com/wp-content/uploads/2013/01/features.png" alt="" width="700" height="284" /></a></p>
+<h2>Conclusions</h2>
+<p>Streaming appears to be the fastest Python solution, without any magic under the hood. However, it requires care when implementing the reducer, and also when working with more complex objects.</p>
+<p>All the Python frameworks look like pseudocode, which is a huge plus.</p>
+<p>mrjob seems highly active, easy-to-use, and mature. It makes multistep MapReduce flows easy, and can easily work with complex objects. It also works seamlessly with EMR. But it appears to perform the slowest.</p>
+<p>The other Python frameworks appear to be somewhat less popular. Their main advantage appears to be built-in support for binary formats, but this is probably something that can be implemented by the user, if it matters.</p>
+<p>So for the time being:</p>
+<ul>
+<li>Prefer Hadoop Streaming if possible. It&#8217;s easy enough, as long as care is taken with the reducer.</li>
+<li>Prefer mrjob to rapidly get on Amazon EMR, at the cost of significant computational overhead.</li>
+<li>Prefer dumbo for more complex jobs that may include complex keys and multistep MapReduce workflows; it&#8217;s slower than Streaming but faster than mrjob.</li>
+</ul>
+<p>If you have your own observations based on practice, or for that matter any errors to point out, please do so in comments.</p>
+<p><em>Uri Laserson is a data scientist at Cloudera.</em></p>
+<p>&gt; <a href="http://www.infoq.com/presentations/python-hadoop">Watch a video</a> of Uri&#8217;s &#8220;Guide to Python Frameworks for Hadoop&#8221; presentation from QCon NY 2013.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/data-science/" title="View all posts in Data Science" rel="category tag">Data Science</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>33 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.steveasleep.com/">Steve Johnson</a> /
+			January 07, 2013 / 11:25 AM		</em>
+		<p>I left a couple of comments and corrections over at the HN thread about this post. <a href="http://news.ycombinator.com/item?id=5022625" rel="nofollow">http://news.ycombinator.com/item?id=5022625</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Luca Pireddu</a> /
+			January 07, 2013 / 11:29 AM		</em>
+		<p>Hi Uri,</p>
+<p>what sort of problems did you have installing Pydoop?  You may be missing some dependencies (see <a href="http://pydoop.sourceforge.net/docs/installation.html" rel="nofollow">http://pydoop.sourceforge.net/docs/installation.html</a>).</p>
+<p>Interestingly, once Pydoop is installed, with &#8216;pydoop script&#8217; you could almost run your pseudo code exactly as it is.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Uri Laserson</a> /
+			January 07, 2013 / 12:06 PM		</em>
+		<p>Luca, I believe I have all the required dependencies for pydoop.  The pip output is here:<br />
+<a href="https://gist.github.com/4477947" rel="nofollow">https://gist.github.com/4477947</a></p>
+<p>And the output from building from source:<br />
+<a href="https://gist.github.com/4477933" rel="nofollow">https://gist.github.com/4477933</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Luca Pireddu</a> /
+			January 07, 2013 / 1:34 PM		</em>
+		<p>Hmmm&#8230;you&#8217;re trying to build Pydoop on Mac OS X!  </p>
+<p>That&#8217;s the first time we see anyone trying this.  Mac OS X isn&#8217;t a supported Hadoop or Pydoop platform, hence the compilation issues.</p>
+<p>I looked at the setup output you posted.  There seems to be some sort of incompatibility in boost-python.  Unfortunately I don&#8217;t have a Mac to try debugging your problem.</p>
+<p>Nevertheless, I&#8217;ve searched the Internet for your error and it seems that you&#8217;re not the first one to encounter it.  One project got around the problem simply reordering their #includes:  <a href="https://groups.google.com/d/msg/pythonvision/eVu5I4vzDfw/pi894YBwEMgJ" rel="nofollow">https://groups.google.com/d/msg/pythonvision/eVu5I4vzDfw/pi894YBwEMgJ</a><br />
+A stab in the dark could be to edit pydoop/src/pipes_context.hpp and reverse the order of the lines<br />
+  #include<br />
+  #include </p>
+<p>Another project had a more sophisticated solution:  <a href="http://goo.gl/zCgTc" rel="nofollow">http://goo.gl/zCgTc</a>  [code.google.com]</p>
+<p>Do you want to try?  If you manage to build it, we'd be happy to integrate your changes into Pydoop.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Luca Pireddu</a> /
+			January 07, 2013 / 1:37 PM		</em>
+		<p>Argg&#8230;.I didn&#8217;t mean to be that vague with the &#8220;stab in the dark&#8221;.  The blog engine ate my include lines.</p>
+<p>The include lines are numbers 27 and 28:  hadoop/Pipes.hh and boost/python.hpp</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://dumbotics.com">Klaas</a> /
+			January 07, 2013 / 3:41 PM		</em>
+		<p>Nice post!</p>
+<p>For what it&#8217;s worth, dumbo is a lot faster when using ctypedbytes and the memory limit safeguards can easily be tweaked.</p>
+<p>I&#8217;d also be interested to know what things in particular you found to be missing in the docs. I don&#8217;t think we&#8217;ll have every little detail documented anytime soon, but maybe there&#8217;s some low hanging fruit that could be rectified with realistic effort&#8230;</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://jimblomo.yelp.com">Jim Blomo</a> /
+			January 07, 2013 / 4:52 PM		</em>
+		<p>Jim from Yelp here.  Thanks for the wonderful write-up!  For those interested in more information, we&#8217;re hosting the Hadoop meetup this Wednesday and talking about the future of mrjob: <a href="http://www.meetup.com/hadoopsf/events/95687012/" rel="nofollow">http://www.meetup.com/hadoopsf/events/95687012/</a></p>
+<p>Regarding serialization performance, Steve Johnson points out in the HN comments this is likely caused by the default Python JSON library.  Switching to simplejson may speed things up significantly, and it is what we use at Yelp.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://minireference.com/">Ivan Savov</a> /
+			January 07, 2013 / 8:06 PM		</em>
+		<p>Thanks for the research and the sample code. This is something I will definitely have to play with.</p>
+<p>Is there any chance you could add a groovy version? I hear that it is almost as good as python (short and expressive) but it can use all the Java stuff natively.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">TG</a> /
+			January 07, 2013 / 10:00 PM		</em>
+		<p>Hi, </p>
+<p>Terrific blog post! I ran the vanilla python streaming code on CDH4 and recieved this error:</p>
+<p>Error: java.lang.RuntimeException: PipeMapRed.waitOutputThreads(): subprocess failed with code 1<br />
+	at org.apache.hadoop.streaming.PipeMapRed.waitOutputThreads</p>
+<p>Do you have any experience running streaming jobs on CDH4? Any idea what might be causing this? Thanks!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			January 08, 2013 / 1:20 PM		</em>
+		<p>TG,</p>
+<p>I recommend that you post your question/error to the <a href="mailto:cdh-user@cloudera.org">cdh-user@cloudera.org</a> list.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.crs4.it">Simone Leo</a> /
+			January 11, 2013 / 9:03 AM		</em>
+		<p>Hello,</p>
+<p>It is not quite clear to me why you tried building Pydoop on Mac OS X: isn&#8217;t your test environment made up of CentOS boxes? CentOS is an operating system we&#8217;ve supported right from the start.</p>
+<p>Anyway, we worked on Mac support and released a new version that builds on OS X Mountain Lion. Here is the link to the installation instructions:</p>
+<p><a href="http://pydoop.sourceforge.net/docs/installation.html#osx" rel="nofollow">http://pydoop.sourceforge.net/docs/installation.html#osx</a></p>
+<p>This is how you write the n-gram program with pydoop script:</p>
+<p>def mapper(_, record, writer):<br />
+  record = record.split(&#8220;\t&#8221;, 3)<br />
+  ngram = record[0].split()<br />
+  writer.emit(&#8220;\t&#8221;.join(sorted((ngram[0], ngram[-1]))+[record[1]]), record[2])</p>
+<p>def reducer(key, ivalue, writer):<br />
+  writer.emit(key, sum(map(int, ivalue)))</p>
+<p>And this is how you run it (assuming you saved the code to a file named &#8220;ngram_aggregation.py&#8221;):</p>
+<p>pydoop script ngram_aggregation.py input output</p>
+<p>You can get the new release with a git pull. It would be great if you could update this survey with Pydoop data.</p>
+<p>Simone</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.crs4.it">Simone Leo</a> /
+			January 11, 2013 / 9:06 AM		</em>
+		<p>The blog engine removed all indentation from the code :( Everything except the def lines should be indented one level.</p>
+<p>Simone</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Uri Laserson (@laserson)</a> /
+			January 11, 2013 / 11:35 AM		</em>
+		<p>Simone, I had the exact same errors on the CentOS machines.  I only compiled it on my local machine to generate the errors to copy/paste.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Gianluigi Zanetti</a> /
+			January 11, 2013 / 2:55 PM		</em>
+		<p>Hi Uri.<br />
+Could you please give us details on  the errors you had on the CentOS machines? We have multiple installations running on configurations nominally similar to the one you tried, so it would be very interesting to know what went wrong in your case.</p>
+<p>By the way, as Simone was saying, pydoop 0.8 supports OS X Mountain Lion so it would be very nice if you could try a re-install.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.crs4.it">Simone Leo</a> /
+			January 14, 2013 / 1:59 AM		</em>
+		<p>Yes, the CentOS build log would definitely help. By the way, we have an active help forum here:</p>
+<p><a href="http://sourceforge.net/p/pydoop/discussion/990018" rel="nofollow">http://sourceforge.net/p/pydoop/discussion/990018</a></p>
+<p>Simone</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Steve Kannan</a> /
+			January 17, 2013 / 5:31 PM		</em>
+		<p>Great post! I have actually been doing some similar research myself.</p>
+<p>Do you know if it&#8217;s possible to write and run a MapReduce using Jython and the standard Java Mapreduce API?  It is frequently suggested as a viable option but I haven&#8217;t found anyone who has actually done it.  As you point out, the happy project appears to be dead.  Additionally, the word_count.py example included in most hadoop distributions does not seem to work.  It relies on jythonc, which was deprecated years ago.  I got the old version of Jython with jythonc and compiled it anyway, but the resultant jar would not run on the TaskTrackers.</p>
+<p>Others seem to have had the same experience (<a href="http://sourceforge.net/mailarchive/forum.php?forum_name=jython-users&#038;max_rows=25&#038;style=nested&#038;viewmonth=200809" rel="nofollow">http://sourceforge.net/mailarchive/forum.php?forum_name=jython-users&#038;max_rows=25&#038;style=nested&#038;viewmonth=200809</a>).  </p>
+<p>Is this an option you explored?<br />
+Thanks</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Uri Laserson (@laserson)</a> /
+			January 17, 2013 / 10:40 PM		</em>
+		<p>I believe that Pig lets you write Python UDFs that get run through Jython.  I think requiring Jython is a huge roadblock for many people since they want to use their favorite Python modules that are probably not compatible (e.g., NumPy).  Mortar data is a new player that makes it easy to write Pig scripts and Python to work on data in S3.  According to their website, it should be possible to use all of the Python scientific stack (NumPy, SciPy, etc.).</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Steve Kannan</a> /
+			January 18, 2013 / 10:12 AM		</em>
+		<p>Thanks for the info.  I totally agree that Jython is limited in many respects.  I was trying to test the basic Jython MRs for the sake of completeness, but I don&#8217;t think they are usable.  Is it safe to assume that the included examples (WordCount.py and JythonAbacus.py) are deprecated and Jython (outside of Pig) is not supported?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Angelica Pando</a> /
+			March 11, 2013 / 8:52 PM		</em>
+		<p>FWIW, I also can&#8217;t build pydoop. Pretty unfortunate, since I really wanted to give it a try. </p>
+<p>Same error as Uri, trying to do pip install: <a href="https://gist.github.com/laserson/4477947" rel="nofollow">https://gist.github.com/laserson/4477947</a></p>
+<p>And, like Uri, I&#8217;m *not* trying to install on Mac OS X</p>
+<p>$ cat /etc/redhat-release<br />
+CentOS release 5.6 (Final)</p>
+<p>Also tried to post in the help forum mentioned above but I guess I can&#8217;t create any topics. Oh well.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Simone Leo</a> /
+			March 19, 2013 / 9:42 AM		</em>
+		<p>Hi Angelica,</p>
+<p>unfortunately the pip install issue has been around for a while, but it should be solved now. You still have to install all prerequisites manually as pip cannot handle them.</p>
+<p>Regarding your inability to post on the forum, I have no idea what happened. It&#8217;s been used by a lot of different users now. Have you tried contacting the Sourceforge tech support?</p>
+<p>Simone</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://bestpythonide.com">Pythoner</a> /
+			May 02, 2013 / 8:02 AM		</em>
+		<p>what IDE do you use for python?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://matthewcornell.org">Matthew Cornell</a> /
+			October 16, 2013 / 5:58 AM		</em>
+		<p>Thanks very much for the article. FYI The Hadoop Streaming link <a href="http://hadoop.apache.org/docs/r0.15.2/streaming.html" rel="nofollow">http://hadoop.apache.org/docs/r0.15.2/streaming.html</a> is broken. Here&#8217;s the most recent: <a href="http://hadoop.apache.org/docs/stable/streaming.html" rel="nofollow">http://hadoop.apache.org/docs/stable/streaming.html</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			October 16, 2013 / 8:10 AM		</em>
+		<p>Matthew,</p>
+<p>Thanks for pointing that out, corrected.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">AJ Rader</a> /
+			November 25, 2013 / 9:14 AM		</em>
+		<p>I liked this writeup when I first saw it and have come back to try to get mrjob working. I keep getting this error however:<br />
+IOError: Could not check path hdfs:///test/pg5000.txt<br />
+Any suggestions on what could be causing this?<br />
+thanks,</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Uri Laserson (@laserson)</a> /
+			November 25, 2013 / 1:26 PM		</em>
+		<p>Hi AJ,</p>
+<p>Glad the post is helpful.  I looked briefly at the mrjob code, and seems that the call to <code>invoke_hadoop</code> is raising a <code>CalledProcessError</code>, which leads to your error.  I imagine this could happen if you can&#8217;t successfully run <code>hadoop fs -ls</code> in the context that the mrjob code is running.  Or perhaps your hadoop configuration files (e.g., site.xml or something like that) are not configured to correctly point to the cluster.  Perhaps it would help to explicitly add the hostname of the hadoop cluster to the hdfs:// path?  Hope this helps!  Also, if you have followup questions, would you mind moving this to one of the user mailing lists?  (either mrjob&#8217;s mailing list or github issue tracker, or hadoop-users or cdh-users)?  Thanks!  &#8211;Uri</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://kldavenport.com">Kevin Davenport (@KevinLDavenport)</a> /
+			December 21, 2013 / 4:38 PM		</em>
+		<p>Great post, thanks for sharing. I look forward to trying to implement sci-kit learn in one of these frameworks.</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Uri Laserson (@laserson)</a> /
+			December 22, 2013 / 11:59 AM		</em>
+		<p>Thanks, Kevin!  Please keep us posted on any progress.  Also, if you&#8217;re not familiar with it, you should check out impyla and PySpark as well.</p>
+	</li>
+</li>
+</ul>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='19840' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="pNQ=" />
+		<input type="hidden" name="cptch_time" value="1398162795" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &minus; &#116;w&#111; = 5	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

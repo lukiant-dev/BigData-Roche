@@ -1,0 +1,957 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-to: Use cron-like Scheduling in Apache Oozie | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-to: Use cron-like Scheduling in Apache Oozie"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2014/04/how-to-use-cron-like-scheduling-in-apache-oozie/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; How-to: Use cron-like Scheduling in Apache Oozie Comments Feed" href="http://blog.cloudera.com/blog/2014/04/how-to-use-cron-like-scheduling-in-apache-oozie/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Hello, Apache Hadoop 2.4.0' href='http://blog.cloudera.com/blog/2014/04/hello-apache-hadoop-2-4-0/' />
+<link rel='next' title='How-to: Run a Simple Apache Spark App in CDH 5' href='http://blog.cloudera.com/blog/2014/04/how-to-run-a-simple-apache-spark-app-in-cdh-5/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2014/04/how-to-use-cron-like-scheduling-in-apache-oozie/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=25953' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-25953 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-to: Use cron-like Scheduling in Apache Oozie</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/rkanter/" title="Posts by Robert Kanter" rel="author">Robert Kanter</a></li>
+				<li>April 11, 2014</li>
+				<li class="comment"><a href="#comments">no comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><strong>Improved scheduling capabilities via Oozie in CDH 5 makes for far fewer headaches.</strong></p>
+<p>One of the best new <a href="http://oozie.apache.org">Apache Oozie</a> features in <a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH 5</a>, Cloudera&#8217;s software distribution, is the ability to use <code>cron</code>-like syntax for coordinator frequencies. Previously, the frequencies had to be at fixed intervals (every hour or every two days, for example) – making scheduling anything more complicated (such as every hour from 9am to 5pm on weekdays or the second-to-last day of every month) complex and difficult. </p>
+<p>In this post, you&#8217;ll learn how to use this new syntax in a practical way.</p>
+<h2>Scheduling in CDH 4</h2>
+<p>Before we get into the <code>cron</code>-like syntax, let&#8217;s take a quick look at the fixed-frequency scheduling supported in CDH 4 and earlier.</p>
+<p>Oozie treats frequency in terms of minutes; however, due to the variability in the number of minutes in each day and month, we recommend using the appropriate EL (Expression Language) functions instead of trying to do the calculations by hand. With that in mind, coordinator frequencies are typically specified with one of these four EL functions:</p>
+<ul>
+<li><code>${coord:minutes(int n)}</code></li>
+<li><code>${coord:hours(int n)}</code></li>
+<li><code>${coord:days(int n)}</code></li>
+<li><code>${coord:months(int n)}</code></li>
+</ul>
+<p>Let&#8217;s try to use these functions to schedule a coordinator for the first example: every hour from 9am to 5pm on weekdays. The most obvious approach is to use <code>${coord:hours(1)}</code> to schedule the coordinator to run every hour. But as you&#8217;ll quickly realize, that won&#8217;t work &#8212; because the job will continue after 5pm, before 9am, and also into the weekend. In the end, the easiest approach is to create 40 similar coordinator jobs!</p>
+<p>Yes, you read that correctly: you&#8217;d create a new job to run every seven days, and start them at offsets of an hour between 9am and 5pm on Monday, Tuesday, Wednesday, Thursday, and Friday &#8212; that&#8217;s eight coordinators per day and five days = 40 coordinators. </p>
+<p>True, you can make this process less painful by reusing a single coordinator.xml and simply submitting it with multiple start times by making the start attribute a variable and setting it at submission time:</p>
+<pre class="prettyprint ">
+&lt;coordinator-app name=&quot;coord-1&quot; frequency=&quot;${coord:days(7)}&quot; start=&quot;{$start}&quot; end=&quot;2015-01-27T00:00Z&quot; timezone=&quot;UTC&quot; xmlns=&quot;uri:oozie:coordinator:0.4&quot;&gt;
+	...
+&lt;/coordinator-app&gt;
+</pre>
+<p>&nbsp;</p>
+<p>Here&#8217;s how the first and last few of the 40 submissions would look, with the first on Monday, January 27, 2014, at 9am and the last on Friday, January 31, 2014, at 5pm:</p>
+<pre class="prettyprint ">oozie job -config job.properties -run -Dstart=2014-01-27T09:00Z
+oozie job -config job.properties -run -Dstart=2014-01-27T10:00Z
+oozie job -config job.properties -run -Dstart=2014-01-27T11:00Z
+...
+oozie job -config job.properties -run -Dstart=2014-01-31T15:00Z
+oozie job -config job.properties -run -Dstart=2014-01-31T16:00Z
+oozie job -config job.properties -run -Dstart=2014-01-31T17:00Z
+</pre>
+<p>&nbsp;</p>
+<p>You&#8217;d have to do the same thing for the other example, the second-to-last day of every month. In fact, you&#8217;d probably have to manually calculate the specific dates and submit a coordinator for each month!</p>
+<h2>Scheduling in CDH 5</h2>
+<p><a href="http://en.wikipedia.org/wiki/Cron"><code>cron</code></a> is a utility included with most Unix/Linux operating systems for scheduling time-based jobs. For example, you might want it to run a script that cleans out your Internet history once a week. </p>
+<p>As I hinted at earlier, the syntax for specifying the schedule for <code>cron</code> is more flexible and powerful than previously. We&#8217;ll take a quick look at the syntax below, but for more details, review the documentation <a href="http://archive.cloudera.com/cdh5/cdh/5/oozie/CoordinatorFunctionalSpec.html#a4.4.3._Cron_syntax_in_coordinator_frequency">here</a>. (Note that there are variations even among standard <code>cron</code> tools, so it&#8217;s a good idea to quickly read the Oozie-specific documentation even if you are already familiar with <code>cron</code>.) Oozie uses the <a href="http://www.quartz-scheduler.org">Quartz Scheduler</a> to parse the <code>cron</code> syntax. </p>
+<p>The <code>cron</code> syntax used by Oozie is a string with five space-separated fields: Minute, Hour, Day-of-Month, Month, and Day-of-Week. Below is a chart, adapted from the documentation, summarizing the different values for each field:</p>
+<p align="center"><img title="oozie-tab" src="http://blog.cloudera.com/wp-content/uploads/2014/04/oozie-tab.png" alt="" width="516" height="180" /></p>
+<p>The Allowed Values for each field are fairly self-explanatory (but note that while in many <code>cron</code> implementations, Day-of-Week accepts 0-6, here we accept 1-7, instead). </p>
+<p>Allowed Special Characters are allowed in all fields: &#8220;*&#8221; (asterisk), which matches all values; &#8220;,&#8221; (comma), which lets you specify multiple values; &#8220;-&#8221; (dash), which lets you specify ranges; and &#8220;/&#8221;, which lets you specify increments. </p>
+<p>It&#8217;s probably easiest to explain these characters with some examples. Remember, Oozie&#8217;s processing time zone is UTC, so if you&#8221;re in a different time zone, you&#8217;ll have to add/subtract the appropriate offset from the examples ahead. </p>
+<ul>
+<li><code>30 * * * *</code><br /> This expression indicates that the job should run at the 30th minute of every hour (1:30am, 2:30am, and so on, assuming the job is set to start on the hour). We&#8217;ve set the Minute field to 30, and the remaining fields to &#8220;*&#8221; so they match every value. </li>
+<li><code>30 14 * * *</code><br /> This expression indicates that the job should run at 2:30pm everyday. The Minute field is set to 30, the Hour field is set to 14, and the remaining fields are set to &#8220;*&#8221;. </li>
+<li><code>30 14 * 2 *</code><br /> This expression indicates that the job should run at 2:30pm everyday during February. This is similar to the previous expression, except that we&#8217;ve now restricted the Month field to February instead of including every month. </li>
+<li><code>0/20 5-9,12-14 0/5 * *</code><br /> This expression is a bit trickier and highlights the flexibility of the <code>cron</code>-like scheduling. It indicates that the job should run every 20 minutes (0, 20, and 40 past the hour) between 5am and 10am (with the last job starting at 9:40am) and between noon and 2pm (with the last job starting at 1:40pm) on every fifth day of every month. The Minute field is set to 0/20, the Hour field is set to 5-9,12-14, the Day-of-Month field is set to 0/5, and the remaining fields are set to &#8220;*&#8221;. </li>
+</ul>
+<p>You may have also noticed that there are some additional Allowed Special Characters &#8212; &#8220;?&#8221;, &#8220;L&#8221;, &#8220;W&#8221;, and &#8220;#&#8221; – which you can use in some of the fields to provide more specialized results:</p>
+<ul>
+<li>Use &#8220;?&#8221; in the Day-of-Month and Day-of-Week fields to indicate no specific value (if you want to specify one but not the other).</li>
+<li>Use &#8220;L&#8221; in the Day-of-Month and Day-of-Week fields to indicate the last day of the month or the last day of the week (Saturday) respectively. The &#8220;L&#8221; can do other things in the Day-of-Week field, too; for example, if &#8220;6L&#8221; is in the Day-of-Week field, it indicates the last Friday of the month. </li>
+<li>Use &#8220;W&#8221; in the Day-of-Month field to indicate the nearest weekday to the given day. And the &#8220;#&#8221; can be used in the Day-of-Week field to indicate the nth day of the month. </li>
+</ul>
+<p>These values have more subtle and complex use cases than the other values. Before using them, read the <a href="http://archive.cloudera.com/cdh5/cdh/5/oozie/CoordinatorFunctionalSpec.html#a4.4.3._Cron_syntax_in_coordinator_frequency">documentation</a> carefully &#8212; especially for &#8220;L&#8221; and &#8220;W&#8221; as they have some additional behavior.</p>
+<p>Here are some examples using these special values:</p>
+<ul>
+<li><code>0 5 ? * MON</code><br /> This expression indicates that the job should run every Monday at 5am. The Minute field is set to 0, the Hour field is set to 5, the Day-of-Month field is set to &#8220;?&#8221;, the Month field is set to &#8220;*&#8221;, and the Day-of-Week field is set to MON. Notice that if the &#8220;?&#8221; were a &#8220;*&#8221;, then this expression would indicate that the job should run every day at 5am, not just Mondays. The difference between the &#8220;?&#8221; and the &#8220;*&#8221; is sometimes tricky, but this example is pretty helpful. </li>
+<li><code>0 5 L * ?</code><br /> This expression indicates that the job should run on the last day of every month at 5am.  The Minute field is set to 0, the Hour field is set to 5, the Day-of-Month field is set to L, the Month field is set to &#8220;*&#8221;, and the Day-of-Week field is set to &#8220;?&#8221;. </li>
+<li><code>0 5 15W * ?</code><br /> This expression indicates that the job should run at 5am on the weekday closest to the 15th day of every month. The Minute field is set to 0, the Hour field is set to 5, the Day-of-Month field is set to 15W, the Month field is set to &#8220;*&#8221;, and the Day-of-Week field is set to &#8220;?&#8221;. </li>
+<li><code>0/33 9-14 ? * 2#1</code><br /> This expression indicates that the job should run every 33 minutes between 9am and 3pm on the first Monday of every month. The Minute field is set to 0/33, the Hour field is set to 9-14, the Day-of-Week field is set to 2#1 (the first Monday), and the remaining fields are set to &#8220;*&#8221;. </li>
+</ul>
+<p>With all this in mind, it is now fairly straightforward to create one coordinator for each of our examples. Using <code>cron</code> syntax, every hour from 9am to 5pm on Weekdays can be expressed as:</p>
+<p><code>0 9-17 ? * 2-6 </code></p>
+<p>and the second-to-last day of every month can be expressed as:</p>
+<p><code>0 0 L-1 * ?</code></p>
+<p>(Note that &#8220;L-1&#8243; means the second-to-last day of the month.)</p>
+<p>You would need only one coordinator for each of the two examples instead of the (ridiculous) number of them you saw earlier.</p>
+<p>For more examples, take a look at the <a href="http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger"><code>cron</code> tutorial</a> from the Quartz Scheduler website. Keep in mind that they have a Second and optional Year fields, whereas Oozie has neither, so their examples have six or seven fields instead of only five. </p>
+<h2>It&#8217;s Even Easier with Hue</h2>
+<p>The <a href="http://gethue.com">Hue</a> team has added support for Oozie&#8217;s <code>cron</code>-like scheduling syntax. too. (Hopefully you are familiar with Hue&#8217;s great Oozie dashboard and editor.) In fact, it&#8217;s easier to configure the frequency with Hue because you don&#8217;t even have to know the <code>cron</code> syntax! You can also just use Hue to create the cron expression for you, and then put it into your own coordinator. </p>
+<p align="center"><img title="oozie-cron-f1" src="http://blog.cloudera.com/wp-content/uploads/2014/04/oozie-cron-f1.png" alt="" width="600" height="132" /></p>
+<p>Find out more and watch a demo on the <a href="http://gethue.com/hadoop-tutorial-schedule-your-hadoop-jobs-intuitively/">Hue blog</a>. </p>
+<h2>Conclusion</h2>
+<p>If you found the <code>cron</code>-like scheduling syntax to be a little overwhelming, don&#8217;t worry: the fixed-frequency scheduling syntax isn&#8217;t going anywhere and will still work. Or, you can try using Hue. </p>
+<p>Otherwise, <code>cron</code>-like scheduling is a much more powerful and flexible way to schedule jobs and will make Oozie an even more valuable tool in CDH 5. Also, it requires no extra setup or configuration, so go and try it out!</p>
+<p><em>Robert Kanter is a Software Engeer at Cloudera, and an Oozie Committer/PMC Member.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/oozie/" title="View all posts in Oozie" rel="category tag">Oozie</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>No Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='25953' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="yaw=" />
+		<input type="hidden" name="cptch_time" value="1397909746" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &minus; &#111;ne = 7	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

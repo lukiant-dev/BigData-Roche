@@ -1,0 +1,1024 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Introducing Sqoop | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Introducing Sqoop"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2009/06/introducing-sqoop/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Introducing Sqoop Comments Feed" href="http://blog.cloudera.com/blog/2009/06/introducing-sqoop/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Common Questions and Requests From Our Users' href='http://blog.cloudera.com/blog/2009/05/common-questions-and-requests-from-our-users/' />
+<link rel='next' title='The Smart Grid: Hadoop at the Tennessee Valley Authority (TVA)' href='http://blog.cloudera.com/blog/2009/06/smart-grid-hadoop-tennessee-valley-authority-tva/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2009/06/introducing-sqoop/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=759' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-759 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Introducing Sqoop</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/aaron/" title="Posts by Aaron Kimball" rel="author">Aaron Kimball</a></li>
+				<li>June 01, 2009</li>
+				<li class="comment"><a href="#comments">33 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>In addition to providing you with a <a href="http://www.cloudera.com/hadoop">dependable release of Hadoop</a> that is <a href="http://my.cloudera.com">easy to configure</a>, at Cloudera we also focus on developing tools to extend Hadoop&#8217;s usability, and make Hadoop a more central component of your data infrastructure. In this vein, we&#8217;re proud to announce the availability of Sqoop, a tool designed to easily import information from SQL databases into your Hadoop cluster.</p>
+<p>Sqoop (&#8220;SQL-to-Hadoop&#8221;) is a straightforward command-line tool with the following capabilities:</p>
+<ul>
+<li>Imports individual tables or entire databases to files in HDFS</li>
+<li>Generates Java classes to allow you to interact with your imported data</li>
+<li>Provides the ability to import from SQL databases straight into your <a href="http://hadoop.apache.org/hive">Hive</a> data warehouse</li>
+</ul>
+<p>After setting up an import job in Sqoop, you can get started working with SQL database-backed data from your Hadoop MapReduce cluster in minutes.</p>
+<h2>Motivation</h2>
+<p>Hadoop MapReduce is a powerful tool; its flexibility in parsing unstructured or semi-structured data means that there is a lot of potential for creative applications. But your analyses are only as useful as the data which they process. In many organizations, large volumes of useful information are locked away in disparate databases across the enterprise. HDFS, Hadoop&#8217;s distributed file system represents a great place to bring this data together, but actually doing so is a cumbersome task.</p>
+<p>Consider the task of processing access logs and analysing user behavior on your web site. Users may present your site with a cookie that identifies who they are. You can log the cookies in conjunction with the pages they visit. This lets you coordinate users with their actions. But actually matching their behavior against their profiles or their previously recorded history requires that you look up information in a database. If several MapReduce programs needed to do similar joins, the database server would experience very high load, in addition to a large number of concurrent connections, while MapReduce programs were running, possibly causing performance of your interactive web site to suffer.</p>
+<p>The solution: periodically dump the contents of the users database and the action history database to HDFS, and let your MapReduce programs join against the data stored there. Going one step further, you could take the in-HDFS copy of the users database and import it into <a href="http://hadoop.apache.org/hive/">Hive</a>, allowing you to perform ad-hoc SQL queries against the entire database without working on the production database.</p>
+<p>Sqoop makes all of the above possible with a single command-line.</p>
+<h2>Example Usage</h2>
+<p>Continuing the example above, let&#8217;s say that our front end servers connected to a MySQL database named <tt>website</tt>, stored on <tt>db.example.com</tt>. The <tt>website</tt> database has several tables, but the one we are most interested in is one named <tt>USERS</tt>.</p>
+<p>This table has several columns; it might have been created from a SQL statement like:</p>
+<pre><tt>CREATE TABLE USERS (
+  user_id INTEGER NOT NULL PRIMARY KEY,
+  first_name VARCHAR(32) NOT NULL,
+  last_name VARCHAR(32) NOT NULL,
+  join_date DATE NOT NULL,
+  zip INTEGER,
+  state CHAR(2),
+  email VARCHAR(128),
+  password_hash CHAR(64));
+</tt></pre>
+<p>Importing this table into HDFS could be done with the command:</p>
+<pre><tt>you@db$ sqoop --connect jdbc:mysql://db.example.com/website --table USERS \
+    --local --hive-import
+</tt></pre>
+<p>This would connect to the MySQL database on this server and import the <tt>USERS</tt> table into HDFS. The <tt>&ndash;-local</tt> option instructs Sqoop to take advantage of a local MySQL connection which performs very well. The <tt>&ndash;-hive-import</tt> option means that after reading the data into HDFS, Sqoop will connect to the Hive metastore, create a table named <tt>USERS</tt> with the same columns and types (translated into their closest analogues in Hive), and load the data into the Hive warehouse directory on HDFS (instead of a subdirectory of your HDFS home directory).</p>
+<p>Suppose you wanted to work with this data in MapReduce and weren&#8217;t concerned with Hive. When storing this table in HDFS, you might want to take advantage of compression, so you&#8217;d like to be able to store the data in <a href="http://hadoop.apache.org/core/docs/current/api/org/apache/hadoop/io/SequenceFile.html">SequenceFiles</a>. In this case, you might want to import the data with the command:</p>
+<pre><tt>you@db@ sqoop --connect jdbc:mysql://db.example.com/website --table USERS \
+    --as-sequencefile</tt></pre>
+<p>Sqoop will also emit a Java class named <tt>USERS</tt> with getter methods for each of the columns of the table.</p>
+<p>They support the majority of SQL&#8217;s types including optionally-null values. The data will be loaded into HDFS as a set of SequenceFiles; you can use the <tt>USERS.java</tt> class to work with the data in your MapReduce analyses.</p>
+<p>Sqoop can also connect to other databases besides MySQL; anything with a JDBC driver should work. If you are running locally on a MySQL server the import will be especially high-performance, but a MapReduce-based import mechanism allows remote database connections as well. Authenticated connections with usernames and passwords are also supported. Several other options allow you to control which columns of a table are imported, and other aspects of the import process. The full reference manual is available at <a href="http://www.cloudera.com/hadoop-sqoop">www.cloudera.com/hadoop-sqoop</a>.</p>
+<h2>A Closer Look</h2>
+<p>In this section I&#8217;ll briefly outline how Sqoop works under the hood.</p>
+<p>In an <a href="http://blog.cloudera.com/blog/2009/03/06/database-access-with-hadoop/">earlier blog post</a>, I described the <a href="http://hadoop.apache.org/core/docs/current/api/org/apache/hadoop/mapred/lib/db/DBInputFormat.html">DBInputFormat</a>, a connector that allows Hadoop MapReduce programs to read rows from SQL databases. DBInputFormat allows Hadoop to read input from <a href="http://en.wikipedia.org/wiki/Jdbc">JDBC</a>: a Java interface to databases that most popular database vendors (Oracle, MySQL, Postgresql, etc.) implement.</p>
+<p>In order to use DBInputFormat you need to write a class that deserializes the columns from the database record into individual data fields to work with. This is pretty tedious&mdash;and entirely algorithmic. Sqoop auto-generates class definitions to deserialze the data from the database. These classes can also be used to store the results in Hadoop&#8217;s SequenceFile format, which allows you to take advantage of built-in compression within HDFS too. The classes are written out as <tt>.java</tt> files that you can incorporate in your own data processing pipeline later. The class definition is created by taking advantage of JDBC&#8217;s ability to read metadata about databases and tables.</p>
+<p>When Sqoop is invoked, it retrieves the table&#8217;s metadata, writes out the class definition for the columns you want to import, and launches a MapReduce job to import the table body proper.</p>
+<p>Hadoop users know that moving large volumes of data can be a time-intensive operation. While it provides a reliable implementation-independent mechanism to read database tables, using a MapReduce JDBC job to import data from a remote database is often inefficient. Database vendors usually provide an export tool that exports data in a more high-performance manner. Sqoop is capable of  using alternate import strategies as well. By examining the <em>connect string URL</em> that tells Sqoop which database to connect to, Sqoop will choose alternate import strategies as appropriate to the database. We&#8217;ve already implemented the ability to take advantage of MySQL&#8217;s export tool called <tt>mysqldump</tt>. We&#8217;ll add support for other systems as soon as we can.</p>
+<h2>Getting Sqoop</h2>
+<p>The first beta release of Sqoop is available today as part of <a href="http://www.cloudera.com/hadoop">Cloudera&#8217;s Distribution for Hadoop</a>. It installs as part of the same RPM (or Debian package) that contains Hadoop itself.</p>
+<p>Hadoop users who aren&#8217;t using our distribution can apply the patch that is contributed to Apache Hadoop as issue <a href="http://issues.apache.org/jira/browse/HADOOP-5815">HADOOP-5815</a>, and compile it themselves, but Sqoop won&#8217;t be part of the standard Hadoop release for some time (at least until version 0.21.0). <tt>mysqldump</tt> support is added in <a href="http://issues.apache.org/jira/browse/HADOOP-5844">HADOOP-5844</a>, and Hive integration is provided in <a href="http://issues.apache.org/jira/browse/HADOOP-5887">HADOOP-5887</a>.</p>
+<p>You can read the documentation for Sqoop at <a href="http://www.cloudera.com/hadoop-sqoop">http://www.cloudera.com/hadoop-sqoop</a>. You can also get some basic usage information from Sqoop itself by running <tt>sqoop &ndash;-help</tt> after it&#8217;s installed.</p>
+<p>We also did a preview of this tool at the May Bay Area Hadoop User Group meet-up; you can catch the presentation here:</p>
+<iframe src='http://player.vimeo.com/video/4778230?title=1&amp;byline=1&amp;portrait=1' width='400' height='225' frameborder='0'></iframe>
+<p>We hope you find this tool useful&mdash;please check it out! Then let us know your feedback on <a href="http://getsatisfaction.com/cloudera/products/cloudera_sqoop">GetSatisfaction</a>. Bug reports and feature requests especially welcome.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/data-collection/" title="View all posts in Data Collection" rel="category tag">Data Collection</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/distribution/" title="View all posts in Distribution" rel="category tag">Distribution</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hive/" title="View all posts in Hive" rel="category tag">Hive</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>33 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.toluju.com">Toby Jungen</a> /
+			June 01, 2009 / 1:31 PM		</em>
+		<p>Thanks for the post, looking forward to using it!</p>
+<p>A couple of notes:<br />
+- You mentioned that JDBC performs poorly for larger dumps due to needing to iterate over the tables in chunks via limit and offset. If this is the same problem I&#8217;ve run into, then you are doing this chunking because a single query would cause you to run out of memory. I&#8217;ve resolved this problem by setting PreparedStatement.setFetchSize to a reasonable size.<br />
+- You also mentioned an extra overhead in unescaping data output over mysqldump. I believe you can disable value escaping in mysqldump via one of its command line flags.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.cloudera.com">Aaron</a> /
+			June 01, 2009 / 2:35 PM		</em>
+		<p>Hi Toby,</p>
+<p>The chunks aren&#8217;t really the issue here. The problem is that by using a MapReduce job to read from a table, individual map tasks responsible for loading slices of the table are run on different nodes; they each generate a separate SELECT statement to accomplish this slice load. But most databases cannot start a query at a particular offset, nor are related queries fused together. Instead, the db just delivers to each task output starting from an offset into a separate full-table read, meaning that each mapper incurs a table scan up to the end of its OFFSET+LIMIT. The solution is to use a single mapper; the downside is that this somewhat defeats the purpose of using MapReduce and doesn&#8217;t utilize the network efficiently.</p>
+<p>As for mysqldump, I looked at the command-line flags in question. Unfortunately, it&#8217;s hard to use those flags in conjunction with a pipe. So I think that using them would incur an additional r/w cycle on the disk, which is even worse.</p>
+<p>Thanks for the thorough reading; keep keeping me honest :)<br />
+- Aaron</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.toluju.com">Toby Jungen</a> /
+			June 01, 2009 / 6:22 PM		</em>
+		<p>Hi Aaron -<br />
+Seems I have sorely misunderstood, my apologies! It sounded like Sqoop operated by first dumping the database data into HDFS and then running the MapReduce task as a second step. My dealings with databases in hadoop have consisted of dumping the database data of interest to HDFS, and then starting a mapreduce task over that data. That way, the map / reduce tasks would never touch the database directly. Of course, this approach introduces somewhat of a bottleneck since the dump process cannot be parallelized, and if the task is primarily I/O bound then this will be a problem.<br />
+-Toby</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.myfreecloudhost.com">Steve</a> /
+			June 09, 2009 / 9:07 AM		</em>
+		<p>Can this tool also run in reverse? I.E, Export data from Hive into mySQL?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.cloudera.com">Aaron</a> /
+			June 09, 2009 / 1:53 PM		</em>
+		<p>Hi Steve,</p>
+<p>Not yet. But we&#8217;re working on it!</p>
+<p>- Aaron</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Simonluca Landi</a> /
+			June 18, 2009 / 6:40 AM		</em>
+		<p>Hi all.<br />
+I&#8217;m trying to use sqoop to import a few GBs table from MySQL to Hadoop, but i got an OOME:<br />
+java.lang.OutOfMemoryError: Java heap space<br />
+        at com.mysql.jdbc.Buffer.getBytes(Buffer.java:198)<br />
+        at com.mysql.jdbc.Buffer.readLenByteArray(Buffer.java:318)<br />
+        at com.mysql.jdbc.MysqlIO.nextRow(MysqlIO.java:1375)<br />
+        at com.mysql.jdbc.MysqlIO.readSingleRowSet(MysqlIO.java:2369)<br />
+        at com.mysql.jdbc.MysqlIO.getResultSet(MysqlIO.java:451)<br />
+        at com.mysql.jdbc.MysqlIO.readResultsForQueryOrUpdate(MysqlIO.java:2076)<br />
+        at com.mysql.jdbc.MysqlIO.readAllResults(MysqlIO.java:1451)<br />
+        at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1787)<br />
+        at com.mysql.jdbc.Connection.execSQL(Connection.java:3283)<br />
+        at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1332)<br />
+        at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:1467)<br />
+        at org.apache.hadoop.sqoop.manager.SqlManager.execute(SqlManager.java:254)</p>
+<p>The hadoop node is running with 1GB of RAM.<br />
+Any work-around for this?</p>
+<p>-=[SLL]=-</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://aicoder.blogspot.com">NealRichter</a> /
+			July 21, 2009 / 11:18 PM		</em>
+		<p>+1 on making Sqoop publish data into MySQL&#8230; though I would think that creating an &#8216;external&#8217; table with a jdbc link as the LOCATION would be pretty optimal also.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Dharmesh</a> /
+			September 17, 2012 / 10:45 PM		</em>
+		<p>Hi all,</p>
+<p>I have question on DBInputFormat Vs. Sqoop</p>
+<p>I am trying to build wrapper class where I can read data from mysql and process it in map reduce and output can be stored in again RDBMS (MySQL) or NOSQL databases or HDFS.</p>
+<p>My confusion is what is the best option to use Sqoop or DBInputFormat and DBOutputFormat? I am creating plugable api where I will just configure input and output datasource and my mapreduce will read and write  data accordingly in selected datasource.</p>
+<p>If DBInputFormat and DBOutput format is the best option than do let me know which version of Hadoop Mapreduce API I should use.</p>
+<p>Thanks in advance.</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='759' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="Cpw=" />
+		<input type="hidden" name="cptch_time" value="1398163045" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &minus; 3 =  s&#105;&#120;	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

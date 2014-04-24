@@ -1,0 +1,1066 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Inside Cloudera Impala: Runtime Code Generation | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Inside Cloudera Impala: Runtime Code Generation"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/02/inside-cloudera-impala-runtime-code-generation/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Inside Cloudera Impala: Runtime Code Generation Comments Feed" href="http://blog.cloudera.com/blog/2013/02/inside-cloudera-impala-runtime-code-generation/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='From Zero to Impala in Minutes' href='http://blog.cloudera.com/blog/2013/02/from-zero-to-impala-in-minutes/' />
+<link rel='next' title='Meet the Engineer: Kathleen Ting' href='http://blog.cloudera.com/blog/2013/02/meet-the-engineer-kathleen-ting/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/02/inside-cloudera-impala-runtime-code-generation/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=20267' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-20267 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Inside Cloudera Impala: Runtime Code Generation</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/nong/" title="Posts by Nong Li" rel="author">Nong Li</a></li>
+				<li>February 11, 2013</li>
+				<li class="comment"><a href="#comments">5 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><a title="Cloudera Impala: Real-Time Queries in Apache Hadoop, For Real" href="http://blog.cloudera.com/blog/2012/10/cloudera-impala-real-time-queries-in-apache-hadoop-for-real/">Cloudera Impala</a>, the open-source real-time query engine for Apache Hadoop, uses many tools and techniques to get the best query performance. This blog post will discuss how we use runtime code generation to significantly improve our CPU efficiency and overall query execution time. We’ll explain the types of inefficiency that code-generation eliminates and go over in more detail one of the queries in the TPCH workload where code generation improves overall query speeds by close to 3x.</p>
+<h2>Why Code Generation?</h2>
+<p>The baseline for &#8220;optimal&#8221; query engine performance is a native application that is written specifically for your data format, written only to support your query. For example, it would be ideal if a query engine could execute this query:</p>
+<pre class="code" style="padding-left: 10px;">select count(*)
+from tbl
+where col like %XYZ%
+</pre>
+<p>&nbsp;</p>
+<p>as fast as <code>grep -c "XYZ" tbl</code>.</p>
+<p>As another example, consider the query <code>select sum(col) from tbl</code>. If the table had only one int64 column, encoded as little endian, this could be implemented by a dedicated application as:</p>
+<pre class="code" style="padding-left: 10px;">int64_t sum = 0;
+int64_t* values = (int64_t*)buffer;
+for (int i = 0; i &lt; num_rows; ++i) {
+    sum += values[i];
+  }
+</pre>
+<p>&nbsp;</p>
+<p>Both these queries are reasonable (as is the encoding on the second for a columnar format) and probably much slower when run through most existing query engines. (This is assuming brute force execution; a database could certainly use indices or save precomputed values to perform much better than a simple application. Of course, the techniques described here would be applied to non-brute force execution strategies as well.) This is because most query engines in use today follow an interpretive approach that adds various forms of execution overhead.</p>
+<p>Overhead comes in the form of:</p>
+<ol>
+<li>Virtual function calls. Without codegen, expressions (e.g. col1 + col2 &lt; col3) are interpreted, resulting in a virtual function call per expression. (This certainly depends on the implementation, but ours, and probably most others, would involve something akin to a virtual generic “Eval” function that each operator would implement.) In this case, the expression itself is very cheap (a single add) but the virtual function call overhead is very high.</li>
+<li>Large switch statements for types, operators, functions that are not referenced by the query. While the branch predictor can alleviate this problem, branch instructions still prevents effective instruction pipelining and instruction-level parallelism. </li>
+<li>Inability to propagate all constants. Impala computes a fixed-width tuple format during planning (e.g. col3 is at byte offset 16). It would be beneficial if these constants could be folded into the code itself rather than having to do additional memory lookups.</li>
+</ol>
+<p>The goal of code generation is to have each query use the same number of instructions as custom-written code that implements exactly the logic of the query, with no overhead due to the query execution supporting broader functionality.</p>
+<h2>Introduction to LLVM</h2>
+<p><a href="http://llvm.org">LLVM</a> (Low-Level Virtual Machine) is a set of libraries that constitute the building blocks of a compiler (the clang compiler is built using these libraries). The key components are:</p>
+<ol>
+<li>Abstract Syntax Tree (AST) ? Intermediate Representation (IR) generation</li>
+<li>IR optimization (i.e. compiler optimizations)</li>
+<li>IR ? machine code generation</li>
+</ol>
+<p>IR is an intermediate, typed assembly language that LLVM uses as the input and output for most of its internal components; it&#8217;s comparable to Java byte code. LLVM also exposes higher-level code objects (e.g. Instruction object, Function object) that makes it easy to manipulate IR programmatically. This includes operations like inlining a function call, removing instructions, removing a computation with a constant, and so on. Impala utilizes only (2) and (3) at runtime since we have our own version of the AST in the form of the query plan.</p>
+<p>LLVM gives us a better balance of low overhead, being able to leverage an optimizing compiler and having an actual API to generate the code.</p>
+<p>There are other techniques that can be used for code generation. We believe LLVM is superior. Other techniques include:</p>
+<ul>
+<li>Generating assembly on the fly and running that. While this is very fast to do, writing assembly (as ASCII text) is error-prone and difficult, especially as the number of functions generated in assembly increases. It also does not benefit from optimization passes that a compiler is able to do. </li>
+<li>Generating C++ (as text) on the fly, compiling it (by exec-ing a compiler) and dynamically loading the resulting binary. This has the benefit of being able to use an optimizing compiler and writing in a higher level language (although writing as text is not great) but the overhead of compiling can be prohibitive (multiple seconds). </li>
+</ul>
+<h2>Impala&#8217;s Use of IR</h2>
+<p>After the SQL semantic analysis phase, we generate code for the “kernels” for the individual operators of the query: i.e. the inner loops of the code in which the query spends the vast majority of the cpu cycles. At the time of code generation, we know all the types, tuple layouts, SQL operations and expressions that will be used by this query. The result is a very tight inner loop with all function calls inlined and no extraneous instructions.</p>
+<p>We first need to get IR function objects for pieces of the code path. LLVM provides two mechanism for generating IR. The first is to use LLVM’s IrBuilder (c++) API which lets us programmatically generate IR, instruction by instruction. The second is to use the clang compiler to compile c++ source code into IR.  Impala uses both methods.</p>
+<p>At a high level, to perform code generation we:</p>
+<ol>
+<li>Generate IR using the IRBuilder where more efficient code can be generated with  additional runtime information.</li>
+<li>Load precompiled IR for functions that we need but don&#8217;t benefit from runtime information.</li>
+<li>Combine the IR from 1 and 2 by replacing called functions. This allows us to inline across what would have been virtual function calls.</li>
+<li>Run the LLVM optimizer along with some of our custom optimizations. This is very similar to compiling your code with optimizations enabled and takes care of many things for you. In addition to having less code, this step also does subexpression elimination, constant propagation, more function inlining, instruction reordering, dead code elimination, and other compiler optimization techniques.</li>
+<li>JIT-compile the optimized IR to machine code. LLVM returns this as a function pointer that the query engine uses instead of the interpreted function.</li>
+</ol>
+<h2>Example &amp; Results</h2>
+<p>The most common question we get when talking about code generation is how much does this speed things up? What&#8217;s the performance difference? </p>
+<p>Here’s an example running the TPCH-Q1 query on a test cluster that comprises 10 data nodes each with 10 disks, 48GB RAM and 8 cores (16 hyper threads). The query is:</p>
+<pre class="code" style="padding-left: 10px;">select
+      l_returnflag,
+      l_linestatus,
+sum(l_quantity),
+      sum(l_extendedprice),
+      sum(l_extendedprice * (1 - l_discount)),
+      sum(l_extendedprice * (1 - l_discount) * (1 + l_tax)),
+      avg(l_quantity),
+      avg(l_extendedprice),
+      avg(l_discount),
+      count(1)
+from
+tpch.lineitem
+where
+ 	l_shipdate&lt;='1998-09-02'
+group by
+ 	l_returnflag,
+ 	l_linestatus</pre>
+<p>&nbsp;</p>
+<p>Details of how Impala executes queries will be provided in a future blog post. As a quick overview, Impala processes batches of tuples through an operator tree. In this case, there are two operators: a scan which reads the input from disk, and a hash aggregation, which computes the sum and averages. </p>
+<p>We’ll focus on the aggregation step. For hash aggregation, we iterate through the tuples in the batch, evaluate and hash the grouping columns (<code>l_returnflags</code> and <code>l_linestatus</code>), do a hash table lookup and then evaluate the aggregation expressions (the sums, avgs, and count in the select list). For the aggregation operator, the code generation phase compiles all the logic for evaluating batches of rows into a single fully inlined loop.</p>
+<p>We’ll run this query on two differently sized datasets; the first is at the 1TB scale factor and the second is at the  100GB scale factor. The files are stored as sequence files with <a href="http://code.google.com/p/snappy/">Snappy</a> block compression. For the 100GB dataset, the dataset is small enough to easily fit in the OS buffer cache of the cluster. This prevents the disks from being a possible bottleneck.</p>
+<p><img class="aligncenter" title="nongfig" src="http://blog.cloudera.com/wp-content/uploads/2013/02/nongfig.jpg" alt="" width="600" height="243" align="center" /></p>
+<p>For both datasets, enabling codegen improves the query time by just under 3x. The total code generation time for this query is about 150ms. (Code generation can be toggled on and off through the query options so you can try the same experiment. To see the list of query options, just type &#8216;set&#8217; in the impala shell.)</p>
+<p>To further quantify the benefit of codegen, we can compare some more detailed metrics. In this case, the query is run on a single machine on a much smaller dataset (700MB) using perf stat, which is a linux perf tool that lets you gather hardware metrics with minimal setup requirements. The results are the totals from running the query 5 times.</p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p><strong>Codegen on?</strong></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p><strong>Time</strong></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p><strong>Instructions</strong></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p><strong>Branches</strong></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p><strong>Branch Misses</strong></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p><strong>Miss %</strong></p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>Yes</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>.63s</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>52,605,701,380</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>9,050,446,359</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>145,461,106</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>1.607</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>No</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>1.7s</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>102,345,521,322</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>17,131,519,396</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>370,150,103</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" valign="top">
+<p>2.161</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>        <br /> As you can see, without codegen, we are running about twice as many instructions and over twice as many branch misses.  </p>
+<h2>Conclusion</h2>
+<p>The time we&#8217;ve invested in code generation has already paid dividends and we expect the benefits to grow even bigger as we continue to improve the query engine. With a columnar file format, more efficient encodings, and larger (memory) caches, we expect IO performance to improve dramatically, making CPU efficiency more and more important.</p>
+<p>Code generation is most beneficial for queries that execute simple expressions and the interpretation overhead is most pronounced. For example, a query that is doing a regular expression match over each row is not going to benefit from code generation much because the interpretation overhead is low compared to the regex processing time. We expect cases like this to be much less common and our initial users have confirmed this.</p>
+<p>There are still code paths in the current version of Impala (0.5) that are not yet code generated; we simply have not had the time to do that. A lot of these code paths will be finished up for our upcoming GA release. We have more ideas on how to better take advantage of code generation for after GA.</p>
+<p><em><a title="Meet the Engineer: Nong Li" href="http://blog.cloudera.com/blog/2012/12/meet-the-engineer-nong-li/">Nong Li</a> is a Software Engineer on the Impala team.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hive/" title="View all posts in Hive" rel="category tag">Hive</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/impala/" title="View all posts in Impala" rel="category tag">Impala</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>5 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Igor</a> /
+			February 21, 2013 / 3:03 PM		</em>
+		<p>Pretty impressive speedup.<br />
+How many rows were in lineitem for 1TB dataset &#8211; was that ~6 billion (total i.e 600M/node) or &#8230;.? And what was the CPU used?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.ashwinjayaprakash.com">Ashwin Jayaprakash</a> /
+			February 26, 2013 / 10:34 PM		</em>
+		<p>Just curious, why C++/LLVM? If you had generated JVM bytecode dynamically from the query planner would the speedup have been significantly less than teh equivalent LLVM generated native code?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Gary Trakhman</a> /
+			April 23, 2013 / 2:05 PM		</em>
+		<p>What Ashwin said, I&#8217;m curious what tradeoffs were considered for such a departure from the JVM.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Henrik Behrens</a> /
+			November 11, 2013 / 3:52 AM		</em>
+		<p>This explains why it worked well what I did: I bought a Cluster based on cheap and energy saving CPUs (1 Celeron 847 per node) and fast IO (1 Samsung SSD per node). This way I have an excellent cost-performance ratio using Impala:<br />
+  $360 hardware cost per node<br />
+  250 GB/s scan performance per node on CSV external tables<br />
+  35 W power consumption per node ($8 per month)<br />
+During query execution, the system resources are used equally (80 % CPU utilization, 80 % SSD utilization), so it is a balanced configuration for Impala. For the lineitem table, scan performance is 2,3 M rows per second per node in CSV format (parquet: up to 40 M rows per second per node for count(*)).<br />
+I expect that it will also work for more expensive nodes using several SSDs and mid-size CPUs per node.</p>
+<p>Did anybody else try Impala on SSD based systems?</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='20267' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="M1M=" />
+		<input type="hidden" name="cptch_time" value="1398162782" />
+		<input type="hidden" value="Version: 2.4" />
+		9 &minus; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  on&#101;	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

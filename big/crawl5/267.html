@@ -1,0 +1,1216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How To: Use Oozie Shell and Java Actions | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How To: Use Oozie Shell and Java Actions"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/03/how-to-use-oozie-shell-and-java-actions/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; How To: Use Oozie Shell and Java Actions Comments Feed" href="http://blog.cloudera.com/blog/2013/03/how-to-use-oozie-shell-and-java-actions/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Cloudera Speakers at Hadoop Summit Europe' href='http://blog.cloudera.com/blog/2013/03/cloudera-speakers-at-hadoop-summit-europe/' />
+<link rel='next' title='How-to: Import a Pre-existing Oozie Workflow into Hue' href='http://blog.cloudera.com/blog/2013/03/how-to-import-a-pre-existing-oozie-workflow-into-hue/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/03/how-to-use-oozie-shell-and-java-actions/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=20687' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-20687 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How To: Use Oozie Shell and Java Actions</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Robert Kanter</li>
+				<li>March 18, 2013</li>
+				<li class="comment"><a href="#comments">2 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><a href="http://oozie.apache.org">Apache Oozie</a>, the workflow coordinator for Apache Hadoop, has actions for running MapReduce, Apache Hive, Apache Pig, Apache Sqoop, and <code>Distcp</code> jobs; it also has a Shell action and a Java action. These last two actions allow us to execute any arbitrary shell command or Java code, respectively.</p>
+<p>In this blog post, we’ll look at an example use case and see how to use both the Shell and Java actions in more detail. Please follow along below; you can get a copy of the full project at <a href="https://github.com/cloudera/earthquake">Cloudera&#8217;s GitHub</a> as well. This how-to assumes some basic familiarity with Oozie.</p>
+<h2>Example Use Case</h2>
+<p>Suppose we’d like to design a workflow that determines which earthquakes from the last 30 days have a magnitude greater than or equal to that of the largest earthquake in the last hour; also, we’d like to run this workflow every hour. One last requirement for our workflow is that in order to save bandwidth and time, we’d like to be able to skip downloading and processing the 30 days of earthquake data if there were no “large” earthquakes within the last hour; because “large” is subjective, we’ll just go with 3.2 for this example but we should make this easy to configure.</p>
+<p>We don’t have the earthquake data ourselves, but luckily the US Geological Survey (USGS) maintains earthquake datasets in a few formats that are updated quite frequently <a href="http://earthquake.usgs.gov/earthquakes/feed/">here</a>. We’re interested in their “Past Hour” and “Past 30 Days” datasets. We’ll use the CSV (comma-separated value) format because it’s simple. The URL for the “Past Hour” dataset is <a href="http://earthquake.usgs.gov/earthquakes/feed/csv/all/hour">http://earthquake.usgs.gov/earthquakes/feed/csv/all/hour</a> and the URL for the “Past 30 Days” is <a href="http://earthquake.usgs.gov/earthquakes/feed/csv/2.5/month">http://earthquake.usgs.gov/earthquakes/feed/csv/2.5/month</a>. Unfortunately, the USGS doesn’t make all earthquake data available for 30 days, only ones with magnitudes greater than 2.5.</p>
+<p>Going back to our requirements, we can create a simple Pig script to process the 30 days of earthquake data. But what about checking the last hour of data or downloading the data from the USGS website?  We can use the Shell action to run a shell script to check the last hour of data and the Java action to run some Java code to handle downloading the data. We’ll go into more detail on this later, but first let’s learn about some information that we’ll find useful for this workflow.</p>
+<h2>Capturing Data from an Action</h2>
+<p>We’ll need a way to get some small pieces of data (i.e. the magnitude of the largest earthquake from the past hour) from our shell script into the workflow itself. We can tell Oozie to capture any data that the shell action outputs to <code>STDOUT</code> so it’s available in the workflow by simply adding the<code> &lt;capture-output/&gt;</code> element. The outputted data must be in <a href="http://en.wikipedia.org/wiki/.properties#Format">Java Properties file format</a> and it must not exceed 2KB (by default). Then all we have to do is have our shell script echo the necessary information to <code>STDOUT</code>; we’ll also need to make sure that it doesn’t echo anything else.</p>
+<p>While we won’t need to do this in our example, <code>&lt;capture-output/&gt;</code> can also be used to get data from the Java action. The only difference is that instead of <code>STDOUT</code>, we have to write to a (local) file whose path must be obtained from <code>System.getProperty("oozie.action.output.properties")</code>.</p>
+<h2>Shell Action Caveats</h2>
+<p>The Shell action has the following caveats:</p>
+<ul>
+<li>Interactive commands are not supported.</li>
+<li>In an unsecure cluster, everything is run as the user who started the TaskTracker where our shell script is running (mapred user in CDH4); in a &#8220;Kerberized&#8221; cluster, it will run as the UNIX user of whomever submitted the workflow. This is in contrast to MapReduce-based actions, which, for the purposes of interaction with Hadoop, are run as the user who submitted the workflow &#8211;although the UNIX process for the task still runs as mapred.</li>
+<li>The Shell action is executed on an arbitrary node in the cluster.</li>
+<li>Different operating systems may have different versions of the same shell commands.</li>
+</ul>
+<p>The implications of that third caveat are very important. Oozie executes the shell action in the same way it executes any of the other actions: as a MapReduce job. In this case, it&#8217;s a 1-mapper-0-reducer job, which is why it can be executed on any node in the cluster. This means that any command or script that we want to execute has to be available on that node; because we don’t know which node the shell action will be executed on, the command or script has to be available on all nodes! This is fine for typical built-in shell commands like <code>echo</code> or <code>grep</code>, but can be more problematic for programs such as <code>matlab</code>, which must not only be installed but may also require a license. Instead, we’ll be putting our script in the same directory as the workflow.xml and taking advantage of the<code> &lt;file&gt; </code>tag to have Oozie copy it to the proper node for us.</p>
+<p>Even though two operating systems, or even two different versions of the same operating system, may have the same built-in commands or programs, they may behave differently or accept different arguments. For example, we’ll be using the <code>tail </code>command later; on Mac OS 10.7.5 we can specify the number of lines with the following arguments, but this won’t work properly on CentOS 6.2:</p>
+<pre class="code" style="padding-left: 10px;">tail +2 hour.txt
+</pre>
+<p>&nbsp;</p>
+<p>This doesn’t mean that we can’t use the <code><a href="http://en.wikipedia.org/wiki/Tail_(Unix)">tail</a> </code>command though; it just means that we have to be careful to ensure that all of the machines on which our Shell action could possibly run have compatible versions of the built-in commands. For example, the following arguments work correctly on both Mac OS 10.7.5 and CentOS 6.2:</p>
+<pre class="code" style="padding-left: 10px;">tail -n +2 hour.txt
+</pre>
+<p>&nbsp;</p>
+<p>That said, the script has been tested on Mac OS 10.7.5 and CentOS 6.2, but may require minor tweaking on other operating systems or versions.</p>
+<h2>Java Action Caveats</h2>
+<p>The Java action has the following caveats:</p>
+<ul>
+<li>The Java action is executed on an arbitrary node in the cluster.</li>
+<li>Calling <code>System.exit(int n)</code> will always make the Java action do an “error to” transition.</li>
+</ul>
+<p>The Java action is also executed on an arbitrary node in the cluster for the same reason the Shell action is; however, this is typically less problematic for the Java action because external resources would be JAR files that we’d be already including anyway.</p>
+<p>It is also important that our Java code not call <code>System.exit(int n)</code> as this will make the Java action do an “error to” transition, even if the exit code was 0; instead, an “ok to” transition is indicated by gracefully finishing main and an “error to” transition is indicated by throwing an exception.</p>
+<h2>Our Shell Script</h2>
+<p>We’ll use a shell script to download the “Past Hour” data, get the magnitude of the largest earthquake (in the last hour), and determine if we need to go on to process the “Past 30 Days” data. Let’s call the script check-hour.sh.</p>
+<p>We’ll need to take in the minimum earthquake magnitude that we’re interested in as an argument (for deciding whether or not to process the &#8220;Past 30 Days” data):</p>
+<pre class="code" style="padding-left: 10px;">earthquakeMin=”$1”
+</pre>
+<p>&nbsp;</p>
+<p>Now we’ll need the script to download the “Past Hour” data to a file; we can use <code><a href="http://en.wikipedia.org/wiki/CURL">curl</a> </code>for this:</p>
+<pre class="code" style="padding-left: 10px;">curl http://earthquake.usgs.gov/earthquakes/feed/csv/all/hour -o "hour.txt" -s -S -f
+</pre>
+<p>&nbsp;</p>
+<p>The <code>-o</code> argument tells <code>curl</code> where to download the file, the <code>-s</code> and <code>-S</code> arguments together make <code>curl</code> silent except for errors, and the <code>-f</code> argument makes curl return an error instead of outputting server error HTML pages (e.g. error 404).</p>
+<p>The <code>-s</code> argument is important here because we don’t want to pollute <code>STDOUT</code>. The working directory, where the hour.txt file will be written to, is on the TaskTracker that’s running our script; it will be automatically removed once the action ends, so we don’t have to worry about temporary files or anything like that. Here’s what the downloaded file looks like:</p>
+<pre class="code" style="padding-left: 10px;">DateTime,Latitude,Longitude,Depth,Magnitude,MagType,NbStations,Gap,Distance,RMS,Source,EventID,Version
+2013-02-19T23:32:25.000+00:00,33.472,-116.881,15.6,1.1,Ml,,79,0.1,0.23,ci,ci11246978,1361316922097
+2013-02-19T23:22:34.400+00:00,33.576,-117.598,7.7,1.8,Ml,,130,0.4,0.51,ci,ci11246970,1361316305852
+</pre>
+<p>&nbsp;</p>
+<p>The next step is to determine the magnitude of the largest earthquake from the file we just downloaded. We’ll use a combination of standard Linux tools for this. The first line in the file is always the header information for the columns, which we don’t actually want; we can use the <code>tail</code>command to keep everything except for the first line:</p>
+<pre class="code" style="padding-left: 10px;">tail -n +2 hour.txt
+</pre>
+<p>&nbsp;</p>
+<p>which looks like this:</p>
+<pre class="code" style="padding-left: 10px;">2013-02-19T23:32:25.000+00:00,33.472,-116.881,15.6,1.1,Ml,,79,0.1,0.23,ci,ci11246978,1361316922097
+2013-02-19T23:22:34.400+00:00,33.576,-117.598,7.7,1.8,Ml,,130,0.4,0.51,ci,ci11246970,1361316305852
+</pre>
+<p>&nbsp;</p>
+<p>Going by the headers we just removed, the fifth column is the magnitude. We can get just the fifth column by using the <code><a href="http://en.wikipedia.org/wiki/Cut_(Unix)">cut</a> </code>command:</p>
+<pre class="code" style="padding-left: 10px;">tail -n +2 hour.txt | cut -f 5 -d “,”
+</pre>
+<p>&nbsp;</p>
+<p>The <code>-f 5</code> tells it to get the fifth column and the <code>-d “,”</code>tells it to use comma as the column separator. This gives us:</p>
+<pre class="code" style="padding-left: 10px;">1.1
+1.8
+</pre>
+<p>&nbsp;</p>
+<p>We can now use the <code><a href="http://en.wikipedia.org/wiki/Sort_(Unix)">sort</a> </code>command to put the magnitudes in sorted order. In this case, they are already sorted, but that’s not always guaranteed, especially if there happens to be more than two earthquakes in the past hour.</p>
+<pre class="code" style="padding-left: 10px;">tail -n +2 hour.txt | cut -f 5 -d “,” | sort -n
+</pre>
+<p>&nbsp;</p>
+<p>We can then use the <code>tail </code>command again to get just the last magnitude, which must be the largest because we just sorted them:</p>
+<pre class="code" style="padding-left: 10px;">tail -n +2 hour.txt | cut -f 5 -d “,” | sort -n | tail -n -1
+</pre>
+<p>&nbsp;</p>
+<p>Finally, we get just this:</p>
+<pre class="code" style="padding-left: 10px;">1.8
+</pre>
+<p>&nbsp;</p>
+<p>We now need to compare the largest magnitude with <code>earthquakeMin</code> to determine whether or not to process the &#8220;Past 30 Days” data. It’s not recommended to use bash directly for comparing floats, but we can use the <code><a href="http://en.wikipedia.org/wiki/Bc_programming_language#Using_bc_in_shell_scripts">bc</a> </code>command instead:</p>
+<pre class="code" style="padding-left: 10px;">compare=`echo $largest '&gt;=' $earthquakeMin | bc -l`
+</pre>
+<p>&nbsp;</p>
+<p>where <code>largest</code> is the variable where we stored the largest magnitude from the “Past Hour” data. We can then check the value of compare and echo to <code>STDOUT </code>accordingly:</p>
+<pre class="code" style="padding-left: 10px;">  if [ "$compare" == "1" ]
+  then
+      echo "largest=$largest"
+      echo "isLarger=true"
+  else
+      echo "isLarger=false"
+  fi
+</pre>
+<p>&nbsp;</p>
+<p>Here we’re echoing, in Java Properties file format, whether or not largest is greater than or equal to <code>earthquakeMin</code> and if so, what largest is. We’ll see how these values can be picked up by the workflow later.</p>
+<p>One last thing that we should take care of in our shell script: what happens if there were no earthquakes in the past hour? </p>
+<pre class="code" style="padding-left: 10px;">(standard_in) 1: parse error
+</pre>
+<p>&nbsp;</p>
+<p>Our script will give the above error message (which would cause Oozie to FAIL the workflow). We can prevent this from happening by adding a simple check for this edge case:</p>
+<pre class="code" style="padding-left: 10px;">  numLines=`cat hour.txt | wc -l`
+  if [ $numLines \&lt; 2 ]
+  then
+      echo "isLarger=false"
+  else
+  ...
+</pre>
+<p>&nbsp;</p>
+<p>This will use the <a href="http://en.wikipedia.org/wiki/Cat_(Unix)"><code>cat</code></a> command to echo the contents of the hour.txt file and pass it to the <a href="http://en.wikipedia.org/wiki/Wc_(Unix)"><code>wc</code></a> command. The <code>-l</code> argument tells <code>wc</code> to count the number of lines. We know that we need at least two lines (the header and one line of data) to not get the error message, so we can check if <code>numLines</code> is less than 2. We can then echo the property from before as false, instead of continuing with the script.</p>
+<p>Our final script (with some additional minor details) looks like this:</p>
+<pre class="code" style="padding-left: 10px;">#!/bin/bash -e
+
+earthquakeMin="$1"
+
+curl http://earthquake.usgs.gov/earthquakes/feed/csv/all/hour -o "hour.txt" -s -S -f
+
+numLines=`cat hour.txt | wc -l`
+if [ $numLines \&lt; 2 ]
+then
+      echo "isLarger=false"
+else
+      largest=`tail -n +2 hour.txt | cut -f 5 -d "," | sort -n | tail -n -1`
+      compare=`echo $largest '&gt;=' $earthquakeMin | bc -l`
+      if [ "$compare" == "1" ]
+      then
+          echo "largest=$largest"
+          echo "isLarger=true"
+      else
+          echo "isLarger=false"
+      fi
+fi
+</pre>
+<p>&nbsp;</p>
+<p>Note that we set <code>-e</code> to make sure that the script exits with an error if any of these commands had an error, instead of continuing. If the script exits with a non-zero exit code, the shell action will follow the “error to” transition instead of the “ok to” transition.</p>
+<h2>Making a Decision</h2>
+<p>Once our workflow finishes running our shell script, we need to make a decision. We can use the aptly-named <a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/WorkflowFunctionalSpec.html#a3.1.4_Decision_Control_Node">Decision Control Node</a> for this. Decision nodes are useful when we want our workflow to transition to a different node based on some criteria; it’s essentially identical to the <code><a href="http://en.wikipedia.org/wiki/Switch_statement">switch</a> </code>statement available in many programming languages. Here’s what ours will look like:</p>
+<pre class="code" style="padding-left: 10px;">&lt;decision name="decide"&gt;
+    &lt;switch&gt;
+        &lt;case to="get-data"&gt;
+            ${wf:actionData('shell-check-hour')['isLarger']}
+        &lt;/case&gt;
+        &lt;default to="end"/&gt;
+    &lt;/switch&gt;
+&lt;/decision&gt;
+</pre>
+<p>&nbsp;</p>
+<p>Earlier we saw in our shell script that we outputted whether or not we wanted the workflow to process the “Past 30 Days” data by echoing either <code>isLarger=true</code> or <code>isLarger=false</code>. We can use the <code>wf:actionData</code> EL function to retrieve this <code>key=value</code> pair from our shell action anywhere in the workflow. This EL function’s argument is the name of the action (which we’ll be calling “shell-check-hour” later); this then gives us an array of all of the <code>key=value</code> pairs that Oozie captured from that action. So here we’re checking if <code>isLarger</code> is true. If so, then Oozie will transition the workflow to the “get-data” action; otherwise, the “default to” transition will be followed, which goes to “end” to finish the workflow and skipping the processing of the “Past 30 Days” data.</p>
+<h2>Downloading the Data to HDFS</h2>
+<p>Before we can run a Pig job on the “Past 30 Days” data, we need to get it into HDFS. We could use the shell action again with curl and the Hadoop CLI, but there are some issues with this approach, including the second caveat with the Shell action that we saw earlier about which user is executing the script. We’ll instead use the Java action, which, as we mentioned earlier, doesn’t have this limitation.</p>
+<p>The Java action is particularly powerful because it allows us to execute any Java code we want. Here’s what our Java main function looks like:</p>
+<pre class="code" style="padding-left: 10px;">public static void main(String[] args) throws IOException {
+      URL url = new URL("http://earthquake.usgs.gov/earthquakes/feed/csv/2.5/month");
+      HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+      conn.connect();
+      InputStream connStream = conn.getInputStream();
+
+      FileSystem hdfs = FileSystem.get(new Configuration());
+      FSDataOutputStream outStream = hdfs.create(new Path(args[0], "month.txt"));
+      IOUtils.copy(connStream, outStream);
+
+      outStream.close();
+      connStream.close();
+      conn.disconnect();
+}
+</pre>
+<p>&nbsp;</p>
+<p>The first four lines open a connection to the USGS website where the dataset is located and get an <code>InputStream</code>. We then get the HDFS <code>FileSystem</code> and create an <code>FSDataOutputStream</code>, which we can use to write a new file, month.txt. We can then use <a href="http://commons.apache.org">Apache Commons</a> <code>IOUtils</code> to simplify writing the input stream from the connection to the output stream writing to month.txt. And finally, we close the two streams and disconnect the connection.</p>
+<p>The folder that we want to put month.txt in is passed in as an argument (i.e. <code>args[0]</code>) to our Java program; we’ll see how to do this in the workflow later. Though we’ll need to make sure that this location is set to be the input of our Pig job, which we’ll look at next.</p>
+<h2>Processing the Data</h2>
+<p>The final step is to process the data that we downloaded to HDFS in the previous section. The processing that we want to do is to filter out any earthquakes whose magnitude is less than that of the largest earthquake we found in the “Past Hour” data earlier. As before, we can get this magnitude in the workflow with this EL function call:</p>
+<pre class="code" style="padding-left: 10px;">${wf:actionData('shell-check-hour')['largest']}
+</pre>
+<p>&nbsp;</p>
+<p>We’ll see how to pass this to the Pig script from our workflow later. For now, let&#8217;s just assume we have a variable in our Pig script named <code>$MINMAG</code>. We’ll also need to have variables for the input file (the “Past 30 Days” data we downloaded to HDFS) and the output directory: <code>$INPUT</code> and <code>$OUTPUT</code> respectively.</p>
+<p>First we need to <code><a href="http://pig.apache.org/docs/r0.10.0/basic.html#load">LOAD</a> </code>the data to form a relation:</p>
+<pre class="code" style="padding-left: 10px;">A = LOAD '$INPUT' using PigStorage(',') AS(a1,a2,a3,a4,a5:float,a6,a7,a8,a9,a10,a11,a12,a13);
+</pre>
+<p>&nbsp;</p>
+<p>The <code>USING PigStorage(‘,’)</code> is to tell it to parse the input data as comma-delimited instead of tab-delimited, which is the default. The<code> AS (a1, …)</code> is to tell it the schema that we want it to use. When we looked at the header from the input file, we saw that the magnitude of the earthquake in a data row was the fifth column; hence why we need to make sure to let Pig know that <code>a5</code> is a float &#8212; the rest of the columns we won’t be using so we don’t need to bother specifying data types for them.</p>
+<p>Now that we have the data loaded into Pig, we can simply use the <code><a href="http://pig.apache.org/docs/r0.10.0/basic.html#filter">FILTER</a> </code>operator:</p>
+<pre class="code" style="padding-left: 10px;">B = FILTER A BY (a5 &gt;= $MINMAG);
+</pre>
+<p>&nbsp;</p>
+<p>The expression <code>(a5 &gt;= $MINMAG)</code> is telling Pig to filter out any data row whose <code>a5</code> (i.e. the magnitude of the earthquake) is less than <code>$MINMAG</code> (i.e. the largest earthquake in the last hour). The resulting rows that pass the filter are put into relation <code>B</code>.</p>
+<p>What happens to the first row of our data, the one with the header information? Its fifth column is obviously not a float.</p>
+<pre class="code" style="padding-left: 10px;">(DateTime,Latitude,Longitude,Depth,,MagType,NbStations,Gap,Distance,RMS,Source,EventID,Version)
+</pre>
+<p>&nbsp;</p>
+<p>Note that the fifth column is an empty string instead of “Magnitude”. Conveniently, <a href="http://pig.apache.org/docs/r0.10.0/basic.html#nulls">the <code>FILTER</code> operator rejects null values</a>, so the header row won’t pass the filter and won’t be a problem.</p>
+<p>Now that we’ve filtered the data, we need to output it back to HDFS. We can do that with the <code><a href="http://pig.apache.org/docs/r0.10.0/basic.html#store">STORE</a> </code>operator:</p>
+<pre class="code" style="padding-left: 10px;">STORE B INTO '$OUTPUT' USING PigStorage(',');
+</pre>
+<p>&nbsp;</p>
+<p>As before with the <code>LOAD</code> operator, we specify <code>USING PigStorage(‘,’)</code> to keep the data in a comma-delimited format.</p>
+<p>The end result is that the output from this Pig job has all of the data rows from the last 30 days whose magnitude is greater than or equal to that of the largest earthquake from the last hour. Here’s our final Pig script:</p>
+<pre class="code" style="padding-left: 10px;">A = LOAD '$INPUT' USING PigStorage(',') AS (a1,a2,a3,a4,a5:float,a6,a7,a8,a9,a10,a11,a12,a13);
+B = FILTER A BY (a5 &gt;= $MINMAG);
+STORE B INTO '$OUTPUT' USING PigStorage(',');
+</pre>
+<p>&nbsp;</p>
+<h2>Our Workflow</h2>
+<p>We’re almost done: let’s take a quick look at the 3 actions in our workflow. First, we have our shell action:</p>
+<pre class="code" style="padding-left: 10px;">&lt;action name="shell-check-hour"&gt;
+    &lt;shell xmlns="uri:oozie:shell-action:0.2"&gt;
+        &lt;job-tracker&gt;${jobTracker}&lt;/job-tracker&gt;
+        &lt;name-node&gt;${nameNode}&lt;/name-node&gt;
+        &lt;configuration&gt;
+            &lt;property&gt;
+                &lt;name&gt;mapred.job.queue.name&lt;/name&gt;
+                &lt;value&gt;${queueName}&lt;/value&gt;
+            &lt;/property&gt;
+        &lt;/configuration&gt;
+        &lt;exec&gt;check-hour.sh&lt;/exec&gt;
+        &lt;argument&gt;${earthquakeMinThreshold}&lt;/argument&gt;
+        &lt;file&gt;check-hour.sh&lt;/file&gt; 
+        &lt;capture-output/&gt;
+   &lt;/shell&gt;
+   &lt;ok to="decide"/&gt;
+   &lt;error to="fail"/&gt;
+&lt;/action&gt;
+</pre>
+<p>&nbsp;</p>
+<p>The <code>&lt;exec&gt;</code> element tells Oozie what shell command to execute; this can be a script (like our check-hour.sh script) or an existing command such as <code>echo</code> or <code>grep</code>. We then use the <code>&lt;argument&gt;</code> element to pass the minimum earthquake magnitude that we want to consider to our script; here, we’re using <code>${earthquakeMinThreshold}</code>, which we’ll define in our job.properties file. (You can have multiple <code>&lt;argument&gt;</code> elements for passing multiple arguments.)  The <code>&lt;file&gt;</code> argument tells Oozie to add our script to the distributed cache, making it available on whichever node the shell action gets executed on. Alternatively, we could place our script on every node in the cluster, but that is a lot more work and would require synchronizing updates to the script. We mentioned the <code>&lt;capture-output/&gt;</code> element earlier: it’s what tells Oozie to capture the shell command’s <code>STDOUT</code> so we can use it later in our workflow.</p>
+<p>Our shell action transitions to the decision node, which we looked at earlier. After the decision node, we have our Java action to download the “Past 30 Days” data to HDFS:</p>
+<pre class="code" style="padding-left: 10px;">&lt;action name="get-data"&gt;
+    &lt;java&gt;
+        &lt;job-tracker&gt;${jobTracker}&lt;/job-tracker&gt;
+        &lt;name-node&gt;${nameNode}&lt;/name-node&gt;
+        &lt;prepare&gt;
+            &lt;delete path="${dataInputDir}"/&gt;
+            &lt;mkdir path="${dataInputDir}"/&gt;
+        &lt;/prepare&gt;
+        &lt;configuration&gt;
+            &lt;property&gt;
+                &lt;name&gt;mapred.job.queue.name&lt;/name&gt;
+                &lt;value&gt;${queueName}&lt;/value&gt;
+            &lt;/property&gt;
+        &lt;/configuration&gt;
+        &lt;main-class&gt;com.cloudera.earthquake.GetData&lt;/main-class&gt;
+        &lt;arg&gt;${dataInputDir}&lt;/arg&gt;
+    &lt;/java&gt;
+    &lt;ok to="filter-data"/&gt;
+    &lt;error to="fail"/&gt;
+&lt;/action&gt;
+</pre>
+<p>&nbsp;</p>
+<p>We use the <code>&lt;main-class&gt;</code> element to set the class name of our Java code. The JAR file containing the class will need to be made available to the action; in my <a href="http://blog.cloudera.com/blog/2012/12/how-to-use-the-sharelib-in-apache-oozie/">previous blog post about the Oozie Sharelib</a>, we saw a few ways to include additional JARs with our workflow. For simplicity, we’ll just put the JAR file in the lib folder next to our workflow.xml so Oozie will pick it up automatically. The <code>&lt;arg&gt;</code> element is essentially the same as the <code>&lt;argument</code>&gt; element we saw in the Shell action. Here we pass <code>${dataInputDir}</code> to be the path where we want to store the downloaded data in HDFS; it would be defined in our job.properties. In the <code>&lt;prepare&gt;</code> section, we delete <code>${dataInputDir}</code> and then recreate it to make sure that it exists (our Java code would throw an exception otherwise) and that its clean before we download the data to it.</p>
+<p>Lastly, we have our Pig action to process the data:</p>
+<pre class="code" style="padding-left: 10px;">&lt;action name="filter-data"&gt;
+    &lt;pig&gt;
+        &lt;job-tracker&gt;${jobTracker}&lt;/job-tracker&gt;
+        &lt;name-node&gt;${nameNode}&lt;/name-node&gt;
+        &lt;prepare&gt;
+            &lt;delete path="${outputDir}"/&gt;
+        &lt;/prepare&gt;
+        &lt;configuration&gt;
+            &lt;property&gt;
+                &lt;name&gt;mapred.job.queue.name&lt;/name&gt;
+                &lt;value&gt;${queueName}&lt;/value&gt;
+            &lt;/property&gt;
+        &lt;/configuration&gt;
+        &lt;script&gt;filter-data.pig&lt;/script&gt;
+        &lt;param&gt;INPUT=${dataInputDir}&lt;/param&gt;
+        &lt;param&gt;OUTPUT=${outputDir}&lt;/param&gt;
+        &lt;param&gt;MINMAG=${wf:actionData('shell-check-hour')['largest']}&lt;/param&gt;
+    &lt;/pig&gt;
+    &lt;ok to="end"/&gt;
+    &lt;error to="fail"/&gt;
+ &lt;/action&gt;
+</pre>
+<p>&nbsp;</p>
+<p>The <code>&lt;script&gt;</code> element tells the Pig action the name of our Pig script, which we can put next to our workflow.xml. The <code>&lt;param&gt;</code> elements can then be used to pass variable names to the Pig script, such as the <code>INPUT</code>, <code>OUTPUT</code>, and <code>MINMAG</code> ones we used earlier. For <code>INPUT</code>, we’ll use <code>${dataInputDir}</code>; note that this is where we told the Java action to download the data to. For <code>OUTPUT</code>, we’ll use <code>${outputDir}</code>, which we can define in our job.properties to be where to output the final data. We’re also setting <code>MINMAG</code> to the largest variable from our shell script as previously discussed.</p>
+<h2>Running the Workflow</h2>
+<p>Before creating a coordinator job to run the workflow every hour, we can first try running the workflow directly to make sure that it works. If you downloaded the full project from <a href="https://github.com/cloudera/earthquake">Cloudera&#8217;s GitHub</a>, you should be able to follow the README.txt to build the JAR file and you’ll have your workflow folder already prepared. Once you’ve done that, you can upload the workflow folder to your home directory in HDFS:</p>
+<pre class="code" style="padding-left: 10px;">hadoop fs -put Earthquake-WF Earthquake-WF
+</pre>
+<p>&nbsp;</p>
+<p>In HDFS, you should now have something like this:</p>
+<pre class="code" style="padding-left: 10px;">$ hadoop fs -ls -R Earthquake-WF
+-rw-r--r--   1 rkanter supergroup       1278 2013-02-25 15:54 Earthquake-WF/check-hour.sh
+-rw-r--r--   1 rkanter supergroup        987 2013-02-25 15:54 Earthquake-WF/filter-data.pig
+-rw-r--r--   1 rkanter supergroup       1155 2013-02-25 15:54 Earthquake-WF/job.properties
+drwxr-xr-x   - rkanter supergroup          0 2013-02-25 15:54 Earthquake-WF/lib
+-rw-r--r--   1 rkanter supergroup       3433 2013-02-25 15:54 Earthquake-WF/lib/Earthquake-J-1.0-SNAPSHOT.jar
+-rw-r--r--   1 rkanter supergroup       3406 2013-02-25 15:54 Earthquake-WF/workflow.xml
+</pre>
+<p>&nbsp;</p>
+<p>Because the workflow uses a Pig action, you’ll need to make sure the sharelib is properly installed or the workflow will fail; please see my <a href="http://blog.cloudera.com/blog/2012/12/how-to-use-the-sharelib-in-apache-oozie/">previous blog post about the Oozie Sharelib</a>. You can then submit the workflow to Oozie:</p>
+<pre class="code" style="padding-left: 10px;">oozie job -config path/to/job.properties -run -oozie http://some.hostname:11000/oozie
+</pre>
+<p>&nbsp;</p>
+<p>It shouldn’t take more than a few minutes to run. If there wasn’t a “large” earthquake in the last hour, it won’t run the Java or Pig actions (and should complete very quickly). You can lower the value of <code>earthquakeMinThreshold</code> in job.properties to compensate or try waiting until after a large earthquake.</p>
+<p>Creating a coordinator job to run the workflow every hour is left as an exercise for the reader.</p>
+<h2>Conclusion</h2>
+<p>In this blog post we focused mostly on the Shell, Java, and Pig actions; we also looked at the decision node. You should now be able to write your own Shell and Java actions.</p>
+<p>The Shell and Java actions are great for times when there isn’t an appropriate action to accomplish a task in your Oozie workflow. While there are some limitations to the Shell action, its ease-of-use and lack of requirement to compile any code are quite useful; plus, you can use it to execute scripts from other languages such as python or perl. The Java action is also quite easy to use and has fewer caveats than the Shell action, but requires recompiling every time you change something. Ultimately, creating your own action type is the most flexible as you have more control over how it interacts with the outside world; plus, it&#8217;s directly reusable by other users and can even be contributed back to the <a href="http://oozie.apache.org">Apache Oozie project</a>. Creating your own action type is quite a bit more work though.</p>
+<p><strong>Further Reading</strong></p>
+<ul>
+<li><a href="https://github.com/cloudera/earthquake">Earthquake project code on github</a></li>
+<li><a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/DG_ShellActionExtension.html">Shell Action Documentation</a></li>
+<li><a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/WorkflowFunctionalSpec.html#a3.2.7_Java_Action">Java Action Documentation</a></li>
+<li><a href="https://cwiki.apache.org/OOZIE/java-cookbook.html">Java Action Cookbook</a></li>
+<li><a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/WorkflowFunctionalSpec.html#a3.2.3_Pig_Action">Pig Action Documentation</a></li>
+<li><a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/WorkflowFunctionalSpec.html#a3.1.4_Decision_Control_Node">Decision Control Node Documentation</a></li>
+<li><a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/DG_CustomActionExecutor.html">Creating your own action type Documentation</a></li>
+<li><a href="http://blog.cloudera.com/blog/2012/12/how-to-use-the-sharelib-in-apache-oozie/">How to: Use the ShareLib in Apache O</a><a href="http://blog.cloudera.com/blog/2012/12/how-to-use-the-sharelib-in-apache-oozie/">ozie blog post</a></li>
+<li><a href="http://earthquake.usgs.gov/earthquakes/feed/">USGS Real-time Feeds &amp; Data</a></li>
+</ul>
+<p><em>Robert Kanter is a Software Engineer on the Platform team and an Apache Oozie Committer.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/oozie/" title="View all posts in Oozie" rel="category tag">Oozie</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/pig/" title="View all posts in Pig" rel="category tag">Pig</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>2 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.nextag.com">Sanjay Subramanian</a> /
+			August 05, 2013 / 4:59 PM		</em>
+		<p>Thanks. This along with the email discussions on CDH users groups, I have finally launched my project into production. I have 3 daily Oozie flows each flow containing about 30-40 actions each (each flow is controlled by a coordinator). I successfully used the following Actions<br />
+- Hive<br />
+- Jave<br />
+- Map Reduce<br />
+- Shell</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Vinay</a> /
+			March 10, 2014 / 11:28 PM		</em>
+		<p>In shell action, </p>
+<p>1. what should element  contain ? Is it the path of the shell script or just name of the shell script? </p>
+<p>2. what should element  contain ? apache documentation says it should contain path of shell script. </p>
+<p>Please clarify above both queries.</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='20687' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="/cA=" />
+		<input type="hidden" name="cptch_time" value="1397909893" />
+		<input type="hidden" value="Version: 2.4" />
+		9 &minus; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  f&#105;ve	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

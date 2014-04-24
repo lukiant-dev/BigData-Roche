@@ -1,0 +1,1306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-to: Create a CDH Cluster on Amazon EC2 via Cloudera Manager | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-to: Create a CDH Cluster on Amazon EC2 via Cloudera Manager"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; How-to: Create a CDH Cluster on Amazon EC2 via Cloudera Manager Comments Feed" href="http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='How-to: Analyze Twitter Data with Hue' href='http://blog.cloudera.com/blog/2013/03/how-to-analyze-twitter-data-with-hue/' />
+<link rel='next' title='Phoenix in 15 Minutes or Less' href='http://blog.cloudera.com/blog/2013/03/phoenix-in-15-minutes-or-less/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=20836' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-20836 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-to: Create a CDH Cluster on Amazon EC2 via Cloudera Manager</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Emanuel Buzek</li>
+				<li>March 26, 2013</li>
+				<li class="comment"><a href="#comments">30 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><strong>Editor&#8217;s Note (added Feb. 28, 2014): The instructions below are deprecated for Cloudera Manager releases beyond 4.5. Please refer to <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Installation-Guide/cmig_install_on_EC2.html">this doc</a> for instructions pertaining to releases 4.6 and later.</strong></p>
+<p><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html">Cloudera Manager</a> includes a new express installation wizard for Amazon Web Services (AWS) EC2. Its goal is to enable Cloudera Manager users to provision CDH clusters and Cloudera Impala (the open source distributed query engine for Apache Hadoop) on EC2 as easily as possible (for testing and development purposes only, not supported for production workloads) - and thus is currently the fastest way to provision a Cloudera Manager-managed cluster in EC2.</p>
+<p>The new distinguishing feature introduced in version 4.5 is that Cloudera Manager can now launch and configure the instances for you, so you don’t have to worry about launching the instances, authorizing SSH keys, and configuring a firewall. All this can now be done from within Cloudera Manager! </p>
+<p>Since Cloudera Manager and the nodes running CDH use internal hostnames to communicate, the Cloudera Manager server must run on EC2 as well. In fact, the Cloud Express Wizard only appears when installing Cloudera Manager on EC2.</p>
+<p>Here’s what you can do with Cloud Express Wizard:</p>
+<ul>
+<li>Provision new EC2 instances (AWS credentials required)</li>
+<li>Choose between CentOS and Ubuntu images (or a custom AMI)</li>
+<li>Choose your EC2 instance type</li>
+<li>Install the most recently released CDH, Cloudera Impala, and Cloudera Manager agent packages on them</li>
+</ul>
+<p>And here’s what you cannot do:</p>
+<ul>
+<li>Use pre-existing EC2 instances</li>
+<li>Install older (earlier ) versions of CDH and Cloudera Manager, or use Parcels </li>
+</ul>
+<p>I am excited to show you how this feature works. These instructions will set up a fully configured CDH cluster (all services with embedded PostgreSQL) from scratch in less than 15 minutes.</p>
+<h2>Step 1: Install Cloudera Manager Server on EC2</h2>
+<p>First, you will need to  launch an EC2 instance for the Cloudera Manager server, which will require an AWS Access Key ID and AWS Secret Key &#8212; please follow <a href="http://docs.aws.amazon.com/fws/1.1/GettingStartedGuide/index.html?AWSCredentials.html">these instructions</a> if you need help getting them.</p>
+<p>To launch the EC2 instance, go to “EC2” in the AWS web console and select “Instances” in the left menu. Before you provision the instance, select the EC2 region you want your instance to be in (dropdown in top right corner of the web console). For his demo, you can simply use the default “N. Virginia (us-east-1)” region. Click on “Launch Instance” and select the Classic Wizard. On the next page, pick the “Ubuntu Server 12.04 LTS” 64-bit image. You need one instance of type “m1.large.” You can keep the default values of other settings and proceed to the “Create Key Pair” page.</p>
+<p>If you don’t have an SSH key imported to EC2 already, select “Create a new Key Pair.” Enter the name of your new key pair, and click “Create and Download your key pair.” This will download a .pem file to your computer. (Important: AWS does not store the private SSH keys, so save this file or you won’t be able to SSH into the instance we’re about to launch.)</p>
+<p>It is very important to configure the EC2 firewall correctly. On the “Configure Firewall” page choose “Create a new Security Group,” and authorize all the ports listed below:</p>
+<table width="450" border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="47">
+<p>TCP</p>
+</td>
+<td valign="top" width="132">
+<p>22</p>
+</td>
+<td valign="top" width="271">
+<p>SSH</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="47">
+<p>TCP</p>
+</td>
+<td valign="top" width="132">
+<p>7180</p>
+</td>
+<td valign="top" width="271">
+<p>Cloudera Manager web console</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="47">
+<p>TCP</p>
+</td>
+<td valign="top" width="132">
+<p>7182</p>
+</td>
+<td valign="top" width="271">
+<p>Agent heartbeat</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="47">
+<p>TCP</p>
+</td>
+<td valign="top" width="132">
+<p>7183</p>
+</td>
+<td valign="top" width="271">
+<p>(optional, Cloudera Manager web console with TLS)</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="47">
+<p>TCP</p>
+</td>
+<td valign="top" width="132">
+<p>7432</p>
+</td>
+<td valign="top" width="271">
+<p>Embedded PostgreSQL</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="47">
+<p>icmp</p>
+</td>
+<td valign="top" width="132">
+<p>-1</p>
+</td>
+<td valign="top" width="271">
+<p>ping echo</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Next, go to the last page of the wizard and launch the instance!</p>
+<p><strong>How to Install the Latest Version of Cloudera Manager</strong><br /> Once the state of the instance is “running” (provisioning takes usually less than 5 minutes), you  can SSH in and install Cloudera Manager 4.5. The public hostname of the instance is listed in the instance details in the AWS console.</p>
+<pre class="code" style="padding-left: 10px;">$ ssh -i your-key.pem ubuntu@ec2-xx-xx-xx-xx.compute-1.amazonaws.com
+</pre>
+<p>&nbsp;</p>
+<p>Download the Cloudera Manager 4.5 installer and execute it on the remote instance:</p>
+<pre class="code" style="padding-left: 10px;">$ wget http://archive.cloudera.com/cm4/installer/latest/cloudera-manager-installer.bin
+$ chmod +x cloudera-manager-installer.bin
+$ sudo ./cloudera-manager-installer.bin
+</pre>
+<p>&nbsp;</p>
+<p>Once the installer finishes, use the public hostname of your server instance to navigate in your browser to http://ec2-xx-xx-xx-xx.compute-1.amazonaws.com:7180, and then log into the web console (the default username and password are both “admin”). If you’re successfully logged in, congratulations!</p>
+<h2>Step 2: Installing a CDH Cluster with Cloud Express Wizard</h2>
+<p>After logging in, Cloudera Manager will detect that it runs on EC2, and it will greet you with the welcome screen of the new wizard (see below). There is a warning that the instances started by this installer are instance store-based, which implies that stopping or terminating these instances results in losing all data stored on them. Remember to back-up  important data from the cluster before terminating the instances!</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek1.png"><img title="buzek1" src="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek1.png" alt="" width="600" height="155" /></a><strong>Figure 1: Cloud Express Wizard</strong></p>
+<p>Why does Cloudera Manager prefer <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html">instance store-backed over EBS-backed AMIs</a>? Although EBS volumes offer persistent storage, they are network-attached and charge per I/O request, so they are not suitable for Hadoop deployments. If you wish to experiment with EBS-backed instances, you can always use a custom EBS AMI.</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek2.png"><img title="buzek2" src="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek2.png" alt="" width="600" height="307" /></a><br /><strong>Figure 2: Cloud Express Wizard &#8211; instance specifications</strong></p>
+<p>Go to the second page of the wizard (Figure 2) to specify the details about the hosts we are about to launch. Cloudera Manager detects the region it runs in, and the new instances will be installed there as well. The following attributes can be specified:</p>
+<ul>
+<li>OS (Amazon Machine Image, AMI): Cloudera supports Ubuntu 12.04 and CentOS 6.3 images. Cloudera Manager knows which AMI to use for the specified region. If you choose to use a custom AMI (this is especially handy if you want to pre-install some tools or authorize SSH keys on your hosts), make sure the AMI is available in the specified region.</li>
+<li>Instance Type: Only instance types matching the minimum requirements for CDH hosts are available. m1.medium will be sufficient for this demo. The high-storage instances (hs1.8xlarge) are not yet available but will be included in a future release of Cloudera Manager .</li>
+<li>Number of Instances: You will create four instances for this demo. Although there is no limit on the number of instances, you’re likely to exceed the EC2 API request limit  if you try to create more than ~20 instances at once.</li>
+<li>Group name: The optional “group name” is there to help you identify the instances launched by the wizard, and it will be used as suffix for the name, Security Group, and Key Pair of the instances.</li>
+</ul>
+<p>The next page (Figure 3) shows you the credentials page. You need to paste in the AWS Access ID and AWS Secret Key. Then you can choose an SSH key for the hosts; in this demo I will let Cloudera Manager generate a new key pair for my instances, and the private key will be available for download on the next page once the instances are launched. If you upload an existing private SSH key, Cloudera Manager will extract the public part and authorize it in your AWS account.</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek3.png"><img title="buzek3" src="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek3.png" alt="" width="600" height="308" /></a><br /><strong>Figure 3: Cloud Express Wizard &#8211; Credentials</strong></p>
+<p>Proceed to the review page (Figure 4), where you can double-check your installation settings. You can easily go back to modify the settings. However, once the instances are provisioned, you must terminate  them in order to make changes.</p>
+<p>Note that when provisioning the instance fails on “503 Error: Api Request Limit exceeded”, it’s likely because other applications (or users) are issuing API calls to the same AWS account at the same time, or because you are launching a large number of instances at once. (In testing we successfully spun up as many as 20 instances  simultaneously.) This limitation will be removed in a future Cloudera Manager release.</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek4.png"><img title="buzek4" src="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek4.png" alt="" width="600" height="227" /></a><br /><strong>Figure 4: Cloud Express Wizard &#8211; Review Installation</strong></p>
+<p>The review page indicates you are about to install the latest packages of CDH and Impala. Currently this is the only supported option in this installation wizard. If everything looks right, click the “Start Installation” button. (Note: if node installation fails because “CM failed to receive a heartbeat from Agent”, Confirm that port 7182 is authorized in the Security Group of Cloudera Manager server and re-try the installation.)</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek5.png"><img title="buzek5" src="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek5.png" alt="" width="600" height="265" /></a><br /><strong>Figure 5: AWS web console &#8211; EC2 instance started by Cloudera Manager</strong></p>
+<p>Cloudera Manager uses <a href="http://www.jclouds.org/">jclouds</a> to create new key pair and security group, and to launch the EC2 instances. The new instances will also appear in your AWS EC2 console (Figure 5). You can see that the security group and the key pair starts with “jclouds#” prefix. Also, all ports required for CDH have already been enabled. Provisioning new instances takes usually less than five minutes.</p>
+<p>Once the instances are successfully provisioned, you can download the private SSH key (Figure 6). It’s a good idea to download the key in case something goes wrong and you need to SSH in to investigate the issue. However, this installation path won’t require us to do anything manually on the remote hosts.</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek6.png"><img title="buzek6" src="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek6.png" alt="" width="600" height="169" /></a><br /><strong>Figure 6: Cloud Express Wizard &#8211; Instances successfully provisioned</strong></p>
+<p>The next screen looks familiar if you’ve used the classic express wizard in Cloudera Manager. It shows the progress of package installation on the newly provisioned hosts (Figure 7).</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek7.png"><img title="buzek7" src="http://blog.cloudera.com/wp-content/uploads/2013/03/buzek7.png" alt="" width="600" height="157" /></a><br /><strong>Figure 7: Cloud Express Wizard &#8211; Package installation</strong></p>
+<p>After finishing the package installation, you can proceed to the Host Inspector and Services First Run page – you’re done. Congratulations, the CDH cluster is up and running now!</p>
+<p>Note: The hosts cannot be terminated from Cloudera Manager, so to do that you’ll need to use EC2 CLI tools or the AWS web console instead. Go to the Instances page in <a href="https://console.aws.amazon.com/ec2">https://console.aws.amazon.com/ec2</a>, select the instance you created for the server and all the instances launched by the wizard (hint: use the Group Name string to filter them out), and click “Actions &gt; Terminate”.</p>
+<p><em>Emanuel Buzek is a Software Engineer on the Enterprise team.</em></p>
+<p><strong>Editor&#8217;s Note (added Feb. 28, 2014): The instructions above are deprecated for Cloudera Manager releases beyond 4.5. Please refer to <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/latest/Cloudera-Manager-Installation-Guide/cmig_install_on_EC2.html">this doc</a> for instructions pertaining to releases 4.6 and later.</strong></p>
+<p>&nbsp;</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cdh/" title="View all posts in CDH" rel="category tag">CDH</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/cloud-2/" title="View all posts in Cloud" rel="category tag">Cloud</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/cloudera-manager/" title="View all posts in Cloudera Manager" rel="category tag">Cloudera Manager</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/impala/" title="View all posts in Impala" rel="category tag">Impala</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/ops/" title="View all posts in Ops and DevOps" rel="category tag">Ops and DevOps</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>30 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Nathan Truong</a> /
+			March 26, 2013 / 11:01 AM		</em>
+		<p>Can Cloudera Manager provision EC2 spot instances?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">p</a> /
+			March 28, 2013 / 10:55 AM		</em>
+		<p>Can I use micro instance? or it must be m1.medium?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			March 28, 2013 / 11:02 AM		</em>
+		<p>Nathan,</p>
+<p>I don&#8217;t believe that the Wizard supports provisioning of spot instances yet.</p>
+<p>P,</p>
+<p>A micro instance will be too small for CDH.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Kris Jonsson</a> /
+			March 30, 2013 / 10:07 AM		</em>
+		<p>Excelent HOW-TO Emanuel! I have everything up and running and I can submit jobs to the cluster if I first ssh into one of the nodes. Could you explain how to open up access to the JobTracker such that you can submit jobs to the EC2 cluster from a remote machine? Setting the JobTracker and NameNode addresses to the external EC2 host names of the corresponding machines in the -site.xml files on the remote machine does not work out of the box.</p>
+<p>Kris</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Stu</a> /
+			April 01, 2013 / 12:51 AM		</em>
+		<p>Thanks for publishing this. I&#8217;ve stood up and 9-node CDH cluster (1NN, 8 DN) and now wish to add additional data nodes. How do i do that in AWS using the Manager? Thanks.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.cloudera.com">Amandeep Khurana</a> /
+			April 01, 2013 / 1:04 PM		</em>
+		<p>Kris,</p>
+<p>In order to use a non EC2 instances as your client node to access HDFS and submit jobs from, you need to do the following:</p>
+<p>1. Bind the Hadoop processes to 0.0.0.0 so that they work with the external DNS also<br />
+2. Open the security groups to allow traffic from the client/gateway node that they want to submit jobs from<br />
+3. Put the external DNS entries for the JT and NN in the -site.xml files on the client/gateway node so the Hadoop client knows how to reach the cluster.</p>
+<p>Hope this helps</p>
+<p>Amandeep</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://randyzwitch.com">Randy Zwitch</a> /
+			April 01, 2013 / 1:22 PM		</em>
+		<p>Following these directions works in terms of getting everything set up and running. However, I&#8217;m not able to get to the Hue screen, the URL never resolves.</p>
+<p>As a test, I&#8217;ve opened up every ICMP, TCP, and UDP ports and the <a href="http://ip-XX-XXX-XXX-XXX.ec2.internal:8888/" rel="nofollow">http://ip-XX-XXX-XXX-XXX.ec2.internal:8888/</a> still doesn&#8217;t resolve.</p>
+<p>Any tips on how to get Hue working properly?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Kostas Sakellis</a> /
+			April 01, 2013 / 2:09 PM		</em>
+		<p>Stu,</p>
+<p>To add more hosts to your cluster, follow these steps:</p>
+<p>1. Create a host template from the Hosts page. (<a href="https://ccp.cloudera.com/display/FREE451DOC/Working+with+Host+Templates" rel="nofollow">https://ccp.cloudera.com/display/FREE451DOC/Working+with+Host+Templates</a>). The host template allows you to specify what roles/configuration you would like for your hosts.<br />
+2. Go to the Hosts page and click &#8220;Add new Hosts to the cluster&#8221;. This wizard will allow you to provision new hosts through AWS<br />
+3. Apply the host template you created in 1) to your new hosts.</p>
+<p>Hope this helps,<br />
+Kostas Sakellis</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Kostas Sakellis</a> /
+			April 01, 2013 / 2:23 PM		</em>
+		<p>Randy,</p>
+<p>The ip-XX-XXX-XXX-XXX.ec2.internal is an AWS internal name that doesn&#8217;t resolve externally. You need to use the public host name. For example, it should be something like: ecXXXXXXXX.compute-1.amazonaws.com. You can find this by either using the AWS console, or using the AWS command line tools.<br />
+ec2-describe-instances | grep ip-XXXXX.ec2.internal</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://randyzwitch.com">Randy Zwitch</a> /
+			April 01, 2013 / 2:35 PM		</em>
+		<p>Thanks Kostas, I figured it out. I figured it was something similar to that, but I only tried the public host name for the m1.large, it didn&#8217;t occur to me that Hue was running off the other nodes.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jon</a> /
+			April 03, 2013 / 12:33 PM		</em>
+		<p>There are two machine types that don&#8217;t actually work. (cc2.8xlarge and cc1.4xlarge). The reason is that these actually require special HVM images which are different from the images that CM tries to launch with. I tried to provide my own HVM images ID, but then it failed with an error saying that it can&#8217;t find hardware support.</p>
+<p>Any chance you could fix this so they actually work?</p>
+<p>Is there any way to work around this in the mean time? I guess I can just manually launch the slaves and then add the nodes in CM &#8211; would that work?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.thecloudavenue.com">Praveen</a> /
+			April 04, 2013 / 3:07 AM		</em>
+		<p>I was able to setup a CDH Manager instance and a 2 node Hadoop cluster. I am able to login into the Hadoop cluster as an ec2-user and not any other user.</p>
+<p>ssh -i cm_cloud_hosts_rsa <a href="mailto:ec2-user@ec2-184-72-169-149.compute-1.amazonaws.com">ec2-user@ec2-184-72-169-149.compute-1.amazonaws.com</a></p>
+<p>ec2-user doesn&#8217;t have permissions to put data into HDFS and run MR jobs. What are the steps involved to put files into HDFS and run an MR job?</p>
+<p>Thanks,<br />
+Praveen</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Chanka Perera</a> /
+			April 09, 2013 / 6:39 AM		</em>
+		<p>How can i disable  &#8220;Cloudera Manager Cloud Express Wizard&#8221;</p>
+<p>Express wizard currently not supported in Sydney region and i would like to use pre-existing EC2 instances which i have already build. </p>
+<p>Please let me know how to disable express wizard and add instances manually.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Stefan</a> /
+			April 18, 2013 / 1:05 PM		</em>
+		<p>Great tutorial!<br />
+It set up the cluster without problems.<br />
+2 Issues:<br />
+a) I am not able to access the hue interface.<br />
+Could you please descibe the necessary steps?</p>
+<p>b) How do I start the impala-shell? Or the hive shell?</p>
+<p>Your support is appreciated.<br />
+Best regards,<br />
+Stefan</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Carlos</a> /
+			April 29, 2013 / 1:06 PM		</em>
+		<p>I was looking at the docs, and it says that this setup is not recommended for production. This post doesn&#8217;t mention production environments. Do you think you could elaborate why this setup wouldn&#8217;t be good for production? or if that is no longer the case?</p>
+<p>I&#8217;m trying to decide how to go about deploying CDH onto a cluster on EC2. I&#8217;ve found other methods, but this seems to be the easiest. I&#8217;m familiar with Hadoop and HBase, but don&#8217;t have much experience deploying a cluster and much less EC2.</p>
+<p>Thanks in advance.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">John</a> /
+			May 05, 2013 / 4:44 PM		</em>
+		<p>I followed the instructions and was able to launch 4 hosts and looks like all the components were successfully installed.  How do I start up job tracker, task tracker, data node and name node?</p>
+<p>I didn&#8217;t see any menu on the Services tab to add new services.</p>
+<p>This is more difficult than I thought it would be.</p>
+<p>Please help.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Ravi</a> /
+			May 06, 2013 / 10:37 AM		</em>
+		<p>When I try to access  CDH instance using CYGWIN  I get below error in Windows 7 machine</p>
+<p>$ ssh -i cm_cloud_hosts_rsa <a href="mailto:ec2-user@ec2-54-234-94-1.compute-1.amazonaws.com">ec2-user@ec2-54-234-94-1.compute-1.amazonaws.com</a><br />
+Permission denied (publickey).</p>
+<p>I have tried permisssion from 400 to 600 to  777 nothing worked .. really weird.</p>
+<p>Also in  MAC I get similar type error<br />
+if permission 400 or 600 I get permission denied and anything other then that it gives error</p>
+<p>Permissions 0644 for &#8216;cm_cloud_hosts are too open.<br />
+It is recommended that your private key files are NOT accessible by others.<br />
+This private key will be ignored.</p>
+<p>Any suggestion whats going wrong that too both in Windows 7 and MAC machine.</p>
+<p>Thanks</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			May 07, 2013 / 3:20 PM		</em>
+		<p>John,</p>
+<p>It sounds like you may need a Cloudera Manager primer. There are some demo videos here:</p>
+<p><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html?category=cloudera-resources%3Ausing-cloudera%2Fproduct-demos&#038;q=cloudera+manager" rel="nofollow">http://www.cloudera.com/content/cloudera/en/resources/library.html?category=cloudera-resources%3Ausing-cloudera%2Fproduct-demos&#038;q=cloudera+manager</a></p>
+<p>(albeit for Cloudera Manager 4.0)</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Eric Moore</a> /
+			June 04, 2013 / 10:28 AM		</em>
+		<p>This isn&#8217;t working for me.  I brought up the ubuntu instance and logged in as the ubuntu user per the instructions above.  I downloaded the Cloudera Manager installer.  When I execute &#8220;./cloudera-manager-installer.bin&#8221;, it says I have to be root to execute.  </p>
+<p>When I try &#8220;sudo ./cloudera-manager-installer.bin&#8221;, it takes me through a bunch of terms acceptance and then installs.  Unfortunately, though, it doesn&#8217;t seem to recognize that it is running in EC2 and after asking if I want to upgrade to full Cloudera Manager, it gives me the normal install options rather than using the cloud install wizard.  Any suggestions?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Sanjeev Kumar</a> /
+			June 13, 2013 / 2:42 AM		</em>
+		<p>The instructions are very clear and I could setup the full CDH cluster successfully within few minutes. Basically I wanted to use it to test Impala on HDFS and HBASE and it seems working fine for me.</p>
+<p>I have a question at this point. I would like to automate provisioning of the CDH and program these steps which currently we are doing manually using Web UI. It will be nice if Chef can be avoided &#8211; earlier we tried provisioning CDH using Chef scripts and unfortunately it was a painful experience though we could bring up cluster there as well.</p>
+<p>Last, but not the least, If the it&#8217;s possible to automate provisioning CDH, Does this mean we can automate bringing up of first instance where Cloudera Manager is installed?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.ashwinjayaprakash.com">Ashwin Jayaprakash</a> /
+			July 01, 2013 / 6:17 PM		</em>
+		<p>The wizard did not take me to the auto install. After some Googling I found out that manually providing the URL parameters would bring up the EC2 cloud wizard:</p>
+<p><a href="http://ec2-xxxxxx.us-west-2.compute.amazonaws.com:7180/cmf/cloud-express-wizard/specs?provider=aws-ec2" rel="nofollow">http://ec2-xxxxxx.us-west-2.compute.amazonaws.com:7180/cmf/cloud-express-wizard/specs?provider=aws-ec2</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://hadoopilluminated.com">Mark Kerzner</a> /
+			July 01, 2013 / 9:23 PM		</em>
+		<p>Hi, Emanuel, thank you for the useful post. How can I improve the health of the cluster? It comes up in concerning and goes to bad pretty soon afterwards.</p>
+<p>I believe it is because of the small 10GB hard drive on root instances.</p>
+<p>Thank you.<br />
+Mark</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Sassoon Kosian</a> /
+			July 01, 2013 / 10:32 PM		</em>
+		<p>I installed CDH4 on AWS using a single instance, it worked fine. In order to save costs I stopped the instance and started later. When I started Hadoop was not running (or maybe was running but everything failed). hadoop fs -ls gave me this error:</p>
+<p>Call From ip-10-147-146-227.ec2.internal/10.147.146.227 to ip-10-147-146-227.ec2.internal:8020 failed on connection exception: java.net.ConnectException: Connection refused; For more details see:  <a href="http://wiki.apache.org/hadoop/ConnectionRefused" rel="nofollow">http://wiki.apache.org/hadoop/ConnectionRefused</a></p>
+<p>How to I get it fixed?</p>
+<p>Thanks.<br />
+Sassoon</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Nathan D</a> /
+			July 12, 2013 / 8:41 AM		</em>
+		<p>The instructions are working and letting me set up the cluster with no errors, but before it gets to the point where it would start up all the services and says &#8220;Server Error    No hosts found&#8221;     Any idea why this is happening?</p>
+<p>When I try to manually start the services, starting with HDFS, it sets up the data nodes but fails when setting up the name node.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/">King</a> /
+			July 18, 2013 / 9:43 AM		</em>
+		<p>Are there any ways to stop the instances for cloudera impala on AWS? there is only terminating. But after terminating, you have to re-install Impala every time. How to re-start the instances after stopping it to avoid being billed?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">dejan</a> /
+			July 30, 2013 / 11:45 PM		</em>
+		<p>Is it posible to connect to ec2 cluster from local machine i.e. put files hdfs ans start map reduce jobs from local machine</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">dejan</a> /
+			July 30, 2013 / 11:52 PM		</em>
+		<p>Can we save AMI with cloudera manager so there is no need to go trough installation process every time we want to create new cluster. Also, is it possible to create cluster using scripts from machinne that is not on ec2.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			July 31, 2013 / 3:05 PM		</em>
+		<p>All,</p>
+<p>Due to the quantity of questions here, I recommend that you post them to our new Community Forum here:</p>
+<p><a href="http://community.cloudera.com/t5/Cloudera-Manager-Installation/bd-p/CMInstall" rel="nofollow">http://community.cloudera.com/t5/Cloudera-Manager-Installation/bd-p/CMInstall</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://none">Matt</a> /
+			August 08, 2013 / 3:47 PM		</em>
+		<p>I&#8217;m having the same problem as this guy:</p>
+<p><a href="http://grokbase.com/t/cloudera/scm-users/1382vdbsbx/express-install-on-ec2-fail" rel="nofollow">http://grokbase.com/t/cloudera/scm-users/1382vdbsbx/express-install-on-ec2-fail</a></p>
+<p>To summarize, I get up to the 6th panel &#8220;Provisioning<br />
+requested instances&#8221;. And then get the following error:<br />
+code=&#8217;RulesPerSecurityGroupLimitExceeded&#8217;,<br />
+message=&#8217;The maximum number of rules per security group has been reached.&#8217;</p>
+<p>I tried to go to the forum link posted by @KESTELYN but it&#8217;s broken&#8230; nothing works today! :)</p>
+<p>Please help!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			September 10, 2013 / 9:45 AM		</em>
+		<p>Sorry Matt,</p>
+<p>That link has been corrected:</p>
+<p><a href="http://community.cloudera.com/t5/Cloudera-Manager-Installation/bd-p/CMInstall" rel="nofollow">http://community.cloudera.com/t5/Cloudera-Manager-Installation/bd-p/CMInstall</a></p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='20836' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="TE0=" />
+		<input type="hidden" name="cptch_time" value="1398162762" />
+		<input type="hidden" value="Version: 2.4" />
+		t&#119;o &times; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> = 6	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

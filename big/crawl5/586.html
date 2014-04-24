@@ -1,0 +1,1009 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Hadoop Log Location and Retention | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Hadoop Log Location and Retention"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2010/11/hadoop-log-location-and-retention/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Hadoop Log Location and Retention Comments Feed" href="http://blog.cloudera.com/blog/2010/11/hadoop-log-location-and-retention/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Apache Hadoop training coming to new cities in 2011' href='http://blog.cloudera.com/blog/2010/11/apache-hadoop-training-coming-to-new-cities-in-2011/' />
+<link rel='next' title='Hadoop World 2010 Tweet Analysis' href='http://blog.cloudera.com/blog/2010/12/hadoop-world-2010-tweet-analysis/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2010/11/hadoop-log-location-and-retention/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=5395' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-5395 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Hadoop Log Location and Retention</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/lars-george/" title="Posts by Lars George" rel="author">Lars George</a></li>
+				<li>November 29, 2010</li>
+				<li class="comment"><a href="#comments">1 comment</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>This post is a follow up to an earlier one called <a href="http://blog.cloudera.com/blog/2009/09/apache-hadoop-log-files-where-to-find-them-in-cdh-and-what-info-they-contain/">Apache Hadoop Log Files: Where to find them in CDH, and what info they contain</a>. It lists nicely the various places Hadoop uses to store log and other info files while it is running. Over time we have seen changes though in different Hadoop and CDH releases that affect where files are stored or how long they are retained. Below strives to document the status quo (no, not the band) of all the log and info files found while running a Hadoop cluster.</p>
+<p>First some general notes: the logs are stored in a few different places and retained for a certain amount of time (or forever). Below are the categories and the various settings that control them. All of the parameters named go into the mapred-site.xml unless noted otherwise.</p>
+<p>If necessary the following codes are used to identify changes in various releases (ordered by Hadoop version):</p>
+<pre>H20:        Hadoop 0.20.2
+CDH3B1:     CDH3b1 (Hadoop-0.20.2+228)
+CDH3B2:     CDH3b2 (Hadoop-0.20.2+320)
+CDH3B3:     CDH3b3 (Hadoop-0.20.2+737)
+H21:        Hadoop 0.21.0</pre>
+<p>If not noted otherwise the description is for vanilla Hadoop 0.20.2 (H20) or in case of configuration keys it is for all releases but the ones named specifically.  Note: CDH2 (Hadoop-0.20.1-169.89) works like CDH3b1 and CDH3b2, so all notes applying to those two versions also apply to CDH2.</p>
+<h2>Daemon Logs</h2>
+<p>The actual Java daemons use log4j and <code>DailyRollingFileAppender</code>, which does not have retention settings (other <code>Appenders</code> have though, for example the <code>RollingFileAppender</code>). The only way to keep them in check is either change the log4j.properties to a different Appender or use a cron job to remove older logs daily (e.g. &#8220;<code>find /var/log/hadoop/ -type f -mtime +3 -name "hadoop-hadoop-*" -delete</code>&#8220;).</p>
+<h2>Job Files</h2>
+<p>There are two sets of files per job, which are created when the job is launched. One is the <em>Job Configuration XML</em> file and the other the <em>Job Status File</em>. The Job Configuration XML files contain the job configuration as specified when the job is launched, i.e. they contain the merged defaults with the user settings for the job that override the defaults.  Each job generates a second file, next to the Job Configuration XML file, called Job Status File. It is created when the job starts but continually written to until the job finishes. They contain what is also visible after a job has finished, i.e. the counters, status, start/stop time, task attempt details etc.  The two files are stored or kept in four locations (usually they are stored as pairs unless noted otherwise):</p>
+<p>1) JobTracker Local</p>
+<p>When a job is initialized the configuration is saved in what is called a &#8220;local directory&#8221;:</p>
+<pre>Location: ${hadoop.log.dir}
+Name: "&lt;jobId&gt;_conf.xml"
+Retention: mapred.jobtracker.retirejob.interval  (see Job Retirement Policy below)</pre>
+<p>Notes:<br />
+- Only the Job Configuration XML is stored here, not the Job Status File.</p>
+<p>- There seems to be a &#8220;bug&#8221; in the code that the check is not forced when the JobTracker is shut down and when it restarts it gets a new ID assigned (the current date) and will then only check for matching jobs to clean up subsequently. What that means is that when you restart your JobTracker and you had Job Configuration XML files in the &#8220;local&#8221; directory that they will never be cleaned up. They can safely be removed and are rather small.  Another simple cronjob could be used for this purpose, executing something like:</p>
+<pre>find /var/log/hadoop/ -type f -mtime +3 -name "job_*_conf.xml" -delete</pre>
+<p>2) In the Job History</p>
+<pre>Key: hadoop.job.history.location
+Key (H21): mapreduce.jobtracker.jobhistory.location
+Default: file:///${hadoop.log.dir}/history
+Retention: up to a max. of 30 days  (see General Job File Notes below)</pre>
+<p>Note: The value for this key is treated as a URI, in other words you can store the job files in HDFS or on the local file system (which is the default).</p>
+<p>3) Per Job</p>
+<pre>Key: hadoop.job.history.user.location
+Key (H21): mapreduce.job.userhistorylocation
+Default: &lt;job_outputdir&gt;/_logs/history  (can be "none" to disable)
+Retention: forever</pre>
+<p>You can print the info contained in those files using the <code>hadoop</code> command line script like so:</p>
+<pre>hadoop job -history &lt;job_outputdir&gt;</pre>
+<p>This implies that the above command expects the path to be on HDFS. In other words you cannot use it to display the other job files stored on the local disk for example.</p>
+<p>4) In Memory</p>
+<p>In addition to the on-disk storage of these files jobs are also retained in memory (for job restarts). But they are kept in memory only for a limited time. This is controlled by:</p>
+<pre>Key: mapred.jobtracker.completeuserjobs.maximum
+Default: 100</pre>
+<p>The check if the in-memory list is too large is only run when a job completes, so on an idle cluster the jobs remain in memory until the next rule possibly kicks in (see Job Retirement Policy below).</p>
+<h3>Job Retirement Policy (pre-H21 only!)</h3>
+<p>Once a job is complete it is kept in memory (up to <code>mapred.jobtracker.completeuserjobs.maximum</code>) and on disk as per the above. There is a configuration value that controls the overall retirement policy of completed jobs:</p>
+<pre>Key: mapred.jobtracker.retirejob.interval
+Default: 24 * 60 * 60 * 1000  (1 day)</pre>
+<p>In other words, completed jobs are retired after one day by default. The check for jobs to be retired is done by default every minute and can be controlled with:</p>
+<pre>Key: mapred.jobtracker.retirejob.check
+Default: 60 * 1000 (60s in msecs)</pre>
+<p>The check runs continually while the JobTracker is running. If a job is retired it is simply removed from the in-memory list of the JobTracker (it also removes all Tasks for the job etc.). Jobs are not retired under at least 1 minute (hardcoded in JobTracker.java) of their finish time. The retire call also removes the <em>JobTracker Local</em> (see above) file for the job. All that is left are the two files per retired job in the history directory (<code>hadoop.job.history.location</code>) plus &#8211; if enabled &#8211; the Per Job files (<code>hadoop.job.history.user.location</code>).</p>
+<h3>General Job File Notes:</h3>
+<p>- When the JobTracker cannot create the job history directory at startup (in the JobTracker constructor, calling  JobHistory.init()) or creating the files for a  job fails (see JobHistory.JobInfo.logSubmitted() for details, it is invoked during the initialization of a task attempt) every subsequent job is not storing any details on disk until the problem is fixed and the JobTracker restarted (MAPREDUCE-1699 is meant to fix this but is not yet applied to any Hadoop 0.20.x based release).</p>
+<p>- There is an option to control the low-level block size used by Hadoop to write the file to disk:</p>
+<pre>Key: mapred.jobtracker.job.history.block.size
+Key (H21): mapreduce.jobtracker.jobhistory.block.size
+Default: 3 * 1024 * 1024 (3MB)</pre>
+<p>Setting it lower has the following advantage (taken verbatim from mapred-default.xml):</p>
+<blockquote><p>&#8220;<em>Since the job recovery uses job history, its important to dump job history to disk as soon as possible</em>.&#8221;</p></blockquote>
+<p>- The Job History page (<code>jobhistory.jsp</code>) in the JobTracker UI always reads the stored job history from <code>hadoop.job.history.location</code> (see above) and not from memory (that is what the default JobTracker page does).</p>
+<p>- Finally both of the above, the Job Configuration XML (with the exception of what is noted under &#8220;JobTracker Local&#8221;) and Job Status File get eventually deleted after 30 days (see H21 related notes below). This cannot be changed (hardcoded in <code>JobHistory.HistoryCleaner.java</code>) and the check for this is run once per day. Also note that it deletes any file older than the threshold unconditionally, i.e. do not leave files there you need or they will be deleted.</p>
+<h3>CDH3b1, CDH3b2, CDH3b3, Hadoop 0.21.0 (H21) and up:</h3>
+<p>There is now an additional directory which is used to move completed jobs into (MAPREDUCE-814). As opposed to leave their files all in <code>hadoop.job.history.location</code> directly all files of completed jobs are moved to this new location. This way you can distinguish between running and completed jobs when looking at the history directory. Here is how the path for the completed jobs is specified:</p>
+<pre>Key: mapred.job.tracker.history.completed.location
+Default: ${hadoop.job.history.location}/done
+Key (H21): mapreduce.jobtracker.jobhistory.completed.location
+Default (H21): ${mapreduce.jobtracker.jobhistory.location}/done</pre>
+<h3>CDH3b3, Hadoop 0.21.0 (H21) and up:</h3>
+<p>These releases also add the notion of a &#8220;retired jobs cache&#8221; (MAPREDUCE-817). This is solely kept and handled in memory and is controlled with:</p>
+<pre>Key: mapred.job.tracker.retiredjobs.cache.size
+Key (H21): mapreduce.jobtracker.retiredjobs.cache.size
+Default: 1000</pre>
+<p>As far as physical log files are concerned this is negligible.</p>
+<p>There is a hardcoded maximum of 100 jobs being displayed in the main JobTracker UI page (<code>jobtracker.jsp</code>). Those are pulled from the above internal memory cache. If the user wants to see all completed jobs they have to use the Job History page (<code>jobhistory.jsp</code>) which loads the job details from the file system (see above under General Job File Notes). But note though that for CDH3b1 and up this is loaded from <code>mapred.job.tracker.history.completed.location</code> instead.</p>
+<h3>Hadoop 0.21.0 (H21):</h3>
+<p>In Hadoop 0.21.0 the whole cleanup code has been completely refactored. For starters, the above hardcoded 30 days clean up of the job history is now configurable and has been reduced to one week (in<code> JobHistory.HistoryCleaner.java</code>):</p>
+<pre>Key: mapreduce.jobtracker.jobhistory.maxage
+Default: 7 * 24 * 60 * 60 * 1000L (one week)</pre>
+<p>In addition the frequency of the check to remove the job files has been made variable (but not user configurable) in that it is either 1 day or less. The latter is the case when <code>mapreduce.jobtracker.jobhistory.maxage</code> is set to something less than a day.</p>
+<p>With Hadoop 0.21.0 you may also find files with the extension &#8220;.old&#8221; in the <code>mapreduce.jobtracker.jobhistory.completed.location</code> directory. Those are the left over job files from a previous instance of JobTracker. So when a JobTracker is restarted it moves and renames the files it finds in <code>mapreduce.jobtracker.jobhistory.location</code> into the <code>mapreduce.jobtracker.jobhistory.completed.location</code> directory. Note that when jobs are removed after the above <code>mapreduce.jobtracker.jobhistory.maxage</code> they will also be removed (and in fact as noted above, any file in that directory older than the maximum age will be deleted). Also note that the &#8220;Job History&#8221; UI page does include those &#8220;.old&#8221; job details.</p>
+<p>A big change is the JobTracker.RetireJobs class which before Hadoop 0.21.0 was a Thread instance that ran according to <code>mapred.jobtracker.retirejob.interval</code> and <code>mapred.jobtracker.retirejob.check</code>. This has been changed to a simple method that is called at the end of each job and is run synchronous from the main thread. That also means that completed jobs are not removed from memory after the usual 24 hours but stay there solely based on the size of the new <code>retiredjobs.cache.size</code> (defaults to 1000, see above). Older jobs are removed from that cache when a newly completed job adds itself.</p>
+<p>Finally, the various keys have been renamed to match each other (see &#8220;H21&#8243; throughout this document).</p>
+<h2>Job Status Store</h2>
+<p>There is an additional place to store job details, which always assumes HDFS to be the storage. It is called Job Status Store (HADOOP-1876) and is used by JobClients to query details about jobs. By default it is disabled and for persistent job status storage in HDFS the following options need to be adjusted:</p>
+<pre>Key: mapred.job.tracker.persist.jobstatus.active
+Default: false  (disabled)
+Key (H21): mapreduce.jobtracker.persist.jobstatus.active
+Default (H21): true</pre>
+<pre>Key: mapred.job.tracker.persist.jobstatus.hours
+Default: 0  (disabled)
+Key (H21): mapreduce.jobtracker.persist.jobstatus.hours
+Default (H21): 1</pre>
+<pre>Key: mapred.job.tracker.persist.jobstatus.dir
+Key (H21): mapreduce.jobtracker.persist.jobstatus.dir
+Default: /jobtracker/jobsInfo  (always on HDFS)</pre>
+<p>The status files are stored directly under the above job status directory and are created when the job finishes. Here their location, file name pattern and retention:</p>
+<pre>Location: mapred.job.tracker.persist.jobstatus.dir  (see above)
+Location (H21): mapreduce.jobtracker.persist.jobstatus.dir  (see above)
+Name: "&lt;jobId&gt;.info"
+Retention: mapred.job.tracker.persist.jobstatus.hours  (see above)
+Retention (H21): mapred.job.tracker.persist.jobstatus.hours  (see above)</pre>
+<p>The check for the above <code>jobstatus.hours</code> is done every hour (hardcoded in <code>CompletedJobStatusStore.java</code>) and runs whenever the JobTracker is running.</p>
+<h2>Task Attempt Logs</h2>
+<p>These include the Standard Out and Standard Error logs as well as custom user logs created by your code using the logging framework within your MapReduce jobs. The location is hardcoded to be <code>${hadoop.log.dir}/userlogs</code>.</p>
+<p>The following controls how large the logs can become. Please note that it has to maintain a linked list in memory until the end of the job to only write the last &#8220;limit / event_size&#8221; (event_size is set to 100) events. So this needs to be accounted for in terms of the per task memory consumption. If you leave it at the default &#8220;0&#8221; then it is disabled and logs straight to disk.</p>
+<pre>Key: mapred.userlog.limit.kb
+Key (H21): mapreduce.task.userlog.limit.kb
+Default: 0  (no limit)</pre>
+<p>By default the userlogs are deleted every day. It is triggered by the TaskTracker when a child process is launched (in other words, when the cluster is idle, then nothing is cleaned up). It can be changed with:</p>
+<pre>Key: mapred.userlog.retain.hours
+Key (H21): mapreduce.job.userlog.retain.hours
+Default: 24 (hours)</pre>
+<p>An note about the log4j.properties. You will find these lines:</p>
+<pre>#Default values
+hadoop.tasklog.taskid=null
+hadoop.tasklog.noKeepSplits=4
+hadoop.tasklog.totalLogFileSize=100
+hadoop.tasklog.purgeLogSplits=true
+hadoop.tasklog.logsRetainHours=12</pre>
+<pre>log4j.appender.TLA=org.apache.hadoop.mapred.TaskLogAppender
+log4j.appender.TLA.taskId=${hadoop.tasklog.taskid}
+log4j.appender.TLA.totalLogFileSize=${hadoop.tasklog.totalLogFileSize}</pre>
+<pre>log4j.appender.TLA.layout=org.apache.log4j.PatternLayout
+log4j.appender.TLA.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
+...</pre>
+<p>The first few lines define default values that can be overridden by system properties (refer to &#8220;<code>-D...</code>&#8221; parameters). The only lines really handled by the code (see <code>TaskRunner.java</code>) are</p>
+<pre>hadoop.tasklog.taskid=null
+hadoop.tasklog.totalLogFileSize=100</pre>
+<p>The former is always set in the <code>TaskRunner.java</code> code to the current task ID and the latter to whatever is defined in the mapred-site.xml (or specified at the JobTracker startup on the command line using &#8220;<code>-D...</code>&#8220;).</p>
+<p>In other words the above <code>totalLogFileSize=100</code> is never used. The other lines are obsolete and are either controlled by the above configuration keys (<code>mapred.userlog.retain.hours</code>) or not used at all (and they should be removed).</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>1 Response</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='5395' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="qFE=" />
+		<input type="hidden" name="cptch_time" value="1397910072" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &times; &#111;n&#101; = 6	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

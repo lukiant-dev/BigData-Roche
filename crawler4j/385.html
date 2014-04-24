@@ -1,0 +1,1063 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-to: Automate Your Cluster with Cloudera Manager API | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-to: Automate Your Cluster with Cloudera Manager API"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2012/09/automating-your-cluster-with-cloudera-manager-api/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Cloudera Manager 4.0: Customer Feedback and Adoption' href='http://blog.cloudera.com/blog/2012/09/cloudera-manager-4-0-customer-feedback-and-adoption/' />
+<link rel='next' title='Cloudera Enterprise in Less Than Two Minutes' href='http://blog.cloudera.com/blog/2012/09/cloudera-enterprise-in-less-than-two-minutes/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2012/09/automating-your-cluster-with-cloudera-manager-api/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=17594' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-17594 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-to: Automate Your Cluster with Cloudera Manager API</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/bc/" title="Posts by bc Wong" rel="author">bc Wong</a></li>
+				<li>September 10, 2012</li>
+				<li class="comment"><a href="#comments">no comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>API access was a new feature introduced in Cloudera Manager 4.0 (download free edition <a href="https://ccp.cloudera.com/display/SUPPORT/Downloads">here</a>.). Although not visible in the UI, this feature is very powerful, providing programmatic access to cluster operations (such as configuration and restart) and monitoring information (such as health and metrics). This article walks through an example of setting up a 4-node HDFS and MapReduce cluster via the Cloudera Manager (CM) API.</p>
+<h2>Cloudera Manager API Basics</h2>
+<p>The CM API is an HTTP REST API, using JSON serialization. The API is served on the same host and port as the CM web UI, and does not require an extra process or extra configuration. The API supports HTTP Basic Authentication, accepting the same users and credentials as the Web UI. API users have the same privileges as they do in the web UI world.</p>
+<p>You can read the full API documentation <a href="http://cloudera.github.com/cm_api/apidocs/v1/index.html">here</a>.</p>
+<h2>Interacting with the API</h2>
+<p>The most basic way to use the API is by making HTTP calls directly using tools like curl. For example, to obtain the status of service hdfs2 in cluster dev01 (note: italics are used for interactive shell code throughout):</p>
+<pre class="code" style="padding-left: 10px;"><strong><em>$ curl -u 'admin:admin' http://cm_host:7180/api/v1/clusters/dev01/services/hdfs2</em></strong><em> {   "name" : "hdfs2",   "type" : "HDFS",   "clusterRef" : {     "clusterName" : "dev01"   },   "serviceState" : "STARTED",   "healthSummary" : "GOOD",   "configStale" : false,   ... } </em></pre>
+<p>&nbsp;</p>
+<p>The API also comes with a <a href="http://cloudera.github.com/cm_api/">Python client</a> for your convenience. To do the same in Python:</p>
+<pre class="code" style="padding-left: 10px;"><strong><em>&gt;&gt;&gt; from cm_api.api_client import ApiResource &gt;&gt;&gt; api = ApiResource('cm_host', username='admin', password='admin')&gt;&gt;&gt; dev01 = api.get_cluster('dev01') &gt;&gt;&gt; hdfs = dev01.get_service('hdfs2') &gt;&gt;&gt; print hdfs.serviceState, hdfs.healthSummary</em></strong><em> STARTED GOOD</em>
+</pre>
+<p>&nbsp;</p>
+<p>You can expect to see client bindings in more languages. A Java client is in the works right now.</p>
+<h2>Setting up a Cluster</h2>
+<p>Next I will demonstrate an API Python script that defines, configures and starts a cluster. You are about to see some of the low-level details of Cloudera Manager. Compared with the UI wizard, the API route is more tedious. But the API provides flexibility and programmatic control. You will also notice that this setup process does not require my cluster to be online (until the very last step where I start the services.) This has proven useful to people who are stamping out pre-configured clusters.</p>
+<h3>Step 1. Define the Cluster</h3>
+<pre class="code" style="padding-left: 10px;"><strong>#!/usr/bin/env python</strong>
+
+import socket
+from cm_api.api_client import ApiResource
+
+CM_HOST = "centos56-17.ent.cloudera.com"
+
+api = ApiResource(CM_HOST, username="admin", password="admin")
+cluster = api.create_cluster("prod01", "CDH4")
+</pre>
+<p>&nbsp;</p>
+<p>This creates a handle on the API. The <code>ApiResource</code> object also accept other optional arguments such as port, TLS, and API version. With that, I created a cluster called prod01 on version CDH4. The handle to the cluster is returned as part of the call.</p>
+<h3>Step 2. Create HDFS Service and Roles</h3>
+<p>Now we can create the services. HDFS comes first:</p>
+<pre class="code" style="padding-left: 10px;"><strong>hdfs = cluster.create_service("hdfs01", "HDFS")</strong>
+</pre>
+<p>&nbsp;</p>
+<p>At this point, if I query the different role types supported by hdfs01, I will get:</p>
+<pre class="code" style="padding-left: 10px;"><strong><em>&gt;&gt;&gt; print hdfs.get_role_types()</em></strong><em> [u'DATANODE', u'NAMENODE', u'SECONDARYNAMENODE', u'BALANCER', u'GATEWAY', u'HTTPFS', u'FAILOVERCONTROLLER']</em>
+</pre>
+<p>&nbsp;</p>
+<p>Now I am going to create 1 NameNode, 1 Secondary NameNode and 4 DataNodes.</p>
+<pre class="code" style="padding-left: 10px;">HOSTNAMES = [
+  "centos56-17.ent.cloudera.com",
+  "centos56-18.ent.cloudera.com",
+  "centos56-19.ent.cloudera.com",
+  "centos56-20.ent.cloudera.com"
+]
+hosts = [ ]                             # API host handles
+
+for name in HOSTNAMES:
+  host = api.create_host(
+      name,                             # Host id
+      name,                             # Host name (FQDN)
+      socket.gethostbyname(name),       # IP address
+      "/default_rack")                  # Rack
+  hosts.append(host)
+
+nn = hdfs.create_role("hdfs01-nn", "NAMENODE", hosts[0].hostId)
+snn = hdfs.create_role("hdfs01-snn", "SECONDARYNAMENODE", hosts[0].hostId)
+for i in range(4):
+  hdfs.create_role("hdfs01-dn" + str(i), "DATANODE", hosts[i].hostId)
+</pre>
+<p>&nbsp;</p>
+<p>Most of the code is performing host creation. That is required for role creation, as each role needs to be assigned to a host. In the end, the first host is assigned the NameNode, the Secondary NameNode and a DataNode. The rest are DataNodes.</p>
+<p>At this point, if I query the first host, I can see the correct roles assigned to it:</p>
+<pre class="code" style="padding-left: 10px;"><strong><em>&gt;&gt;&gt; print api.get_host(HOSTNAMES[0]).roleRefs</em></strong><em> [{'clusterName': 'prod01', 'roleName': 'hdfs01-snn', 'serviceName': 'hdfs01'},  {'clusterName': 'prod01', 'roleName': 'hdfs01-dn0', 'serviceName': 'hdfs01'},  {'clusterName': 'prod01', 'roleName': 'hdfs01-nn', 'serviceName': 'hdfs01'}] </em></pre>
+<p>&nbsp;</p>
+<h3>Step 3. Configure HDFS</h3>
+<p>Service configuration is separated into service-wide configuration and role type configuration. Service-wide configuration is typically settings that affect multiple role types, such as HDFS replication factor. Role type configuration is a template that gets inherited by specific role instances. For example, at the role type template level, I can set all DataNodes to use 3 data directories. And I can override that for specific DataNodes by setting the role-level configuration.</p>
+<pre class="code" style="padding-left: 10px;">hdfs_service_config = {
+  'dfs_replication': 2,
+}
+nn_config = {
+  'dfs_name_dir_list': '/dfs/nn',
+  'dfs_namenode_handler_count': 30,
+}
+snn_config = {
+  'fs_checkpoint_dir_list': '/dfs/snn',
+}
+dn_config = {
+  'dfs_data_dir_list': '/dfs/dn1,/dfs/dn2,/dfs/dn3',
+  'dfs_datanode_failed_volumes_tolerated': 1,
+}
+hdfs.update_config(
+    svc_config=hdfs_service_config,
+    NAMENODE=nn_config,
+    SECONDARYNAMENODE=snn_config,
+    DATANODE=dn_config)
+
+# Use a different set of data directories for DN3
+hdfs.get_role('hdfs01-dn3').update_config({
+    'dfs_data_dir_list': '/dn/data1,/dn/data2' })
+</pre>
+<p>How do I find out the configuration keys used by CM? For example, how do I know that dfs_replication is the key for setting replication factor? I query the service:</p>
+<pre class="code" style="padding-left: 10px;"><strong><em>&gt;&gt;&gt; service_conf, roletype_conf = hdfs.get_config(<span style="color: #cc0033;">view="full"</span>) &gt;&gt;&gt; print service_conf</em></strong><em> {u'catch_events': ,  u'dfs_block_access_token_enable': ,  u'dfs_block_size': ,  ... <strong>&gt;&gt;&gt; for k, v in sorted(service_conf.items()): ... print "\n------ ", v.displayName, "\n Key:", k, \ ... "\n Value:", v.value, "\n Default:", v.default, \ ... "\n AKA:", v.relatedName, "\n Desc:", v.description</strong> ... ------ Enable log event capture   Key: catch_events   Value: None   Default: true   AKA: None   Desc: When set, each role will identify important log events and forward them to Cloudera Manager. ------ Enable block access token   Key: dfs_block_access_token_enable   Value: None   Default: true   AKA: dfs.block.access.token.enable   Desc: If true, access tokens are used as capabilities for accessing DataNodes. If false, no access tokens are checked on accessing DataNodes. ------ Block Size   Key: dfs_block_size   Value: None   Default: 134217728   AKA: dfs.blocksize   Desc: The default block size for new HDFS files.   ...</em>
+</pre>
+<p>&nbsp;</p>
+<p>Note the <code><span style="color: #cc0033;">view="full"</span></code> argument. Without it, the API returns only the configs that are set to non-default values:</p>
+<pre class="code" style="padding-left: 10px;"><strong><em>&gt;&gt;&gt; hdfs.get_config()</em></strong><em> ({u'dfs_ha_fencing_cloudera_manager_secret_key': u'xz5Yr2inDI8vWEzf16EQpIKPoBMoTg',   u'dfs_replication': u'2'},  {u'BALANCER': {},   u'DATANODE': {u'dfs_data_dir_list': u'/dfs/dn1,/dfs/dn2,/dfs/dn3',    u'dfs_datanode_failed_volumes_tolerated': u'1'},   u'FAILOVERCONTROLLER': {},   u'GATEWAY': {},   u'HTTPFS': {},   u'NAMENODE': {u'dfs_name_dir_list': u'/dfs/nn',    u'dfs_namenode_handler_count': u'30'},   u'SECONDARYNAMENODE': {u'fs_checkpoint_dir_list': u'/dfs/snn'}}) </em></pre>
+<p>&nbsp;</p>
+<h3>Step 4. Create MapReduce Service and Roles</h3>
+<p>This step is similar to the HDFS one. I assign a TaskTracker to each node, and the JobTracker to the first one.</p>
+<pre class="code" style="padding-left: 10px;">mr = cluster.create_service("mr01", "MAPREDUCE")
+jt = mr.create_role("mr01-jt", "JOBTRACKER", hosts[0].hostId)
+for i in range(4):
+  mr.create_role("mr01-tt" + str(i), "TASKTRACKER", hosts[i].hostId)
+</pre>
+<p>&nbsp;</p>
+<h3>Step 5. Configure MapReduce</h3>
+<p>Here is the code to configure the &#8220;mr01&#8243; service.:</p>
+<pre class="code" style="padding-left: 10px;">mr_service_config = {
+ 
+<strong>'hdfs_service': 'hdfs01',</strong>
+}
+jt_config = {
+  'jobtracker_mapred_local_dir_list': '/mapred/jt',
+  'mapred_job_tracker_handler_count': 40,
+}
+tt_config = {
+  'tasktracker_mapred_local_dir_list': '/mapred/local',
+  'mapred_tasktracker_map_tasks_maximum': 10,
+  'mapred_tasktracker_reduce_tasks_maximum': 6,
+}
+
+<strong>gateway_config</strong>
+ = {
+  'mapred_reduce_tasks': 10,
+  'mapred_submit_replication': 2,
+}
+mr.update_config(
+    svc_config=mr_service_config,
+    JOBTRACKER=jt_config,
+    TASKTRACKER=tt_config,
+    GATEWAY=gateway_config)
+</pre>
+<p>&nbsp;</p>
+<p>Two items deserve elaboration. First is the <code>hdfs_service</code>. Rather than asking the user for the equivalent of &#8220;fs.defaultFS&#8221;, a MapReduce service depends on an HDFS service, and derives its HDFS access parameters based on how that HDFS service is configured.</p>
+<p>Second, the &#8220;gateway&#8221; role type is unique to CM. It represents a client. A gateway role does not run any daemons. It simply receives client configuration, as part of the &#8220;deploy client configuration&#8221; process, which we will perform later.</p>
+<h3>Step 6. Start HDFS</h3>
+<p>HDFS is ready to start. This is the step that requires the cluster nodes to be up, CDH installed, and Cloudera Manager Agents running. (The API does not perform software installation.) As part of the preparation, I did that, and pointed the CM agents to the CM server by editing the <code>server_host</code> in /etc/cloudera-scm-agent/config.ini.</p>
+<p>Now I can format HDFS and start it.<br /> <code></code></p>
+<pre class="code" style="padding-left: 10px;">CMD_TIMEOUT = 180 # format_hdfs takes a list of NameNodes
+cmd = hdfs.format_hdfs('hdfs01-nn')[0]
+if not cmd.wait(CMD_TIMEOUT).success:
+  raise Exception("Failed to format HDFS")
+
+cmd = hdfs.start()
+if not cmd.wait(CMD_TIMEOUT).success:
+  raise Exception("Failed to start HDFS")
+</pre>
+<p>&nbsp;</p>
+<p>Each of the <code>cmd</code> object represents an asynchronous command. I then wait for their completion and assert that they have succeeded. Then I deploy the HDFS client configuration to the host running <code>hdfs01-nn</code>.</p>
+<pre class="code" style="padding-left: 10px;">cmd = hdfs.deploy_client_config('hdfs01-nn')
+if not cmd.wait(CMD_TIMEOUT).success:
+  raise Exception("Failed to deploy HDFS client config")
+</pre>
+<p>&nbsp;</p>
+<h3>Step 7. Start MapReduce</h3>
+<p>The JobTracker will not start unless /tmp exists in HDFS.</p>
+<pre class="code" style="padding-left: 10px;"><strong><em>[root@centos56-17 ~]# sudo -u hdfs hadoop fs -mkdir /tmp [root@centos56-17 ~]# sudo -u hdfs hadoop fs -chmod 1777 /tmp</em></strong>
+</pre>
+<p>&nbsp;</p>
+<p>Now we can finish the rest:<br /> <code></code></p>
+<pre class="code" style="padding-left: 10px;">cmd = mr.start()
+if not cmd.wait(CMD_TIMEOUT).success:
+  raise Exception("Failed to start MapReduce")
+   cmd = mr.deploy_client_config('mr01-jt')
+if not cmd.wait(CMD_TIMEOUT).success:
+  raise Exception("Failed to deploy MapReduce client config")
+</pre>
+<p>&nbsp;</p>
+<p>Note that users have not been setup, and their home directories do not exist. But we can run a job as &#8220;hdfs&#8221;:</p>
+<pre class="code" style="padding-left: 10px;"><strong><em>[root@centos56-17 ~]# sudo -u hdfs hadoop jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples.jar pi 2 2</em></strong><em> Number of Maps = 2 Samples per Map = 2 Wrote input for Map #0 Wrote input for Map #1 Starting Job 12/09/03 23:38:35 WARN mapred.JobClient: Use GenericOptionsParser for parsing the arguments. Applications should implement Tool for the same. 12/09/03 23:38:35 INFO mapred.FileInputFormat: Total input paths to process : 2 12/09/03 23:38:36 INFO mapred.JobClient: Running job: job_201209032320_0001 ...</em></pre>
+<h2>Advanced Usage</h2>
+<p>The Cloudera Manager API provides a lot more than configuration and service life-cycle management. You can also obtain service health information and metrics (for the Enterprise Edition), and configure Cloudera Manager itself. Here are some resources for your exploration:</p>
+<ul>
+<li><a href="http://cloudera.github.com/cm_api/apidocs/v1/index.html">API documentation</a></li>
+<li><a href="http://cloudera.github.com/cm_api/apidocs/v1/tutorial.html">API tutorial</a></li>
+<li><a href="http://cloudera.github.com/cm_api/">API client library</a> (with example scripts on Github). Here you can also find a Nagios monitoring script that integrates with the API to discover the entities in the cluster and their health.</li>
+</ul>
+<p><em>bc Wong is a Software Engineering Manager at Cloudera, currently working on Cloudera Manager.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cloudera-manager/" title="View all posts in Cloudera Manager" rel="category tag">Cloudera Manager</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/mapreduce/" title="View all posts in MapReduce" rel="category tag">MapReduce</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/ops/" title="View all posts in Ops and DevOps" rel="category tag">Ops and DevOps</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/tools/" title="View all posts in Tools" rel="category tag">Tools</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>No Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='17594' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="FS0=" />
+		<input type="hidden" name="cptch_time" value="1398162836" />
+		<input type="hidden" value="Version: 2.4" />
+		8 &minus; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  t&#104;&#114;e&#101;	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

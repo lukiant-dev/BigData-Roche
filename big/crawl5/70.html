@@ -1,0 +1,1207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-to: Do Statistical Analysis with Impala and R | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-to: Do Statistical Analysis with Impala and R"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/12/how-to-do-statistical-analysis-with-impala-and-r/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; How-to: Do Statistical Analysis with Impala and R Comments Feed" href="http://blog.cloudera.com/blog/2013/12/how-to-do-statistical-analysis-with-impala-and-r/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Meet the Book Authors: Flavio Junqueira and Benjamin Reed on &lt;em&gt;ZooKeeper&lt;/em&gt;' href='http://blog.cloudera.com/blog/2013/12/meet-the-book-authors-flavio-junqueira-and-benjamin-read-on-zookeeper/' />
+<link rel='next' title='How-to: Use Impala on Amazon EMR' href='http://blog.cloudera.com/blog/2013/12/how-to-use-impala-on-amazon-emr/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/12/how-to-do-statistical-analysis-with-impala-and-r/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=24260' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-24260 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-to: Do Statistical Analysis with Impala and R</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/jkestelyn/" title="Posts by Justin Kestelyn (@kestelyn)" rel="author">Justin Kestelyn (@kestelyn)</a></li>
+				<li>December 16, 2013</li>
+				<li class="comment"><a href="#comments">16 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><strong>The new RImpala package brings the speed and interactivity of Impala to queries from R.</strong></p>
+<p><em>Our thanks to Austin Chungath, Sachin Sudarshana, and Vikas Raguttahalli of <a href="http://www.mu-sigma.com/">Mu Sigma</a>, a Decision Sciences and Big Data analytics company, for the guest post below.</em></p>
+<p>As is well known, Apache Hadoop traditionally relies on the MapReduce paradigm for parallel processing, which is an excellent programming model for batch-oriented workloads. But when ad hoc, interactive querying is required, the batch model fails to meet performance expectations due to its inherent latency.</p>
+<p>To overcome this drawback, Cloudera introduced <a href="http://impala.io">Cloudera Impala</a>, the open source distributed SQL query engine for Hadoop data. Impala brings the necessary speed to queries that were otherwise not interactive when executed by the batch Apache Hive engine; Hive queries that used to take minutes can be executed in a matter of seconds using Impala.</p>
+<p>Impala is quite exciting for us at Mu Sigma because existing Hive queries can run interactively with few or no changes. Furthermore, because we do a lot of our statistical computing on <a href="http://www.r-project.org/">R</a>, the popular open source statistical computing language, we considered it worthwhile to bring the speed of Impala to R.</p>
+<p>To meet that goal, we have created a new R package, <a href="http://cran.r-project.org/web/packages/RImpala/index.html">RImpala</a>, which connects Impala to R. RImpala enables querying the data residing in HDFS and Apache HBase from R, which can be further processed as an R object using R functions. RImpala is now available for download from the Comprehensive R Archive Network (CRAN) under GNU General Public License (GPL3).</p>
+<p>The RImpala architecture is simple: we used the existing Impala JDBC drivers and wrote a Java program to connect and query Impala, which we then called from R using the rJava package. We put them all together in an R package that you can use to easily query Impala from R.</p>
+<p align="center"><img title="rimpala" src="/wp-content/uploads/2013/12/rimpala.png" alt="" width="600" height="352" /></p>
+<h2>Steps for Installing RImpala</h2>
+<p>Assuming that you have R and Impala already installed, installing the RImpala package is straightforward and is done in a manner similar to any other R package. There are two steps to installing RImpala and getting it working:</p>
+<p><strong>Step 1: Install the package from CRAN</strong></p>
+<p>You can install RImpala directly using the install.packages() command in R.</p>
+<pre class="prettyprint ">
+&gt; install.packages(&quot;RImpala&quot;)
+</pre>
+<p>&nbsp;</p>
+<p>Alternatively, if you need to do offline installation of the package, you can download it from <a href="http://cran.r-project.org/web/packages/RImpala/index.html">here</a> and install using the <code>R CMD INSTALL </code> command:</p>
+<pre class="prettyprint ">R CMD install RImpala_0.1.1.tar.gz</pre>
+<p>&nbsp;</p>
+<p><strong>Step 2: Install the Impala JDBC drivers</strong></p>
+<p>You need to install Cloudera’s JDBC drivers before you can use the RImpala package that we installed earlier. Cloudera provides JBDC jars on its website that you can download directly. As of this writing, <a href="https://downloads.cloudera.com/impala-jdbc/impala-jdbc-0.5-2.zip">this</a> is the link to zip file containing the JDBC jars.</p>
+<p>There are two ways to do this:</p>
+<ol>
+<li>If you have Impala installed on the machine running R, then you will have the necessary JDBC jars already (probably in /usr/lib/impala/lib) and you can use them to initiate the connection to Impala.</li>
+<li>If the machine running R is a different server than the Impala server, then you need to download the JDBC jars from the above link and extract it to a location that can be accessed by the R user.</li>
+</ol>
+<p>After you have installed the JDBC drivers you can start using the RImpala package:</p>
+<ol>
+<li>Load the library.
+<pre class="prettyprint ">library(RImpala)
+</pre>
+<p>&nbsp;</p>
+</li>
+<li>Initialize the JDBC jars.
+<pre class="prettyprint ">rimpala.init(&quot;/path/to/impala/jars&quot;)
+</pre>
+<p>&nbsp;</p>
+</li>
+<li>Connect to Impala.
+<pre class="prettyprint ">rimpala.connect(&quot;IP or Hostname of Impala server&quot;, &quot;port&quot;)
+</pre>
+<p>&nbsp;</p>
+<p>The following is an Rscript showing how to connect to Impala:</p>
+<pre class="prettyprint ">library(RImpala)
+rimpala.init(libs=&quot;/tmp/impala/jars/&quot;)
+rimpala.connect(&quot;192.168.10.1&quot;,&quot;21050&quot;)
+</pre>
+<p>&nbsp;</p>
+<p>Location of JDBC jars = /tmp/impala/jars</p>
+<p>IP of the server running impalad service = 192.168.10.1</p>
+<p>Port where the impalad service is listening = 21050</p>
+</li>
+</ol>
+<p>The default parameter for the rimpala.init() function is “/usr/lib/impala/lib” and the default parameters for rimpala.connect() function are “localhost” and “21050” respectively.</p>
+<p>To run a query on the impalad instance that the client has connected, you can use the rimpala.query() function. Example:</p>
+<pre class="prettyprint ">result</pre>
+<p>&nbsp;</p>
+<p>All the contents of the sample_table will be stored in the result object as a data frame. This data frame can now be used for further analytical processing in R.</p>
+<p>You can also install the RImpala package on a client machine running Microsoft Windows. Since the JDBC jars are platform independent, you can extract them into a folder on a Windows machine (such as “C:\Program Files\impala”) and then this location can be passed as a parameter to the rimpala.init() function.</p>
+<p>The following a simple example that shows you how to use RImpala:</p>
+<pre class="prettyprint ">&gt; library(RImpala)
+Loading required package: rJava
+
+&gt; rimpala.init(libs=&quot;/tmp/impala/jars/&quot;) # Adds the impala JDBC jars present in the &quot;/tmp/impala/jars/&quot; folder to the classpath
+[1] &quot;Classpath added successfully&quot;
+
+&gt; rimpala.connect(IP=&quot;192.168.10.1&quot;,port=&quot;21050&quot;)  # Establishes a connection to impalad instance running on the machine 172.25.1.151 on the port 21050
+[1] TRUE
+
+&gt; rimpala.invalidate() # Invalidates the metadata of all the tables present in the Hive metastore
+[1] TRUE
+
+&gt; rimpala.showdatabases()# Displays all the databases available
+# Output #
+	name
+1	airlines
+2	bank
+3	default
+
+&gt; rimpala.usedatabase(&quot;bank&quot;) # Changes the current database to &quot;bank&quot;
+Database changed to bank
+[1] TRUE
+
+&gt; rimpala.showtables() # Displays all the tables present in the current database
+# Output  #
+name
+1	bank_web_clicks
+2	ticker_100m
+3	stock_1gb
+4	weblog_10gb
+
+&gt; rimpala.describe(&quot;bank_web_clicks&quot;) # Describes the table &quot;bank_web_clicks&quot;
+# Output  #
+Name		type		comment
+1	customer_id	int     	Customer ID
+2	session_id	int		Session ID
+3	page		string	Web page name
+4	datestamp	timestamp	Date
+
+&gt; result  result
+# Output #
+customer_id	 session_id	cnt
+1	32 		 21		5200
+2	34  		 12 		5100
+3	35  		 49  		4105
+4	32  		 34  		3600
+5	36  		 32  		3218
+6	37		 67  		3190
+7	31  		 45  		2990
+8	35		 75  		2300
+9	34  		 69  		2113
+
+&gt; rimpala.close() # Closes the connection to the impalad instance
+[1] TRUE
+</pre>
+<p>&nbsp;</p>
+<h2>Conclusion</h2>
+<p>Impala is an exciting new technology that is gaining popularity and will probably grow to be an enterprise asset in the Hadoop world. We hope that RImpala will be a fruitful package for all Big Data analysts to leverage the power of Impala from R.</p>
+<p>Impala is an ongoing and thriving effort at Cloudera and will continue to evolve with richer functionality and improved performance – and so will RImpala. We will continue to improve the package over time and incorporate new features into RImpala as and when they are made available in Impala.  </p>
+<p>Austin Chungath is a Senior Research Analyst with Mu Sigma’s Innovation &amp; Development Team and maintainer of the RImpala project. He does research on various tools in the Hadoop ecosystem and the possibilities that they bring for analytics. He spends his free time contributing to Open Source projects like Apache Tez or building small robots.</p>
+<p>Sachin Sudarshana is a Research Analyst with Mu Sigma’s Innovation &amp; Development Team. His responsibilities include researching emerging tools in the Hadoop ecosystem and how they can be leveraged in an analytics context.</p>
+<p>Vikas Raguttahalli is a Research Lead with Mu Sigma’s Innovation &amp; Development Team. He is responsible for working with client delivery teams and helping clients institutionalize Big Data within their organizations, as well as researching new and upcoming Big Data tools. His expertise includes R, MapReduce, Hive, Pig, Mahout and the wider Hadoop ecosystem.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/data-science/" title="View all posts in Data Science" rel="category tag">Data Science</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/impala/" title="View all posts in Impala" rel="category tag">Impala</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>16 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://simpletoad.blogspot.com/">Kostiantyn</a> /
+			December 16, 2013 / 10:53 AM		</em>
+		<p>As I see rimpala.connect doesn&#8217;t have possibility to pass  login/password. How can this Impala connection be secured?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">svkerr</a> /
+			December 16, 2013 / 10:14 PM		</em>
+		<p>This does not solve the R memory bound problem?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Austin Chungath</a> /
+			December 17, 2013 / 6:58 AM		</em>
+		<p>Hi Kostiantyn,<br />
+We are working on creating a secure connection from RImpala. We will let you know when it is done. Please feel free to suggest any more features that you might need.<br />
+Thanks.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Kamlesh Kshirsagar</a> /
+			December 19, 2013 / 4:30 AM		</em>
+		<p>Hello,</p>
+<p>I tried the steps above. I get following error:</p>
+<p>&gt; rimpala.connect(&#8220;localhost&#8221;,&#8221;21050&#8243;)<br />
+Error in .jcall(&#8220;RJavaTools&#8221;, &#8220;Ljava/lang/Object;&#8221;, &#8220;invokeMethod&#8221;, cl,  :<br />
+  java.lang.NoClassDefFoundError: org.apache.hive.jdbc.HiveConnection</p>
+<p>Please can you help me.</p>
+<p>Regards,<br />
+Kamlesh</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Austin Chungath</a> /
+			December 19, 2013 / 6:14 PM		</em>
+		<p>Kamlesh,</p>
+<p>Extract the jars from <a href="https://downloads.cloudera.com/impala-jdbc/impala-jdbc-0.5-2.zip" rel="nofollow">https://downloads.cloudera.com/impala-jdbc/impala-jdbc-0.5-2.zip</a></p>
+<p>to say /tmp/impala-jdbc</p>
+<p>then start R, assuming that impala is running on 127.0.0.1 at 21050 the following should work:</p>
+<p>library(RImpala)<br />
+rimpala.init(libs=&#8221;/tmp/impala-jdbc/&#8221;)<br />
+rimpala.connect(IP=&#8221;127.0.0.1&#8243;,port=&#8221;21050&#8243;)</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Austin Chungath</a> /
+			December 19, 2013 / 11:09 PM		</em>
+		<p>Svkerr,<br />
+The results of your query from Impala that you load into R through the RImpala package will still be bound by how much memory R has at its disposal.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Kamlesh Kshirsagar</a> /
+			January 10, 2014 / 6:45 AM		</em>
+		<p>Hello Austin,</p>
+<p>I followed the steps you mentioned. I am still getting an error.</p>
+<p>&gt; library(RImpala)<br />
+&gt; rimpala.init(libs=&#8221;/tmp/impala-jdbc/&#8221;)<br />
+[1] &#8220;Classpath added successfully&#8221;<br />
+&gt; rimpala.connect(IP=&#8221;127.0.0.1&#8243;,port=&#8221;21050&#8243;)<br />
+Error in .jcall(&#8220;RJavaTools&#8221;, &#8220;Ljava/lang/Object;&#8221;, &#8220;invokeMethod&#8221;, cl,  :<br />
+  java.lang.NoClassDefFoundError: org.apache.hive.jdbc.HiveConnection</p>
+<p>Please could you help me on this.</p>
+<p>Regards,</p>
+<p>Kamlesh</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Austin Chungath</a> /
+			January 14, 2014 / 12:46 AM		</em>
+		<p>As discussed in our conversation over mail. Connecting to your VM from an R session outside the VM solved the problem. Not sure why the NoClassDefFoundError happens from the R session inside the VM &#8211; must be some Java environment settings gone wrong.</p>
+<p>To install RImpala on Windows:<br />
+Download R and install : <a href="http://cran.r-project.org/bin/windows/base/" rel="nofollow">http://cran.r-project.org/bin/windows/base/</a><br />
+Download RStudio and install: <a href="http://www.rstudio.com/ide/download/" rel="nofollow">http://www.rstudio.com/ide/download/</a> </p>
+<p>Copy and extract this <a href="https://downloads.cloudera.com/impala-jdbc/impala-jdbc-0.5-2.zip" rel="nofollow">https://downloads.cloudera.com/impala-jdbc/impala-jdbc-0.5-2.zip</a> to a location on your file system say C:\impala-jar</p>
+<p>&gt; library(RImpala)<br />
+Loading required package: rJava<br />
+&gt; rimpala.init(libs=&#8221;C:\\impala-jar&#8221;)<br />
+[1] &#8220;Classpath added successfully&#8221;<br />
+&gt; rimpala.connect(IP=&#8221;192.168.204.164&#8243;,port=&#8221;21050&#8243;)<br />
+[1] TRUE<br />
+&gt; rimpala.invalidate()<br />
+&gt; rimpala.showdatabases()<br />
+     name<br />
+1 default</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Kiran Kaipa</a> /
+			January 15, 2014 / 11:03 PM		</em>
+		<p>Hi,<br />
+Firstly, I am excited to use this library and trying to get started.<br />
+I am setting up Impala connection using my windows pc version R and RStudio.<br />
+When I had to initialize I had to point to individual jars in the extracted folder for class path. e.g. rimpala.init(libs=&#8221;./impala-jar//slf4j-log4j12-1.6.1.jar&#8221;)<br />
+for all the jars.<br />
+I get [1] &#8220;Classpath added successfully&#8221; for all jars.<br />
+Next when I am trying to use rimpala.connect() to connect to my impala server but it returns a NULL error and FALSE message. Can you please help?<br />
+Here is the o/p:<br />
+rimpala.connect(&#8220;BISOLHYD3&#8243;,&#8221;21050&#8243;)<br />
+Error: null<br />
+[1] FALSE<br />
+rimpala.connect(&#8220;10.136.225.34&#8243;,&#8221;21050&#8243;)<br />
+Error: null<br />
+[1] FALSE</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Slaton Lipscomb</a> /
+			January 28, 2014 / 7:51 PM		</em>
+		<p>No problem connecting to Impala, or running commands like showtables, describe, etc. I can run some queries.</p>
+<p>However I am seeing &#8220;java.sql.SQLException: Method not supported&#8221; for any query I attempt that changes a column name using SELECT .. AS ..</p>
+<p>Example:<br />
+rimpala.query(&#8220;SELECT foo AS bar FROM my_table LIMIT 20&#8243;)<br />
+Error in .jcall(&#8220;RJavaTools&#8221;, &#8220;Ljava/lang/Object;&#8221;, &#8220;invokeMethod&#8221;, cl,  :<br />
+  java.sql.SQLException: Method not supported</p>
+<p>Is this a limit in Cloudera&#8217;s current JDBC driver?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Austin Chungath</a> /
+			January 29, 2014 / 2:32 AM		</em>
+		<p>Hi Kiran,<br />
+It&#8217;s nice to hear from you.<br />
+The RImpala code requires all the jdbc jars to be in a directory and you need to give the path to the directory in the init function.<br />
+Adding one jar at a time will not work as the init function expects a directory. But init function still says “Classpath added successfully” even when you are adding one jar at a time. Thanks for bringing this to my notice.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">kamal</a> /
+			February 13, 2014 / 11:18 PM		</em>
+		<p>No problem connecting to Impala, or running commands like showtables, describe, etc. I can run some queries.</p>
+<p>However I am seeing “java.sql.SQLException: Method not supported” for any query I attempt that changes a column name using SELECT .. AS ..</p>
+<p>Example:<br />
+rimpala.query(“SELECT foo AS bar FROM my_table LIMIT 20?)<br />
+Error in .jcall(“RJavaTools”, “Ljava/lang/Object;”, “invokeMethod”, cl, :<br />
+java.sql.SQLException: Method not supported</p>
+<p>I have added all the Required jar file in directory then also getting the same error</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="https://github.com/austincv/RImpala">Austin Chungath</a> /
+			February 25, 2014 / 3:07 AM		</em>
+		<p>For those who are interested &#8211; the source is available at <a href="https://github.com/austincv/RImpala" rel="nofollow">https://github.com/austincv/RImpala</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Vinodh</a> /
+			March 06, 2014 / 10:51 PM		</em>
+		<p>Hi,<br />
+I am able to connect. But when I execute a query I am getting following error<br />
+df=rimpala.query(&#8220;select id,name from test1&#8243;)<br />
+Error in `colnames&lt;-`(`*tmp*`, value = c(&quot;id&quot;, &quot;name&quot;)) :<br />
+  &#039;names&#039; attribute [2] must be the same length as the vector [1]<br />
+If I put only one field in select query it works.<br />
+Appreciate help</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Sachin Sudarshana</a> /
+			March 18, 2014 / 11:16 PM		</em>
+		<p>HI Vinodh,</p>
+<p>I&#8217;m not able to replicate the error that you&#8217;ve mentioned.<br />
+Could you please check if the table does contain 2 columns?<br />
+If possible, share a sample of your dataset and I will try to resolve the issue.</p>
+<p>Thank you,<br />
+Sachin</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Vinodh S</a> /
+			March 20, 2014 / 11:58 PM		</em>
+		<p>Hi Sachin,<br />
+Thanks for looking into this.<br />
+The table Test in Impala is having the structure<br />
+id       name<br />
+1        vinodh<br />
+I am using query select * from test.<br />
+Error is same with any query done on any table which fetches more than one column.<br />
+I have checked the source file RImpala.R. The error is in rimpala.query in line colnames(onlyData)=colNames.<br />
+If I select only one column it works fine.<br />
+Hope this helps<br />
+Thanks,<br />
+Vinodh S</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='24260' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="qq4=" />
+		<input type="hidden" name="cptch_time" value="1397909780" />
+		<input type="hidden" value="Version: 2.4" />
+		&#115;&#105;x &#43; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> = 7	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

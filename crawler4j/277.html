@@ -1,0 +1,997 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-to: Set Up Cloudera Manager 4.5 for Apache Hive | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-to: Set Up Cloudera Manager 4.5 for Apache Hive"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/03/how-to-set-up-cloudera-manager-4-5-for-apache-hive/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='How-to: Set Up a Hadoop Cluster with Network Encryption' href='http://blog.cloudera.com/blog/2013/03/how-to-set-up-a-hadoop-cluster-with-network-encryption/' />
+<link rel='next' title='Introduction to Apache HBase Snapshots' href='http://blog.cloudera.com/blog/2013/03/introduction-to-apache-hbase-snapshots/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/03/how-to-set-up-cloudera-manager-4-5-for-apache-hive/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=20652' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-20652 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-to: Set Up Cloudera Manager 4.5 for Apache Hive</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Darren Lo</li>
+				<li>March 06, 2013</li>
+				<li class="comment"><a href="#comments">no comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>Last week Cloudera released the 4.5 release of <a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html">Cloudera Manager</a>, the leading framework for end-to-end management of Apache Hadoop clusters. (Download Cloudera Manager <a href="https://ccp.cloudera.com/display/SUPPORT/Downloads">here</a>, and see install instructions <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Free/4.5.0/PDF/CM-4.5-free-installation-guide.pdfe+Edition+Installation+Guide">here</a>.) Among many other features, Cloudera Manager 4.5 adds support for <a href="http://hive.apache.org">Apache Hive</a>. In this post, I&#8217;ll explain how to set up a Hive server for use with Cloudera Manager 4.5 (and later).</p>
+<p>For details about other new features in this release, please see the full release notes:</p>
+<ul>
+<li><a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Free/4.5.0/PDF/CM-4.5-free-release-notes.pdf">Free Edition</a></li>
+<li><a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/4.5.0/PDF/CM-4.5-enterprise-release-notes.pdf">Enterprise Edition</a></li>
+</ul>
+<h2>Introducing the Hive Metastore Server</h2>
+<p>Starting with Cloudera Manager 4.5, there is a new role type called the Hive Metastore Server. This role manages the metastore process when Hive is configured with a Remote Metastore.</p>
+<p>I strongly encourage you to <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/4.2.0/CDH4-Installation-Guide/cdh4ig_topic_18_4.html">read the documentation</a> about the Hive Remote Metastore and Local Metastore.</p>
+<p>Cloudera recommends using a Remote Metastore with Hive, especially for CDH 4.2 or later. Since the Remote Metastore is recommended, Cloudera Manager treats the Hive Metastore Server as a required role for all Hive services. Here are a couple key reasons why the Remote Metastore setup is advantageous, especially in production settings:</p>
+<ul>
+<li>The Hive Metastore Database password and JDBC drivers don’t need to be shared with every Hive client; only the Hive Metastore Server does. Sharing passwords with many machines is a security concern.</li>
+<li>You can control activity on the Hive Metastore Database. To stop all activity on the database, just stop the Hive Metastore Server. This makes it easy to perform tasks such as backup and upgrade, which require all Hive activity to stop.</li>
+</ul>
+<p>The Hive Metastore Server should not be used with CDH3. If you are using CDH3 or you’d like to use the Local Metastore mode, you can control this process by enabling the <code>Bypass Hive Metastore Server</code> mode in the Hive Service Configuration. See the discussion in the “Hive Services Created During Cloudera Manager Upgrade” below.</p>
+<h2>Hive Setup Made Easy</h2>
+<p>Whether adding Hive for the first time or importing an existing Hive install to be managed by Cloudera Manager, the steps are very similar. If you are upgrading from a previous Cloudera Manager release, then see the section below on upgrade.</p>
+<p>To help you set up and manage Hive, Cloudera Manager will:</p>
+<ul>
+<li>Create a database for the Hive Metastore if you are using the Cloudera Manager Embedded PostgreSQL Database.</li>
+<li>Create Hive Metastore tables.</li>
+<li>Create the Hive Warehouse Directory in HDFS.</li>
+<li>Manage Hive Metastore Server.</li>
+<li>Manage HiveServer2 (CDH4.2 only).</li>
+<li>Manage client configurations (/etc/hive/conf).</li>
+<li>Manage Hive configuration for services that depend on Hive (<a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/ImpalaBeta/0.6/PDF/Impala-1.0-Beta-Installing-and-Using-Cloudera-Impala.pdf">Cloudera Impala</a> and <a href="http://cloudera.github.com/hue/">Hue</a>).</li>
+</ul>
+<p>Note that using Apache Derby for the Hive Metastore Database is not recommended for production use. The wizards do not support adding a new Hive service configured with Derby. Instead, I recommend leveraging the Cloudera Manager Embedded PostgreSQL Database for an easy, production-quality setup.</p>
+<p>Now let’s walk through adding a Hive service to an existing cluster. If you are creating a new Cloudera Manager cluster from scratch, the steps are extremely similar to the steps outlined below.</p>
+<ol>
+<li>If you are importing an existing Hive install to be managed by Cloudera Manager:</li>
+<ul>
+<li>Back up your Hive Metastore Database and any hive configuration files (hive-site.xml).</li>
+<li>Stop any running hive processes such as Hive Metastore, HiveServer, HiveServer2, or any Hive clients that are running commands.</li>
+<li>Get your Hive Metastore Database login info handy. You’ll need it in a moment.</li>
+</ul>
+<li>From main page, click &#8220;Actions” -&gt; &#8220;Add Service&#8221;.</li>
+<li>Select Hive.</li>
+<li>Select dependencies. Hive depends on HDFS and MapReduce (including YARN).</li>
+<li>Select roles</li>
+<ul>
+<li>Add a “Gateway” to any host from which you will run the Hive CLI or the <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/4.2.0/CDH4-Installation-Guide/cdh4ig_topic_18_8.html?scroll=topic_18_8_1_unique_1">Beeline CLI</a>.</li>
+<li>Pick one host for the “Hive Metastore Server”.</li>
+<ul>
+<li>Although Hive can be configured to use more than one Hive Metastore Server, Cloudera does not support having multiple Hive Metastore Servers. This may result in problems such as concurrency errors.</li>
+<li>For performance reasons, it’s generally a good idea to have the Hive Metastore Server on the same host as the database that it’ll be talking to. This is not required.</li>
+</ul>
+<li>If you’re using CDH4.2, you can also pick “HiveServer2”. HiveServer2 differs from HiveServer, and Beeline is the supported CLI to communicate with HiveServer2. HiveServer2 supports multiple clients making many simultaneous requests, which is an improvement over HiveServer. (See <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/4.2.0/CDH4-Installation-Guide/cdh4ig_topic_18_5.html">HiveServer2 Documentation</a>.)</li>
+</ul>
+<li>Test the database connection.</li>
+<ul>
+<li>If you’d like to leverage the Cloudera Manager Embedded PostgreSQL Database for your Hive Metastore Database, select “Use Embedded Database”. Don’t use this when adopting an existing Hive setup.</li>
+<li>If you&#8217;d like to configure an external database, then select &#8220;Use Custom Databases&#8221; and enter the appropriate database login information. If you are importing an existing Hive setup, enter the same information that your existing Hive setup uses.</li>
+<li>Click “Test Connection” and make sure there are no errors (skipped tests are ok), then click “Continue”.<br /> 
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/fig1.png"><img class="aligncenter size-full wp-image-20653" title="fig1" src="http://blog.cloudera.com/wp-content/uploads/2013/03/fig1.png" alt="" width="600" height="272" /><br /></a></p>
+</li>
+</ul>
+<li>Review Configuration Changes</li>
+<ul type="a">
+<li>For newly created Hive setups, the defaults are normally appropriate.</li>
+<li style="text-align: left;">If you are adopting an existing Hive setup, then be sure to pick the <code>Hive Warehouse Directory </code>that matches what your existing Hive setup uses.
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/fig2.png"><img class="aligncenter size-full wp-image-20654" title="fig2" src="http://blog.cloudera.com/wp-content/uploads/2013/03/fig2.png" alt="" width="600" height="137" /><br /></a></p>
+</li>
+</ul>
+<li>Cloudera Manager sets up your service. Note the following steps:</li>
+<ul type="a">
+<li>Create Hive Metastore Database &#8211; creates the user and database in the Cloudera Manager Embedded PostgreSQL server. If you selected a custom database, then this step will not appear in the workflow.</li>
+<li>Create Hive Metastore Database Tables &#8211; creates all of the tables in the Hive Metastore Database for the current Hive version. This command will only run if the schema is empty.</li>
+<li>Create Hive Warehouse Directory &#8211; creates the Hive Warehouse directory in HDFS with 1777 permissions if it doesn’t already exist.</li>
+<li>Deploy Client Configuration &#8211; updates /etc/hive/conf on all hosts that have a Hive role, using the alternatives mechanism.
+<p>Once this is done, then you can run the shell command <code>hive</code> on any of these hosts and your hive commands will all go through the Hive Metastore Server.<br /> </p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/fig3.png"><img class="aligncenter size-full wp-image-20655" title="fig3" src="http://blog.cloudera.com/wp-content/uploads/2013/03/fig3.png" alt="" width="600" height="239" /></a></p>
+</li>
+</ul>
+<li>(Optional) Review configuration:</li>
+<ul>
+<li>You can now review the configuration to make sure it matches what you’d like.</li>
+<li>If you are importing an existing setup, you should compare the configuration with your backup copy of hive-site.xml.</li>
+<li>If there’s any config that’s missing from your hive-site.xml, but there’s no option in the UI for this config, then you can use the property <code>Hive Service Configuration Safety Valve for hive-site.xm</code>l to specify these configs for all CM-managed processes (includes roles from Hive, Impala, and Hue). If you need the config to be used by Hive CLI (which normally reads from /etc/hive/conf/hive-site.xml), then use the property <code>Hive Client Configuration Safety Valve for hive-site.xml</code>.</li>
+<li>Be sure to restart Hive, restart any dependent services (Hue and Impala), and deploy client configs after making a configuration change.</li>
+</ul>
+</ol>
+<h2>Hive Services Created During Cloudera Manager Upgrade</h2>
+<p>When upgrading to Cloudera Manager 4.5, if there are any Hue or Impala services in the existing setup, one or more Hive services will automatically be created.</p>
+<p>Prior to Cloudera Manager 4.5, Hue and Impala both specified Hive configurations such as warehouse directory and database configuration. When upgrading to Cloudera Manager 4.5, this information from the Hue and Impala configurations is used to generate a new Hive service with the same warehouse directory and database configuration. The old Hue Impala services are then linked to the new Hive service(s). Cloudera Manager will attempt to merge the configuration, so if Hue and Impala had an identical Hive configuration, then only a single Hive service will be created.</p>
+<p>After upgrading to Cloudera Manager 4.5, at the end of the Upgrade Wizard, you will be asked to add a Hive Metastore Server role to each Hive Service that was automatically created. Select one host for the Hive Metastore Server. Cloudera recommends using the Hive Metastore Server, so Cloudera Manager requires that each Hive service has one. For performance reasons, it’s good to have the Hive Metastore Server on the same host as the database that it’ll be talking to.</p>
+<p>If you manually (not using Cloudera Manager) created an account for Hive in the Embedded PostgreSQL Database, then you need to make sure that the database and user have the same name. This can easily be done through the commands:</p>
+<pre class="code" style="padding-left: 10px;">CREATE ROLE &lt;dbname&gt; LOGIN PASSWORD ‘&lt;password&gt;’;
+ALTER DATABASE &lt;dbname&gt; SET OWNER &lt;dbname&gt;;
+REASSIGN OWNED BY &lt;old username&gt; TO &lt;dbname&gt;;
+</pre>
+<p>&nbsp;</p>
+<p>After running these commands, edit your Hive Metastore Database configuration in Cloudera Manager with the new username and password, restart Hive, restart Hue/Impala, and deploy the client configuration. (Thanks to Benjamin Kim on the scm-users group for pointing this out!)</p>
+<p>Hive has the configuration <code>Bypass Hive Metastore Server</code>. When this configuration is enabled, Hive clients, Hue, and Impala connect directly to the Hive Metastore Database. Prior to Cloudera Manager 4.5, Hue and Impala talked directly to the Hive Metastore Database, so the <code>Bypass</code> mode is enabled by default when upgrading to Cloudera Manager 4.5. This is to make sure the upgrade doesn’t disrupt your existing setup.</p>
+<p>You should plan to disable the <code>Bypass Hive Metastore Server</code> mode, especially when using CDH 4.2 or later. Using the Hive Metastore Server is the recommended configuration (as discussed in “Introducing the Hive Metastore Server” previously).</p>
+<p>To switch between using the Hive Metastore Server or talking directly to the Metastore Database, use the Hive service configuration <code>Bypass Hive Metastore Server</code>. You can find this option by using the search feature on the Hive Service Configuration page:</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/03/fig4.png"><img class="aligncenter size-full wp-image-20656" title="fig4" src="http://blog.cloudera.com/wp-content/uploads/2013/03/fig4.png" alt="" width="600" height="162" /></a></p>
+<p>After toggling this <code>Bypass</code> option, restart Hive and all services that depend on Hive (Hue and Impala), then re-deploy client configuration.</p>
+<h2>Troubleshooting</h2>
+<p>Here are some common issues I hope you’ll now easily avoid. It’s always a good idea to look at the latest <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Free/4.5.0/PDF/CM-4.5-free-installation-guide.pdf">Cloudera Manager Installation Documentation</a> and <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Free/4.5.0/PDF/CM-4.5-free-release-notes.pdf">Known Issues</a> before performing an install or upgrade.</p>
+<p><strong>CDH Upgrades</strong></p>
+<ul>
+<li>When upgrading to CDH 4.1 or 4.2, a manual Metastore Database upgrade is required.</li>
+<li>When performing any CDH upgrade, be sure to read the Cloudera Manager upgrade guides to make sure the Hive Metastore Database is properly backed up and upgraded before starting Hive. See &#8220;Upgrading CDH in a Cloudera Managed Deployment&#8221; in <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Free/4.5.0/PDF/CM-4.5-free-installation-guide.pdf">this doc</a>.</li>
+</ul>
+<p><strong><br /> CDH3</strong></p>
+<ul>
+<li>You’ll probably need to <code>chown /user/hive</code> in HDFS to <code>hive:hive</code> after the warehouse directory is created, otherwise you may see errors in creating /user/hive/.Trash when you drop a table.</li>
+<li>There are various issues with using the Hive Metastore Server in CDH3. It’s easier to just always enable the “Bypass Hive Metastore Server” mode when running in CDH3. (See the Upgrade section for discussion on using this option.)</li>
+</ul>
+<p><strong>CDH4.0 and CDH4.1 Secure Clusters</strong></p>
+<ul>
+<li>Hue has trouble talking to the Hive Metastore Server in CDH4.0 and CDH 4.1 secure clusters. Details can be found at the &#8220;Known Issues and Workarounds&#8221; section of <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Free/4.5.0/PDF/CM-4.5-free-release-notes.pdf">this doc</a>.</li>
+</ul>
+<p><em> Darren Lo is a Software Engineer working on the Enterprise team.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cloudera-manager/" title="View all posts in Cloudera Manager" rel="category tag">Cloudera Manager</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hive/" title="View all posts in Hive" rel="category tag">Hive</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>No Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='20652' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="IhsP" />
+		<input type="hidden" name="cptch_time" value="1398162771" />
+		<input type="hidden" value="Version: 2.4" />
+		2 &times; s&#105;x =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

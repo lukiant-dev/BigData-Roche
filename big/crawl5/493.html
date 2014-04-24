@@ -1,0 +1,1091 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Recommendation with Apache Mahout in CDH3 | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Recommendation with Apache Mahout in CDH3"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2011/11/recommendation-with-apache-mahout-in-cdh3/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Recommendation with Apache Mahout in CDH3 Comments Feed" href="http://blog.cloudera.com/blog/2011/11/recommendation-with-apache-mahout-in-cdh3/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Apache ZooKeeper 3.3.4 has been released' href='http://blog.cloudera.com/blog/2011/11/apache-zookeeper-3-3-4-has-been-released/' />
+<link rel='next' title='Apache HBase Pow-wow Summary 11/29/2011' href='http://blog.cloudera.com/blog/2011/12/apache-hbase-pow-wow-summary-11292011/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2011/11/recommendation-with-apache-mahout-in-cdh3/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=9340' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-9340 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Recommendation with Apache Mahout in CDH3</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/josh-patterson/" title="Posts by Josh Patterson" rel="author">Josh Patterson</a></li>
+				<li>November 30, 2011</li>
+				<li class="comment"><a href="#comments">9 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<h2>Intro</h2>
+<p>The amount of information we are exposed to on a daily basis is far outstripping our ability to consume it, leaving many of us overwhelmed by the amount of new content available. Ideally we&#8217;d like machines and algorithms to help find the more interesting&#8212;to individual preference&#8212;items so we can easily focus our attention on these items of relevance.</p>
+<p>Have you ever been recommended a friend on Facebook? Or an item you might be interested in on Amazon? If so then you&#8217;ve benefitted from the value of recommendation systems. Recommendation systems apply knowledge discovery techniques to the problem of making recommendations that are personalized for each user. Recommendation systems are one way we can use algorithms to help us sort through the masses of information to find the &#8220;good stuff&#8221; in a very personalized way.</p>
+<p>Due to the explosion of web traffic and users the scale of recommendation poses new challenges for recommendation systems.&#160; These systems face the dual challenge of producing high quality recommendations and calculating these personalized recommendations for millions of users. In recent years, collaborative filtering (CF) has become a popular way to effectively meet these challenges.&#160; CF techniques start by analyzing the user-item matrix to identify relationships between different users or items, and use that information to produce recommendations for each user.</p>
+<h2>Quick CF Recommendation Overview</h2>
+<p>From an algorithmic standpoint, the recommendation systems we&#8217;ll talk about today are considered in the k-nearest neighbor family of problems (another type would be a SVD-based recommender). We want to predict the estimated preference of a user towards an item they have never seen before. We also want to generate a ranked (by preference score) list of items the user might be most interested in. Two well-known styles of recommendation algorithms are item-based recommenders and user-based recommenders. Both types rely on the concept of a similarity function/metric (ex: Euclidean distance, log likelihood), whether it is for users or items.</p>
+<p>With user-based recommendation algorithms we&#8217;re looking at the notion of similarity between users based on preferences/actions/ratings of those users so we can recommend the same things to similar users. We start out by finding out which users are more similar (as opposed to finding more similar items first).</p>
+<p>With item-based CF we&#8217;re looking at how users interact with items (books, videos, news, users &#8230;) and from that information we look at which items are more similar. In both types of CF we start with deriving some idea of the user-item preferences and then either look at user-user or item-item similarity. &#160;We get these interactions from explicit (e.g. &#160;a user rating something by number of stars) and implicit (e.g. purchasing a book) ratings. Given the past actions of a user, the then attempt to predict the future in a &#8220;content agnostic&#8221; fashion that doesn&#8217;t use &#160;the properties of the items themselves, just how user&#8217;s interact with the items. Typically we&#8217;re interested in item-based recommendation systems when the number of items is very low compared to the number of users. This scenario can provide a good performance gain versus a user-based setup. Another aspect to consider is that the items are going to change far less frequently than the users.</p>
+<p>Mathematically speaking we&#8217;re creating a user-item-matrix from the user preference data and then predicting the missing entries by finding patterns from the user preference information we know about. In the most simple case, we&#8217;re computing the number of times each pair of items occurs together in a user&#8217;s list of preferences/ratings and given that grouping (for a given pair) across all users we then feed these &#8220;co-occurrences&#8221; to a similarity function like &#8220;log likelihood&#8221;.</p>
+<p>Mahout&#8217;s implementation of this algorithm is also a great example of how an existing concept is rebuilt for MapReduce. A difference to note with the MapReduce version is that Mahout uses a &#8220;Co-Occurrence&#8221; matrix for the concept of &#8220;item similarity&#8221;, which provides some degree of similarity between items (the idea being that the more two items co-occur, the more similar they likely are). This means we are calculating the number of times a pair of items occurs together per user. With this job we&#8217;re able to calculate a lot of co-occurrences in parallel which highlights the power of MapReduce and the &#8220;out of the box&#8221; functionality offered with Mahout.</p>
+<p>Once we know a bit about how similar our items are (here, how often they co-occur) we can then predict our user&#8217;s preference towards a small subset of other items the user has not seen before. We want to predict a rating for an item a user has not seen before based on the information gathered from other users . To do this we look at all items that are similar to an item we&#8217;d like to predict a rating on (for the user) and have been rated by this user. In the case of Mahout&#8217;s distributed recommender we multiply the user vector (as column vector) vs the co-occurrence matrix. This means we multiply the user column vector times each item row vector. The sum of each of those row time column multiplications creates a rating for each item relative to the user. We can then select the top N most highly rated items (minus the items the user has already rated) to recommend to the user.</p>
+<h2>Install Mahout with CDH3u3</h2>
+<p>Mahout has been integrated with CDH3 since CDH3u2. Let&#8217;s start out by getting a cluster going in either Pseudo-Distributed Mode or on a full cluster (If CDH3u2 is already running, please skip this part, otherwise go ahead and install CDH3u3). Click following link to get started:</p>
+<p><a title="CDH3 Quick Start Guide" href="https://ccp.cloudera.com/display/CDHDOC/CDH3+Quick+Start+Guide">CDH3 Quick Start Guide</a></p>
+<p>Make sure $JAVA_HOME is set or Mahout will complain. Click the link to learn about <a title="Mahout Installation" href="https://ccp.cloudera.com/display/CDHDOC/Mahout+Installation">Mahout Installation</a>.</p>
+<p>Now that we have Mahout installed, let&#8217;s take a look at how we interact with it from the command line.</p>
+<h2>Working with Mahout</h2>
+<p>Running Mahout is fairly simple and acts a lot like Hadoop from the command line. For instance, if we type &#8220;mahout&#8221; on the command line after the install we should get:</p>
+<pre class="code">mahout
+ Running on hadoop, using HADOOP_HOME=/usr/lib/hadoop-0.20
+ HADOOP_CONF_DIR=/etc/hadoop-0.20/conf
+ MAHOUT-JOB: /usr/lib/mahout/mahout-examples-0.5-cdh3u2-SNAPSHOT-job.jar
+ An example program must be given as the first argument.
+ Valid program names are:
+ arff.vector: : Generate Vectors from an ARFF file or directory
+ canopy: : Canopy clustering
+ cat: : Print a file or resource as the logistic regression models would see it
+ cleansvd: : Cleanup and verification of SVD output
+ clusterdump: : Dump cluster output to text
+ dirichlet: : Dirichlet Clustering
+ eigencuts: : Eigencuts spectral clustering
+ evaluateFactorization: : compute RMSE of a rating matrix
+ factorization against probes in memory
+ evaluateFactorizationParallel: : compute RMSE of a rating matrix
+ factorization against probes
+ fkmeans: : Fuzzy K-means clustering
+ fpg: : Frequent Pattern Growth
+ itemsimilarity: : Compute the item-item-similarities for item-based
+ collaborative filtering
+ kmeans: : K-means clustering
+ lda: : Latent Dirchlet Allocation
+ ldatopics: : LDA Print Topics
+ lucene.vector: : Generate Vectors from a Lucene index
+ matrixmult: : Take the product of two matrices
+ meanshift: : Mean Shift clustering
+ parallelALS: : ALS-WR factorization of a rating matrix
+ predictFromFactorization: : predict preferences from a factorization
+ of a rating matrix
+ prepare20newsgroups: : Reformat 20 newsgroups data
+ recommenditembased: : Compute recommendations using item-based
+ collaborative filtering
+ rowid: : Map SequenceFile to
+ {SequenceFile,
+ SequenceFile}
+ rowsimilarity: : Compute the pairwise similarities of the rows of a matrix
+ runlogistic: : Run a logistic regression model against CSV data
+ seq2sparse: : Sparse Vector generation from Text sequence files
+ seqdirectory: : Generate sequence files (of Text) from a directory
+ seqdumper: : Generic Sequence File dumper
+ seqwiki: : Wikipedia xml dump to sequence file
+ spectralkmeans: : Spectral k-means clustering
+ splitDataset: : split a rating dataset into training and probe parts
+ ssvd: : Stochastic SVD
+ svd: : Lanczos Singular Value Decomposition
+ testclassifier: : Test Bayes Classifier
+ trainclassifier: : Train Bayes Classifier
+ trainlogistic: : Train a logistic regression using stochastic gradient descent
+ transpose: : Take the transpose of a matrix
+ vectordump: : Dump vectors from a sequence file to text
+ wikipediaDataSetCreator: : Splits data set of wikipedia wrt feature
+ like country
+ wikipediaXMLSplitter: : Reads wikipedia data and creates ch
+</pre>
+<p>If your JAVA_HOME env variable is set correctly you should see the above output. Now that we have Mahout installed and working with CDH let&#8217;s move on to working with some data.</p>
+<h2>GroupLens Movie Data</h2>
+<p>The input data for this demo is based on 1,000,209 anonymous ratings of approximately 3,900 movies made by 6,040 MovieLens users, which you can download from the www.grouplens.org site. The zip file contains four files:</p>
+<ul>
+<li>movies.dat (movie ids with title and category)</li>
+<li>ratings.dat (ratings of movies)</li>
+<li>README</li>
+<li>users.dat (user information)</li>
+</ul>
+<h2>Ratings File Description</h2>
+<p>The ratings file is most interesting to us since it&#8217;s the main input to our recommendation job. Each line has the format:</p>
+<pre class="code">UserID::MovieID::Rating::Timestamp</pre>
+<p>where</p>
+<ul>
+<li>UsersIDs are integers</li>
+<li>MovieIDs are integers</li>
+<li>Ratings are 1 through 5 &#8220;stars&#8221; (integers)</li>
+<li>Time stamp is seconds since the epoch</li>
+<li>Each user has at least 20 ratings</li>
+</ul>
+<p>This file isn&#8217;t exactly how Mahout prefers, but this is an easy fix. Mahout is looking for a CSV file with lines of the form:</p>
+<p>userID, itemID, value</p>
+<p>So let&#8217;s adjust our input file to match what we need to run our job. First download the file and unzip it locally from:</p>
+<p><a href="http://www.grouplens.org/system/files/ml-1m.zip">http://www.grouplens.org/system/files/ml-1m.zip</a></p>
+<p>Next we&#8217;ll run the command:</p>
+<pre class="code">tr -s ':' ',' < ratings.dat | cut -f1-3 -d, > ratings.csv</pre>
+<p>This produces the output format we&#8217;ll use in the next section when we run our &#8220;Itembased Collaborative Filtering&#8221; job. While this is an extra step it gives us good practice preparing data for input into our recommendation jobs.</p>
+<h2>Running Mahout&#8217;s Recommendation System</h2>
+<p>The core workflow in mahout is based around the class</p>
+<p><strong>org.apache.mahout.cf.taste.hadoop.item.RecommenderJob</strong></p>
+<p>and is a completely distributed item-based recommender. The input to this job is going to be the &#8220;ratings.csv&#8221; file we generated above (after we converted the ratings.dat file to the ratings.csv file). The format of this file looks like:</p>
+<pre class="code">userID, itemID, value</pre>
+<p>and the output will be another CSV file with the layout of:</p>
+<pre class="code">userID [ itemID, score, ... ]</pre>
+<p>which represents the userIDs with their recommended itemIDs along with the preference scores. This algorithm is also implemented in MapReduce and the following table has some of the options we can specify for the job:</p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<th width="180" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier">
+<p>Flag</p>
+</th>
+<th width="340" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier">
+<p>Description</p>
+</th>
+</tr>
+<tr>
+<td width="180" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier; font-size:10pt">
+<p>&#45;&#45;input (-i)</p>
+</td>
+<td width="340" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier; font-size:10pt">
+<p>Path to the job input directory in HDFS (-i shortcut flag is broken in 0.5, MAHOUT-842)</p>
+</td>
+</tr>
+<tr>
+<td width="180" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier; font-size:10pt">
+<p>&#45;&#45;output (-o)</p>
+</td>
+<td width="340" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier; font-size:10pt">
+<p>Path to the output dir in HDFS</p>
+</td>
+</tr>
+<tr>
+<td width="180" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier; font-size:10pt">&#45;&#45;usersFile</td>
+<td width="340" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier; font-size:10pt">
+File listing users to generate recommendations for
+</td>
+</tr>
+<tr>
+<td width="299" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier; font-size:10pt">
+<p>&#45;&#45;tempDir</p>
+</td>
+<td width="340" valign="top" style="font-family:'lucida grande', 'lucida sans unicode', courier; font-size:10pt">
+<p>Intermediary output directory</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>To set things up we need to setup the list of users we want to produce a recommendation for.&#160; Put the number &#8220;6040&#8243; (a user ID in our source data) on a line by itself in a file and put that in HDFS. Use the hadoop command line tools to copy this file to HDFS:</p>
+<pre class="code">hadoop fs -put [my_local_file] [user_file_location_in_hdfs]</pre>
+<p>With our user list in hdfs we can now run the Mahout&#160; recommendation job with a command in the form of:</p>
+<pre class="code">mahout recommenditembased --input [input-hdfs-path] --output [output-hdfs-path] --tempDir [tmp-hdfs-path] --usersFile [user_file_location_in_hdfs]</pre>
+<p>which will run for a while (a chain of 10 MapReduce jobs) and then write out the item recommendations into HDFS we can now take a look at. &#160;If we tail the output from the RecommenderJob with the command:</p>
+<pre class="code">hadoop fs -cat [output-hdfs-path]/part-r-00000</pre>
+<p>it should look like:</p>
+<pre class="code">6040 &#160; &#160; [1941:5.0,1904:5.0,2859:5.0,3811:5.0,3814:5.0,14:5.0,17:5.0,3795:5.0,3794:5.0,3793:5.0]</pre>
+<p>where each line represents a userID with associated recommended itemIDs and their scores.</p>
+<h2>Conclusion</h2>
+<p>This concludes the introduction to Mahout&#8217;s implementation of Collaborative Filtering which is now included in CDH3u2. CF is but one of the many techniques included in the Mahout project and the reader should now be ready to not only further explore CF but tackle some of the other techniques as well. Special thanks to Sean Owen for review help on this article.</p>
+<h2>References</h2>
+<ul>
+<li>S. Owen, R. Anil, T. Dunning, E. Friedman: Mahout in Action</li>
+<li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.144.9927&amp;rep=rep1&amp;type=pdf">Sarwar et al.: Item-Based Collaborative Filtering Recommendation Algorithms</a></li>
+<li>Apache Mahout Wiki:
+<ul>
+<li><a href="http://mahout.apache.org/">http://mahout.apache.org/</a></li>
+</ul>
+</li>
+</ul>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>9 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.cloudshoring.in">sankar</a> /
+			January 03, 2012 / 12:04 PM		</em>
+		<p>Useful information. Combination of Hadoop and Mahout in my viewpoint has huge application potential in the emerging space of real-time data integration from  Industrial IT  to the Cloud (e.g. smartgrids). The recommendations system that is presented could be applied to real-time industrial IT/SCADA scenarios that generated huge volumes of sensor and alarms data. For instance Bad or No fault alarm recommendations from an array of sensors across a wide timeline of events through map-reduce analysis and machine learning may  be done more effectively at near real times for critical decision making of plant operations</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Vivek Kondur</a> /
+			February 06, 2012 / 11:59 PM		</em>
+		<p>Doing some research &amp; analysis on java based Recommendation Engines. This post gives a very good overview as to how Mahout has been built around Hadoop and algos used in Mahout.</p>
+<p>Cheers!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Niksa Jakovljevic</a> /
+			May 30, 2012 / 5:20 AM		</em>
+		<p>Nice article. I would like to know how much effort does take to make Apache Mahout work with Apache Hadoop  in distributed mode across multiple machines. Do you maybe have any experience with that? </p>
+<p>Best Regards,</p>
+<p>Niksa</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Simone</a> /
+			June 14, 2012 / 8:36 PM		</em>
+		<p>I enjoy the Mahout verbosity.. but it might be a bit too much because I don&#8217;t understand where the error is looking at it. Unfortunately, everythings seems to go fine, but I got an empty result.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Sri</a> /
+			April 21, 2013 / 5:33 PM		</em>
+		<p>Trying to run this example on CDH4 and looks like an additional argument &#8216;-s &#8216; need to be supplied&#8230;When I ran it with COOCCURRENCE&#8230;my output part file was empty&#8230;any insights?</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='9340' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="6Bg=" />
+		<input type="hidden" name="cptch_time" value="1397910020" />
+		<input type="hidden" value="Version: 2.4" />
+		t&#104;r&#101;&#101; &minus; 2 =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

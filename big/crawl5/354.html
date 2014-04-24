@@ -1,0 +1,1078 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Cloudera Impala: Real-Time Queries in Apache Hadoop, For Real | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Cloudera Impala: Real-Time Queries in Apache Hadoop, For Real"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2012/10/cloudera-impala-real-time-queries-in-apache-hadoop-for-real/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Cloudera Impala: Real-Time Queries in Apache Hadoop, For Real Comments Feed" href="http://blog.cloudera.com/blog/2012/10/cloudera-impala-real-time-queries-in-apache-hadoop-for-real/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Cloudera, The Platform for Big Data' href='http://blog.cloudera.com/blog/2012/10/cloudera-the-platform-for-big-data/' />
+<link rel='next' title='Cloudera Manager 4.1 Now Available; Supports Impala Beta Release' href='http://blog.cloudera.com/blog/2012/10/cloudera-manager-4-1-now-available-supports-impala-beta-release/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2012/10/cloudera-impala-real-time-queries-in-apache-hadoop-for-real/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=18872' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-18872 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Cloudera Impala: Real-Time Queries in Apache Hadoop, For Real</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Marcel Kornacker & Justin Erickson</li>
+				<li>October 24, 2012</li>
+				<li class="comment"><a href="#comments">17 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>After a long period of intense engineering effort and user feedback, we are very pleased, and proud, to announce the Cloudera Impala project. This technology is a revolutionary one for Hadoop users, and we do not take that claim lightly.</p>
+<p>When Google published its <a href="http://research.google.com/pubs/pub36632.html">Dremel paper</a> in 2010, we were as inspired as the rest of the community by the technical vision to bring real-time, ad hoc query capability to Apache Hadoop, complementing traditional MapReduce batch processing. Today, we are announcing a fully functional, open-sourced codebase that delivers on that vision &#8211; and, we believe, a bit more &#8211; which we call Cloudera Impala. An Impala binary is now available in public beta form, but if you would prefer to test-drive Impala via a pre-baked VM, we have one of those for you, too. (Links to all downloads and documentation are <a href="https://ccp.cloudera.com/display/SUPPORT/Downloads">here</a>.) You can also review the source code and testing harness at <a href="http://github.com/cloudera/impala">Github</a> right now.</p>
+<p>Impala raises the bar for query performance while retaining a familiar user experience. With Impala, you can query data, whether stored in HDFS or Apache HBase &#8211; including SELECT, JOIN, and aggregate functions &#8211; in real time. Furthermore, it uses the same metadata, SQL syntax (Hive SQL), ODBC driver and user interface (Hue Beeswax) as Apache Hive, providing a familiar and unified platform for batch-oriented or real-time queries. (For that reason, Hive users can utilize Impala with little setup overhead.) The first beta drop includes support for text files and SequenceFiles; SequenceFiles can be compressed as Snappy, GZIP, and BZIP (with Snappy recommended for maximum performance). Support for additional formats including Avro, RCFile, LZO text files, and the Parquet columnar format is planned for the production drop.</p>
+<p>To avoid latency, Impala circumvents MapReduce to directly access the data through a specialized distributed query engine that is very similar to those found in commercial parallel RDBMSs. The result is order-of-magnitude faster performance than Hive, depending on the type of query and configuration. (See FAQ below for more details.) Note that this performance improvement has been confirmed by several large companies that have tested Impala on real-world workloads for several months now.</p>
+<p>A high-level architectural view is below:</p>
+<p align="center"><a href="http://blog.cloudera.com/blog/wp-content/uploads/2012/10/impala.png"><img class="aligncenter size-full wp-image-18874" title="impala" src="http://blog.cloudera.com/blog/wp-content/uploads/2012/10/impala.png" alt="" width="500" height="281" /></a></p>
+<p>There are many advantages to this approach over alternative approaches for querying Hadoop data, including::</p>
+<ul>
+<li>Thanks to local processing on data nodes, network bottlenecks are avoided.</li>
+<li>A single, open, and unified metadata store can be utilized.</li>
+<li>Costly data format conversion is unnecessary and thus no overhead is incurred.</li>
+<li>All data is immediately query-able, with no delays for ETL.</li>
+<li>All hardware is utilized for Impala queries as well as for MapReduce.</li>
+<li>Only a single machine pool is needed to scale.</li>
+</ul>
+<p>We encourage you to read the <a href="https://ccp.cloudera.com/display/IMPALA10BETADOC/Cloudera+Impala+1.0+Beta+Documentation">documentation</a> for further technical details.</p>
+<p>Finally, we’d like to answer some questions that we anticipate will be popular:</p>
+<p><strong>Is Impala open source?</strong><br /> Yes, Impala is 100% open source (Apache License). You can review the code for yourself at <a href="http://github.com/cloudera/impala">Github</a> today.</p>
+<p><strong>How is Impala different than Dremel?</strong><br /> The first and principal difference is that Impala is open source and available for everyone to use, whereas Dremel is proprietary to Google.</p>
+<p>Technically, Dremel achieves interactive response times over very large data sets through the use of two techniques:</p>
+<ul>
+<li>A novel columnar storage format for nested relational data/data with nested structures</li>
+<li>Distributed scalable aggregation algorithms, which allow the results of a query to be computed on thousands of machines in parallel.</li>
+</ul>
+<p>The latter is borrowed from techniques developed for parallel DBMSs, which also inspired the creation of Impala. Unlike Dremel as described in the <a href="http://research.google.com/pubs/pub36632.html">2010 paper</a>, which could only handle single-table queries, Impala already supports the full set of join operators that are one of the factors that make SQL so popular.</p>
+<p>In order to realize the full performance benefits demonstrated by Dremel, Hadoop will shortly have an efficient columnar binary storage format called <a title="Introducing Parquet: Efficient Columnar Storage for Apache Hadoop" href="http://blog.cloudera.com/blog/2013/03/introducing-parquet-columnar-storage-for-apache-hadoop/">Parquet</a>. But contrary to Dremel, Impala supports a range of popular file formats. This lets users run Impala on their existing data without having to “load” or transform it. It also lets users decide if they want to optimize for flexibility or just pure performance.</p>
+<p>To sum it up, Impala plus Parquet will achieve the query performance described in the Dremel paper, but surpass what is described there in SQL functionality.</p>
+<p><strong>How much faster are Impala queries than Hive ones, really?</strong><br /> The precise amount of performance improvement is highly dependent on a number of factors:</p>
+<ul>
+<li>Hardware configuration: Impala is generally able to take full advantage of hardware resources and specifically generates less CPU load than Hive, which often translates into higher observed aggregate I/O bandwidth than with Hive. Impala of course cannot go faster than the hardware permits, so any hardware bottlenecks will limit the observed speedup. For purely I/O bound queries, we typically see performance gains in the range of 3-4x.</li>
+<li>Complexity of the query: Queries that require multiple MapReduce phases in Hive or require reduce-side joins will see a higher speedup than, say, simple single-table aggregation queries. For queries with at least one join, we have seem performance gains of 7-45X.</li>
+<li>Availability of main memory as a cache for table data: If the data accessed through the query comes out of the cache, the speedup will be more dramatic thanks to Impala’s superior efficiency. In those scenarios, we have seen speedups of 20x-90x over Hive even on simple aggregation queries.</li>
+</ul>
+<p><strong>Is Impala a replacement for MapReduce or Hive &#8211; or for traditional data warehouse infrastructure, for that matter?</strong><br /> No. There will continue be many viable use cases for MapReduce and Hive (for example, for long-running data transformation workloads) as well as traditional data warehouse frameworks (for example, for complex analytics on limited, structured data sets). Impala is a complement to those approaches, supporting use cases where users need to interact with very large data sets, across all data silos, to get focused result sets quickly.</p>
+<p><strong>Does the Impala Beta Release have any technical limitations?</strong><br /> As mentioned previously, supported file formats in the first beta drop include text files and SequenceFiles, with many other formats to be supported in the upcoming production release. Furthermore, currently all joins are done in a memory space no larger than that of the smallest node in the cluster; in production, joins will be done in aggregate memory. Lastly, no UDFs are possible at this time.</p>
+<p><strong>What are the technical requirements for the Impala Beta Release?</strong><br /> You will need to have <a href="http://www.cloudera.com/content/cloudera/en/products/cdh.html">CDH4.1</a> installed on RHEL/CentOS 6.2. We highly recommend the use of <a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-manager.html">Cloudera Manager</a> (Free or Enterprise Edition) to deploy and manage Impala because it takes care of distributed deployment and monitoring details automatically.</p>
+<p><strong>What is the support policy for the Impala Beta Release?</strong><br /> If you are an existing Cloudera customer with a bug, you may raise a <a href="http://cloudera.zendesk.com">Customer Support</a> ticket and we will attempt to resolve it on a best-effort basis. If you are not an existing Cloudera customer, you may use our <a href="http://issues.cloudera.org">public JIRA instance</a> or the <a href="mailto:impala-user@cloudera.org">impala-user</a> mailing list, which will be monitored by Cloudera employees.</p>
+<p><strong>When will Impala be generally available for production use?</strong><br /> A production drop is planned for the first quarter of 2013. Customers may obtain commercial support in the form of a <a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise-core/cloudera-enterprise-RTQ.html">Cloudera Enterprise RTQ</a> subscription at that time.</p>
+<p>We hope that you take the opportunity to review the Impala source code, explore the beta release, download and install the VM, or any combination of the above. Your feedback in all cases is appreciated; we need your help to make Impala even better.</p>
+<p>We will bring you further updates about Impala as we get closer to production availability. (Update: Read about <a title="Cloudera Impala 1.0: It’s Here, It’s Real, It’s Already the Standard for SQL on Hadoop" href="http://blog.cloudera.com/blog/2013/05/cloudera-impala-1-0-its-here-its-real-its-already-the-standard-for-sql-on-hadoop/">Impala 1.0</a>.)</p>
+<p><strong>Impala resources:</strong><br /> &#8211; <a href="http://github.com/cloudera/impala">Impala source code</a><br /> &#8211; <a href="https://ccp.cloudera.com/display/SUPPORT/Downloads">Impala downloads (Beta Release and VM)</a><br /> &#8211; <a href="https://ccp.cloudera.com/display/IMPALA10BETADOC/Cloudera+Impala+1.0+Beta+Documentation">Impala documentation</a><br /> &#8211; <a href="http://issues.cloudera.org">Public JIRA</a><br /> &#8211; <a href="https://groups.google.com/a/cloudera.org/forum/?fromgroups#!forum/impala-user" target="_blank">Impala mailing list</a><br />- <a href="http://training.cloudera.com/elearning/impala/" target="_blank">Free Impala training (Screencast)</a></p>
+<p><strong>(Added 10/30/2012) Third-party articles about Impala:<br /></strong>- <a href="http://www.cloudera.com/content/dam/cloudera/Resources/PDF/GigaOM_Cloudera_Real-time_query_for_Hadoop_democratizes_access_to_big_data_analytics.pdf" target="_blank">GigaOm: Real-time query for Hadoop democratizes access to big data analytics</a> (Oct. 22, 2012)<br />- <a href="http://www.wired.com/wiredenterprise/2012/10/cloudera-impala-hadoop/" target="_blank">Wired: Man Busts Out of Google, Rebuilds Top-Secret Query Machine</a> (Oct. 24, 2012)<br />- <a href="http://www.informationweek.com/software/information-management/cloudera-debuts-real-time-hadoop-query/240009673" target="_blank">InformationWeek: Cloudera Debuts Real-Time Hadoop Query</a> (Oct. 24, 2012)<br />- <a href="http://gigaom.com/data/cloudera-makes-sql-a-first-class-citizen-in-hadoop/" target="_blank">GigaOm: Cloudera Makes SQL a First-Class Citizen on Hadoop</a> (Oct. 24, 2012) <br />- <a href="http://www.zdnet.com/clouderas-impala-brings-hadoop-to-sql-and-bi-7000006413/" target="_blank">ZDNet: Cloudera’s Impala Brings Hadoop to SQL and BI</a> (Oct. 25, 2012)<br />- <a href="http://www.wired.com/wiredenterprise/2012/10/kornacker-cloudera-google/" target="_blank">Wired: Marcel Kornacker Profile</a> (Oct. 29, 2012)<br />- <a href="http://www.drdobbs.com/open-source/cloudera-impala-processing-petabytes-at/240012477" target="_blank">Dr. Dobbs: Cloudera Impala &#8211; Processing Petabytes at The Speed Of Thought</a> (Oct. 29, 2012)</p>
+<p><em>Marcel Kornacker is the architect of Impala. Prior to joining Cloudera, he was the lead developer for the query engine of Google’s F1 project.</em></p>
+<p><em>Justin Erickson is the product manager for Impala.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cdh/" title="View all posts in CDH" rel="category tag">CDH</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hbase/" title="View all posts in HBase" rel="category tag">HBase</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hive/" title="View all posts in Hive" rel="category tag">Hive</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/impala/" title="View all posts in Impala" rel="category tag">Impala</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>17 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://mhausenblas.info/">Michael Hausenblas</a> /
+			October 24, 2012 / 11:58 AM		</em>
+		<p>Great stuff. Can you please clarify how Impala compares to the emerging work in the Apache Drill Incubator [1]?</p>
+<p>Cheers,<br />
+Michael</p>
+<p>[1] <a href="http://incubator.apache.org/drill/" rel="nofollow">http://incubator.apache.org/drill/</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.nubetech.co">Sonal</a> /
+			October 25, 2012 / 11:44 AM		</em>
+		<p>Very excited to see Impala. The Dremel paper outlines efficient columnar storage for nested data. How does Impala achieve its speeds if data is not to be loaded in to the system?</p>
+<p>Thanks<br />
+Sonal</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Marcel Kornacker</a> /
+			October 31, 2012 / 8:38 PM		</em>
+		<p>To address Michael&#8217;s question:</p>
+<p>Drill has not been released yet, so it is premature to attempt a comparison. We will of course provide one once the beta is available.</p>
+<p>Marcel</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Marcel Kornacker</a> /
+			October 31, 2012 / 9:06 PM		</em>
+		<p>To address Sonal&#8217;s question:</p>
+<p>The performance advantage you will see with Impala will always depend on the storage format of the data, among other things. Impala tries hard to be fast on ascii-encoded data (text files and sequencefile), but of course the parsing overhead will always show up as a performance penalty compared to something like ColumnIO or Trevni. Impala will also support Trevni in the GA release, as mentioned in the blog post.</p>
+<p>Regarding data loading: we are working on background conversion into Trevni, in a way that enables a logical table to be backed by a mix of data formats. New data would show up in, say, sequencefile format and eventually get converted into the more efficient Trevni columnar format, but all of the data would be queryable at all times, regardless of format.</p>
+<p>Marcel</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">RickW</a> /
+			November 07, 2012 / 2:13 AM		</em>
+		<p>How do I download and install Impala without the need for Cloudera Manager.  I have an existing small Hadoop cluster running Hive.  I would like to test Impala to see the performance difference.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			November 12, 2012 / 5:40 PM		</em>
+		<p>Rick,</p>
+<p>Instructions for manual install are here:</p>
+<p><a href="https://ccp.cloudera.com/display/IMPALA10BETADOC/Installing+Impala" rel="nofollow">https://ccp.cloudera.com/display/IMPALA10BETADOC/Installing+Impala</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Alex B</a> /
+			November 22, 2012 / 8:25 AM		</em>
+		<p>Can you please comment how Impala compares to Hadapt in terms of architecture ? As far as I understand in case of Hadapt ( and I could be wrong of course ) some transformation of the data to Postgre SQL is needed . That does not seems to be the case with Impala( at least in the current implementation) ?</p>
+<p>Thanks,<br />
+Alex</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Kang Xiao</a> /
+			December 03, 2012 / 6:59 AM		</em>
+		<p>Great stuff! We have tried it and impala shows about 2x speedup vs. hive on our simple query on test dataset.</p>
+<p>Could Marcel explain more about the main reasons that make impala faster?<br />
+1. about columnar storage: it seems that hive can also benifit from columnar storage compared with text file.<br />
+2. about distributed scalable aggregation algorithms: is there some details and examples about the algorithms?<br />
+3. about join: if dataset can not fit into memory, how impala keep faster if impala use disk.<br />
+4. about main memory as a cache for table data: is it a cache in impala for recently accessed data?</p>
+<p>Thanks!<br />
+Kang</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Marcel Kornacker</a> /
+			December 20, 2012 / 6:02 PM		</em>
+		<p>Regarding Alex&#8217;s question:</p>
+<p>That&#8217;s correct, Impala does read data directly from HDFS and HBase. Impala also relies on Apache Hive&#8217;s metastore for the mapping of files into tables, which means you can re-use your schema definitions if you&#8217;re already querying Hadoop through Hive.</p>
+<p>Hadapt runs a PostgreSql instance on each data node, and appears to require some form of data movement (and duplication of data storage) between Postgres and HDFS, but for the specifics of that architecture I would recommend consulting the Hadapt website.</p>
+<p>Marcel</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Marcel Kornacker</a> /
+			December 20, 2012 / 6:32 PM		</em>
+		<p>Regarding Kang&#8217;s questions:</p>
+<p>1. Yes, the Trevni columnar storage format will be an open and general purpose storage format that will be available for any of the Hadoop processing frameworks, including Hive, MapReduce, and Pig.</p>
+<p>However, we expect to see greater performance gains from Trevni in Impala compared to what you&#8217;d see in Hive. The reason is that in a disk-based system, Impala is often I/O-bound, and a columnar format will reduce the total I/O volume, often by a substantial amount. Hive is often cpu-bound and will therefore benefit much less from a reduction in I/O volume.</p>
+<p>2. At the moment, Impala does a simple 2-stage aggregation: pre-aggregation is done by all executing backends, followed by a single, central merge aggregation step in the coordinator. In an upcoming release Impala will also support repartitioning aggregation, where the result of the pre-aggregation step is hash-partitioned across all executing backends, so that the total merge aggregation work is also distributed.</p>
+<p>3. Impala currently has the limitation that the right-hand side table of a join needs to fit into the memory of every executing backend. In the GA release, this will be relaxed, so that the right-hand side table will only have to fit into the *aggregate* memory of all executing backends. Disk-based join algorithms won&#8217;t be available until after the GA release.</p>
+<p>4. Impala does not maintain its own cache; instead, it relies on the OS buffer cache in order to keep frequently-accessed data in memory.</p>
+<p>Marcel</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">pollie</a> /
+			December 24, 2012 / 6:51 AM		</em>
+		<p>Will we be finally able to issue and UPDATE or DELETE statement, like in an RDMS</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">chetan conikee</a> /
+			December 29, 2012 / 10:58 AM		</em>
+		<p>Does Impala support JSON tuple UDF?</p>
+<p><a href="https://cwiki.apache.org/Hive/languagemanual-udf.html#LanguageManualUDF-jsontuple" rel="nofollow">https://cwiki.apache.org/Hive/languagemanual-udf.html#LanguageManualUDF-jsontuple</a></p>
+<p>We are currently dealing with very large JSON files that are being ETL&#8217;d (split into KV pairs) /queried upon thereafter.</p>
+<p>It would be great to store the JSON as a BLOB and use json tuple UDF to query upon.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Bill Blaney</a> /
+			February 03, 2013 / 11:19 AM		</em>
+		<p>This is exciting stuff.  I&#8217;m currently researching Big Data products for a large government agency, and am looking forward to test driving Impala.</p>
+<p>I would like to know if there is any intention of providing Impala support for Accumulo.  If so, is there a timeframe in which to expect it?  Our agency deals with large amounts personal information that needs to be secured, and the combination of Impala and Accumulo could be just what&#8217;s needed to support Big Data in our environment.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Yan Zhou</a> /
+			April 29, 2013 / 11:38 AM		</em>
+		<p>I learned from the Impala session of the 2013 Strata that Impala is working with Berkeley AMPLab on caching. I&#8217;m wondering when the feature is planned to be released, and in what release? Thanks!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Dharmesh Purohit</a> /
+			May 07, 2013 / 8:31 AM		</em>
+		<p>Hi ,</p>
+<p>I read this article and I found it very nice I have been using Hadoop and sub projects since 2 years. I had one question describing below.</p>
+<p>I have lots of data in my netezza database. Can I load or connect my Netezza with Impala for the realtime querying and again results I can store into Netezza / Hive / HBase?</p>
+<p>Thanks in advance.</p>
+<p>Dharmesh</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.nice.com">serge</a> /
+			September 04, 2013 / 3:49 PM		</em>
+		<p>Is it possible to run Impala with different hadoop distributions?</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='18872' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="sNI=" />
+		<input type="hidden" name="cptch_time" value="1397909942" />
+		<input type="hidden" value="Version: 2.4" />
+		8 &minus; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  &#115;e&#118;e&#110;	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

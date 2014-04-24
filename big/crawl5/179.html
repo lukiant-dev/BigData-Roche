@@ -1,0 +1,1248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>One Engineer’s Experience with Parcel | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="One Engineer’s Experience with Parcel"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/07/one-engineers-experience-with-parcel/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; One Engineer’s Experience with Parcel Comments Feed" href="http://blog.cloudera.com/blog/2013/07/one-engineers-experience-with-parcel/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Cloudera Search over Apache HBase: A Story of Collaboration' href='http://blog.cloudera.com/blog/2013/07/cloudera-search-over-apache-hbase-a-story-of-collaboration/' />
+<link rel='next' title='How-to: Use the Apache HBase REST Interface, Part 3' href='http://blog.cloudera.com/blog/2013/07/how-to-use-the-apache-hbase-rest-interface-part-3/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/07/one-engineers-experience-with-parcel/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=22300' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-22300 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">One Engineer’s Experience with Parcel</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/jkestelyn/" title="Posts by Justin Kestelyn (@kestelyn)" rel="author">Justin Kestelyn (@kestelyn)</a></li>
+				<li>July 02, 2013</li>
+				<li class="comment"><a href="#comments">1 comment</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><em>We’re very pleased to bring you this guest post from Verisign engineer Benoit Perroud, which is based on his personal experiences with the new “Parcel” binary distribution format in Cloudera Manager 4.5.</em></p>
+<p>Among all the new features released with Cloudera Manager 4.5, <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM4Ent/4.5.1/Cloudera-Manager-Enterprise-Edition-User-Guide/cmeeug_topic_7_11.html?scroll=cmeeug_topic_7_11">Parcel</a> is probably one of the most unnoticed – despite the fact it has the potential to become the administrator’s best friend.</p>
+<p>Parcel is a new package format to easily distribute CDH or other custom packages to all nodes in a cluster. A parcel is basically a monolithic gzip-compressed tarball file with some additional metadata, bundling one or more components.</p>
+<p>In this post we will dig into the Parcel format, explore how it is used in Cloudera Manager, and explore a concrete example that demonstrates how easy and powerful this new format is. (Note: the Parcel format is most likely subject to change and the description given here is a combination of reverse engineering and help from Philip Langdale of Cloudera. See <a title="FAQ: Understanding the Parcel Binary Distribution Format" href="http://blog.cloudera.com/blog/2013/05/faq-understanding-the-parcel-binary-distribution-format/">this FAQ</a> for more background.)</p>
+<h2>Parcel’s Internals</h2>
+<p>First, let’s dig into Parcel’s internals.</p>
+<p>As previously mentioned, a parcel is a gzip-compressed tarball file with some additional metadata. The parcel will be deployed in $PARCELS_ROOT directory, /opt/cloudera/parcels by default.</p>
+<p>From its folder, a parcel relies heavily on <a href="http://linux.die.net/man/8/alternatives">alternatives</a> to create symlinks of the binaries and configuration files in Linux common folders like /usr/bin, /etc, and /usr/share  when the parcel is activated.</p>
+<p>All the metadata are stored in a mandatory folder called &#8220;meta.&#8221; It will comprise two main configuration files: parcel.json and permissions.json. Any additional directory structure can be added without restriction. Common examples include a lib folder containing jar and native libraries, etc folder containing configuration files, share folder containing documentation, and so on.</p>
+<p align="Center"><img title="parcel1" src="http://blog.cloudera.com/wp-content/uploads/2013/06/parcel1.png" alt="" width="577" height="205" /></p>
+<p align="Center"><strong>Proposed parcel directory structure</strong></p>
+<h3>parcel.json</h3>
+<p>The parcel.json file holds a large portion of the parcel’s configuration. It is obviously JSON formatted. The following nonexhaustive properties will be included in the file:</p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" width="120"><strong><br /> Attribute name </strong></td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" width="100">
+<p><strong>Attribute type</strong></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;" width="400">
+<p><strong>Description</strong></p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p><code>name</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>String</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Name of the parcel</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p><code>version</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>String</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Version of the parcel</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p><code>setActiveSymlink</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>boolean</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Tells if parcel activation also creates a symlink without the version in $PARCELS_ROOT.</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p><code>scripts</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Object</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>This object references the scripts executed at activation and at runtime. Scripts listed here are relative to the meta folder.</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>    <code>defines</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>String</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Environment scripts, usually export a couple of environment variables.</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>    <code>alternatives</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>String</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Script to be used to set symlinks (alternatives) when the parcel is activated</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p><code>packages</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>List of Objects</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>List the packages installed with this parcel. Note here that the difference between packages and components seems to be for display only in Cloudera Manager.</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>    <code>name</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>String</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Name of the package</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>    <code>version</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>String</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Version of the package</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p><code>components</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>List of Objects</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>List of components installed with this parcel, explicitly listed in Cloudera Manager.</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>    <code>name</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>String</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Name of the component</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>    <code>version</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>String</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Version of the component</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p><code>users</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Object of Object</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>Define the users that will be created by this parcel. The name of the attribute is the username to create.</p>
+</td>
+</tr>
+<tr>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p><code>groups</code></p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>List of strings</p>
+</td>
+<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+<p>List of groups to create</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>As a detailed example, the parcel.json file in the CDH-4.2.1 parcel looks like this:</p>
+<pre class="code" style="padding-left: 10px;">{
+  "name":               "CDH",
+  "version":            "4.2.1-1.cdh4.2.1.p0.5",
+  "extraVersionInfo": {
+    "fullVersion":        "4.2.1-1.cdh4.2.1.p0.5-precise",
+    "baseVersion":        "4.2.0",
+    "patchCount":         "p0"
+  },
+  "minPrevVersion":     "",
+  "maxPrevVersion":     "",
+  "setActiveSymlink":   false,
+
+  "scripts": {
+    "defines": "cdh_env.sh",
+    "alternatives": "cdh_alternatives.sh"
+  },
+
+  "packages": [
+    { "name":    "bigtop-jsvc",
+      "version": "1.0.10-1.cdh4.2.1.p0.9~precise-cdh4.2.1"
+    }, ...
+  ],
+
+  "components": [
+    { "name":     "flume-ng",
+      "version":  "1.3.0-cdh4.2.1",
+      "pkg_version":  "1.3.0+96"
+    }, ...
+  ],
+
+  "users": {
+     "flume": {
+       "longname"    : "Flume",
+       "home"        : "/var/run/flume",
+       " "       : "/bin/false",
+       "extra_groups": [ ]
+     }, ...
+  },
+
+  "groups": [
+     "hadoop",
+     "sqoop"
+  ]
+}
+</pre>
+<p>&nbsp;</p>
+<h3>permissions.json</h3>
+<p>The permissions.json file defines custom permissions to apply to given files. The files are relative to the parcel root folder:</p>
+<pre class="code" style="padding-left: 10px;">{
+  "bin/myscript.sh ": {
+    "user":  "root",
+    "group": "mapred",
+    "permissions": "4754"
+  }
+}
+</pre>
+<p>&nbsp;</p>
+<h2>Parcel Repository</h2>
+<p>A parcel is hosted on a HTTP web server, and the remote parcel repository URL is added into Cloudera Manager’s configuration.</p>
+<p align="Center"><img title="parcel2" src="http://blog.cloudera.com/wp-content/uploads/2013/06/parcel2.png" alt="" width="593" height="130" /></p>
+<p align="Center"><strong>Adding a new remote parcel repository in Cloudera Manager’s configuration</strong></p>
+<p>The repository must have a file, manifest.json, which will be read by Cloudera Manager. This file will contain a timestamp remembering the latest update and the parcels available in the repository. Finally, the parcel name needs to include the distro for which it is built: el5 for RHEL 5.x, el6 for RHEL 6.x, precise for Ubuntu 12.04 LTS Precise Pangolin, lucid for Ubuntu 10.04 LTS Lucid Lynx, and so on.</p>
+<pre class="code" style="padding-left: 10px;">{
+  "lastUpdated": 13673911330000,
+  "parcels": [
+    {
+      "parcelName": "elephantbird-3.0.9-el6.parcel",
+      "hash": "103d194a738202526aa5ba4354717b3341c68594",
+      "components": []
+    },
+    {
+      "parcelName": "elephantbird-3.0.9-precise.parcel",
+      "hash": "12cbe127fd660a490b82eefde92b0f04d86b1e98",
+      "components": []
+    },
+    {
+      "parcelName": "hadoop_lzo-0.4.15-el6.parcel",
+      "hash": "e2556fea20baf1068e32d755d9196eab04523325",
+      "components": []
+    },
+    {
+      "parcelName": "hadoop_lzo-0.4.15-precise.parcel",
+      "hash": "5362d28511f919e812d9377e60aa5588c24347f7",
+      "components": []
+    }
+  ]
+}
+</pre>
+<p>&nbsp;</p>
+<h2>The Parcel Life-cycle</h2>
+<p>Once the remote parcel repository is added to Cloudera Manager, the administrator can download the new parcels to Cloudera Manager’s local parcel repository (/opt/cloudera/parcel-repo), from where it can be distributed to all nodes of the cluster.</p>
+<p>When the admin decides to distribute the parcel, every node starts downloading the file from the Cloudera Manager server (no need for nodes to have internet access). For large clusters, this will generate significant network traffic, but fortunately the number of concurrent uploads can be defined. Once the file transfer is done, the parcel is untar’ed on the nodes in $PARCELS_ROOT.</p>
+<p>No symlink will be created at that point. Symlinks are only created when the cluster is restarted with the parcel activated. And of course, parcels can be removed from all the nodes and deleted from the local repository.</p>
+<h2>Creating Your Own Parcels</h2>
+<p>One of the biggest pains we experienced with Hadoop at Verisign is <a href="http://www.oberhumer.com/opensource/lzo/">LZO compression</a>. Going back to 2009, LZO was the reasonable solution to compress data with decent decompression speed, and to turn on <a href="http://blog.cloudera.com/blog/2009/11/hadoop-at-twitter-part-1-splittable-lzo-compression/">split-ability</a>. Assuming you have LZO-compressed files in your cluster, you want to continue to give your data scientists the ability to process the files. Below is a proposed approach for using a parcel to install LZO to your cluster.</p>
+<p>Due to its license (GPL v2+), LZO can’t be embedded into Apache projects and thus needs to be shipped separately. LZO native libraries need to be broadcasted to every node of the cluster to be referenced into the java.native.library options of the TaskTracker in order to be loaded by mapper and reducer tasks. You could bundle the libraries with your job and hack some code to include the LZO native libraries in the java.native.library at runtime (see code snippet 2 below), but starting with such tricks is opening the door to non-recommended practices (and remember the <a href="http://en.wikipedia.org/wiki/Broken_windows_theory">broken windows theory</a>). Moreover, if you’re extensively using Hadoop Streaming, you want <code>com.hadoop.mapred.DeprecatedLzoTextInputFormat</code> to be available as <code>inputformat</code> parameter:</p>
+<pre class="code" style="padding-left: 10px;">hadoop jar /opt/cloudera/parcels/CDH-4.2.1-1.cdh4.2.1.p0.5/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.0.0-mr1-cdh4.2.1.jar -inputformat "com.hadoop.mapred.DeprecatedLzoTextInputFormat" -mapper "/bin/cat" -reducer "/usr/bin/wc -l" -input /tmp/random_numbers.txt.lzo -output "streaming/output1"
+</pre>
+<p>&nbsp;</p>
+<p>LZO native and java libraries should be sent to every node of the cluster and the directories added respectively into the java.native.library and the classpath of the TaskTracker. Puppet is a good fit here but rather than digressing, let’s build a parcel enabling LZO compression to the cluster.</p>
+<h2>Building Hadoop LZO</h2>
+<p>The first step consists of building <a href="https://github.com/twitter/hadoop-lzo">Hadoop LZO</a>. Hadoop LZO is the Java library bundling the LZO native libraries and the JNA interface. It also contains the utilities to index the LZO files, a mandatory step in making it split-able.</p>
+<p>Hadoop LZO is not yet compatible with Hadoop 2.0, so a bit of hacking is required to make it work. Or you can simply clone a fork where the modification is already <a href="https://github.com/killerwhile/hadoop-lzo">done</a>. Below are the two main changes that have been done to make the code 2.0-compatible:</p>
+<p><code>org.apache.hadoop.io.compress.Decompressor</code> interface has an additional function <code>getRemaining()</code> and <code>org.apache.hadoop.io.compress.BlockDecompressorStream.getCompressedData</code> returns an <code>int</code> instead of <code>void</code>.</p>
+<p align="Center"><img title="parcel3" src="http://blog.cloudera.com/wp-content/uploads/2013/06/parcel3.png" alt="" width="586" height="403" /></p>
+<p align="Center"><strong>Code change to be 2.0-compatible</strong></p>
+<h2>Create the Parcel</h2>
+<p>The parcel will contain the hadoop-lzo jar library, the native library, and the appropriate metadata.</p>
+<p align="Center"><img title="parcel4" src="http://blog.cloudera.com/wp-content/uploads/2013/06/parcel4.png" alt="" width="587" height="148" /></p>
+<p align="Center"><strong>Parcel content</strong></p>
+<p>The parcel.json file will have the following content:</p>
+<pre class="code" style="padding-left: 10px;">{
+  "name":               "hadoop_lzo",
+  "version":            "0.4.15",
+  "extraVersionInfo": {
+    "fullVersion":        "0.4.15-precise",
+    "baseVersion":        "0.4.15",
+    "patchCount":         "p1"
+  },
+  "minPrevVersion":     "",
+  "maxPrevVersion":     "",
+  "setActiveSymlink":   true,
+  "scripts": {
+    "defines": "lzo_env.sh"
+  },
+  "packages": [
+    { "name":    "hadoop-lzo",
+      "version": "0.14.5"
+    }
+  ],
+  "components": [
+    { "name":     "hadoop-lzo",
+      "version":  "0.14.5",
+      "pkg_version":  "0.14.5"
+    }
+  ],
+  "users": {},
+  "groups": []
+}
+</pre>
+<p>&nbsp;</p>
+<p>And the lzo_env.sh will be the following:</p>
+<pre class="code" style="padding-left: 10px;">#!/bin/bash
+PARCEL="hadoop_lzo-0.4.15"
+export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$PARCELS_ROOT/$PARCEL/java /hadoop-lzo-0.4.15-1.cdh4.jar
+export JAVA_LIBRARY_PATH=$JAVA_LIBRARY_PATH:$PARCELS_ROOT/$PARCEL/native
+</pre>
+<p>&nbsp;</p>
+<p>Note that no alternatives script is shipped because there is no binary file inside.</p>
+<p>The complete contents of this parcel can be found <a href="https://github.com/killerwhile/parcels-repo/tree/master/hadoop_lzo-0.4.15">here</a>.</p>
+<h2>Deploying the Parcel</h2>
+<p>parcel is uploaded in a HTTP web server directory, you need to create the manifest.json. The timestamp is the epoch time in deci-milliseconds:</p>
+<pre class="code" style="padding-left: 10px;">echo $(date +%s)0000
+</pre>
+<p>&nbsp;</p>
+<p>Cloudera’s official <a href="http://archive.cloudera.com/cdh4/parcels/latest/manifest.json">manifest file</a> is always a great source of inspiration.</p>
+<h2>Configuring Hadoop via Cloudera Manager</h2>
+<p>In Cloudera Manager, the configuration steps should be minimal. The only required step is to add the appropriate <code>io.compression.codec</code> class to have the .lzo extension recognized. To do that, add the following value to “MapReduce Service Configuration Safety Valve for mapred-site.xml” property:</p>
+<pre class="code" style="padding-left: 10px;">    io.compression.codec.lzo.class
+    com.hadoop.compression.lzo.LzoCodec
+</pre>
+<p>&nbsp;</p>
+<p>That should do it. Unfortunately, due to a bug in Cloudera Manager version &lt; 4.6, environment scripts are not executed at components startup &#8211;  the HADOOP_CLASSPATH set in lzo_env.sh is in fact not set appropriately. The workaround is to add the content of the script in the property “MapReduce Service Environment Safety Valve”:</p>
+<pre class="code" style="padding-left: 10px;">HADOOP_CLASSPATH=/opt/cloudera/parcels/hadoop_lzo-0.4.15/java/hadoop-lzo-0.4.15-1.cdh4.jar
+JAVA_LIBRARY_PATH=/opt/cloudera/parcels/hadoop_lzo-0.4.15/native
+</pre>
+<p>&nbsp;</p>
+<h2>Restart Your Service</h2>
+<p>We’re done: Simply restart the MapReduce service, and LZO compression will be activated!</p>
+<p>Because often someone else has already done the work for you, you can also simply add a remote repository in Cloudera Manager pointing to Cloudera’s official GPL Extra repository at <a href="http://archive.cloudera.com/gplextras/parcels/latest/">http://archive.cloudera.com/gplextras/parcels/latest/</a> to have the official HADOOP_LZO parcel (including Impala’s drivers). Or, you can point to <a href="http://killerwhile.github.io/parcels-repo/repo">http://killerwhile.github.io/parcels-repo/repo</a> where alongside of Hadoop_lzo package, <a href="https://github.com/kevinweil/elephant-bird">Elephant-Bird</a> (CDH4-compatible) is also available.</p>
+<p>Enjoy!</p>
+<p><em>Benoit Perroud is Software Engineer at Verisign Inc., developing and scaling the companywide offline data processing platform – based on Hadoop infrastructure. He is also an Apache Committer, NoSQL enthusiast, and frequent speaker at Swiss and other European tech conferences.</em></p>
+<hr />
+<p><strong>Learn More About Parcels</strong></p>
+<p>Want to see the power of Parcels in action? Watch our <a href="http://www.cloudera.com/content/cloudera/en/training/landing/understanding-parcels.html">e-learning module on Understanding Parcels</a> to learn the fundamentals of optimizing your Hadoop operations with Parcels. The video includes a step-by-step demo of upgrading CDH and installing Impala, Search, and Hadoop LZO.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cloudera-manager/" title="View all posts in Cloudera Manager" rel="category tag">Cloudera Manager</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>1 Response</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Ujjwal W</a> /
+			March 06, 2014 / 8:48 AM		</em>
+		<p>Thanks for putting together this detailed article. I noticed that structure of the meta folder has changed in CDH5 beta 2. The above mentioned approach and explanation was valid upto CDH5 beta 1.</p>
+<p>From a first look it seems that alternatives.sh has changed to alternatives.json for creating symlinks.</p>
+<p>Can you explain the new approach or may be edit this article for a comparison ?</p>
+<p>Thanks,<br />
+@wadujj</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='22300' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="ZZ8=" />
+		<input type="hidden" name="cptch_time" value="1397909842" />
+		<input type="hidden" value="Version: 2.4" />
+		3 &#43; &#115;ix =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

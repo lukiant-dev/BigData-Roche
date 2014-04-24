@@ -1,0 +1,969 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Getting MapReduce 2 Up to Speed | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Getting MapReduce 2 Up to Speed"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2014/02/getting-mapreduce-2-up-to-speed/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Getting MapReduce 2 Up to Speed Comments Feed" href="http://blog.cloudera.com/blog/2014/02/getting-mapreduce-2-up-to-speed/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Best Practices for Deploying Cloudera Enterprise on Amazon Web Services' href='http://blog.cloudera.com/blog/2014/02/best-practices-for-deploying-cloudera-enterprise-on-amazon-web-services/' />
+<link rel='next' title='How-to: Make Hadoop Accessible via LDAP' href='http://blog.cloudera.com/blog/2014/02/how-to-make-hadoop-accessible-via-ldap/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2014/02/getting-mapreduce-2-up-to-speed/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=25386' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-25386 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Getting MapReduce 2 Up to Speed</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/sandy-ryza/" title="Posts by Sandy Ryza" rel="author">Sandy Ryza</a></li>
+				<li>February 13, 2014</li>
+				<li class="comment"><a href="#comments">3 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><strong>Thanks to the improvements described here, CDH 5 will ship with a version of MapReduce 2 that is just as fast (or faster) than MapReduce 1.</strong></p>
+<p>Performance fixes are tiny, easy, and boring, once you know what the problem is. The hard work is in putting your finger on that problem: narrowing, drilling down, and measuring, measuring, measuring.</p>
+<p>Apache Hadoop is no exception to this rule. Recently, Cloudera engineers set out to ensure that MapReduce performance in Hadoop 2 (MR2/YARN) is on par with, or better than, MapReduce performance in Hadoop 1 (MR1). Architecturally, MR2 has many performance advantages over MR1:</p>
+<ul>
+<li>Better scalability by splitting the JobTracker into the ResourceManager and Application Masters. </li>
+<li>Better cluster utilization and higher throughput through finer-grained resource scheduling. </li>
+<li>Less tuning required to avoid over-spilling from <a href="https://issues.apache.org/jira/browse/MAPREDUCE-64">smarter sort buffer management</a>.</li>
+<li>Faster completion times for small jobs through “Uber Application Masters,” which run all of a job’s tasks in a single JVM.</li>
+</ul>
+<p>While these improvements are important, none of them mean particularly much for well-tuned medium-sized jobs on medium-sized clusters. Whenever a codebase goes through large changes, regressions are likely to seep in.</p>
+<p>While correctness issues are easy to spot, performance regressions are difficult to catch without rigorous measurement. When we started including MR2 in our performance measurements last year, we noticed that it lagged behind MR1 significantly on nearly every benchmark. Since then, we’ve done a ton of work &#8212; tuning parameters in Cloudera Manager and fixing regressions in MapReduce itself &#8212; and can now proudly say that CDH 5 MR2 performs equally well, or better than, MR1 on all our benchmarks.</p>
+<p>In this post, I’ll offer a couple examples of this work as case studies in tracking down the performance regressions of complex (Java) distributed systems.</p>
+<h2>Ensuring a Fair Comparison</h2>
+<p>Ensuring a fair comparison between MR1 and MR2 is tricky. One common pitfall is that TeraSort, the job most commonly used for benchmarking, changed between MR1 and MR2. To reflect rule changes in the GraySort benchmark on which it is based, the data generated by the TeraSort included with MR2 is less compressible. A valid comparison would use the same version of TeraSort for both releases; otherwise, MR1 will have an unfair advantage.</p>
+<p>Another difficult area is resource configuration. In MR1, each node’s resources must be split between slots available for map tasks and slots available for reduce tasks. In MR2, the resource capacity configured for each node is available to both map and reduce tasks. So, if you give MR1 nodes 8 map slots and 8 reduce slots and give MR2 nodes 16 slots worth of memory, resources will be underutilized during MR1’s map phase. MR2 will be able to run 16 concurrent mappers per node while MR1 will only be able to run 8. If you only give MR2 nodes 8 slots of memory, then MR2 will suffer during the period when the map and reduce phases overlap &#8211; it will only get to run 8 tasks concurrently, while MR1 will be able to run more. (See <a href="http://blog.cloudera.com/blog/2013/11/migrating-to-mapreduce-2-on-yarn-for-operators/">this post</a> for more information about properly configuring MR2.)</p>
+<p>To circumvent this issue, our benchmarks give full node capacity in MR1 to both map slots and reduce slots. We then set the <code>mapred.reduce.slowstart.completedmaps</code> parameter in both to .99, meaning that there will be no overlap between the map and reduce phases. This ensures that MR1 and MR2 get full cluster resources for both phases.</p>
+<h2>Case 1: CPU Cache Locality in Sorting Map Outputs</h2>
+<p>A performance fix starts with noticing a performance problem. In this case, I noticed WordCount was lagging: A job that ran in 375 seconds on an MR1 cluster took 472 seconds on an MR2 cluster, more than 25 percent longer.</p>
+<p>A good start when diagnosing a MapReduce performance issue is to determine in which phase it occurs. In this case, the web UI reported that MR2 map tasks were taking much more time than MR1 map tasks. The next thing is to look for any big differences in the counters; here, they were nearly the same between jobs, so that provided few hints.</p>
+<p>With little to go on from the counters, the next step is to isolate the problem &#8211; reproduce it with as little else going on as possible. The difference in map time showed up when running the same job with a single map and single reduce task in the LocalJobRunner.  However, with the reduce task cut out, the times evened out. Because the sort is skipped when no reduce tasks run, it seemed likely that there was some kind of regression in the map-side sort phase.</p>
+<p><strong>The Map-Side Sort</strong></p>
+<p>The next step requires a little bit of background on how the map-side sort works.</p>
+<p>Map output data is placed in an in-memory buffer. When the buffer fills up, the framework sorts it and then writes it to disk (“spills” it). A separate thread merges the sorted on-disk files into a single larger sorted file. The buffer consists of two parts: a section with contiguous raw output data and a metadata section that holds pointers for each record into the raw data section. In MR1, the sizes of these sections were fixed, controlled by <code>io.sort.record.percent</code>, which could be configured per job. This meant that, without proper tuning of this parameter, if a job had many small records, the metadata section could fill up much more quickly than the raw data section. The buffer would be spilled to disk before it was entirely full.</p>
+<p><a href="https://issues.apache.org/jira/browse/MAPREDUCE-64">MAPREDUCE-64</a> fixed this issue in MR2 by allowing the two sections to share the same space and vary in size, meaning that manual tuning of <code>io.sort.record.percent </code>is no longer required to minimize the number of spills.</p>
+<p>With all this in mind, I realized that we had not yet tuned <code>io.sort.record.percent</code> for the job, and therefore the MR1 map tasks were spilling 10 times as many times as the MR2 map tasks. When I did tune the parameter for MR1 so that it would spill as many times as MR2, MR1 performance actually suffered &#8212; spilling fewer larger chunks meant slower map tasks.</p>
+<p>I had a theory that CPU cache latency was involved. A smaller chunk of output data might fit into a CPU cache, meaning that all the memory accesses when sorting it would be extremely fast. A larger chunk would not fit, meaning that memory accesses would have to go into a higher-level cache or maybe even all the way to main memory. As memory accesses to each cache level take about an order of magnitude longer, this could cause a large performance hit.</p>
+<p>Fortunately, there is an extremely powerful Linux profiling tool, called <code>perf</code>, that makes it easy to measure this. Running <code>perf stat -e cache-misses</code> <command></command> will spit out the number of CPU cache misses encountered by the command. In this case, MR2 job and the tuned MR1 job had a similar number of cache misses, while the untuned MR1 job had half as many.</p>
+<p><strong>Improving CPU Cache Latency</strong></p>
+<p>So how to improve CPU cache latency? At the suggestion of Todd Lipcon, I took a look at <a href="https://issues.apache.org/jira/browse/MAPREDUCE-3235">MAPREDUCE-3235</a>, an unfinished JIRA from a year ago that proposed a couple ways to improve CPU cache performance in exactly this situation. The change suggested was trivial: Instead of sorting indices into the map output meta array, sort the array itself. Previously, to access the nth map output record, I found the nth element in the index into the meta array, followed that to the entry in the meta array, and then followed the position reported there into the raw output data. Now, I just find the nth element in the meta array and follow the position reported there. </p>
+<p>This approach removes a layer of indirection and means that I need to access fewer possibly far away memory locations. The drawback is that when the sort does a swap, it moves the full metadata entry (about 20 bytes) instead of the index (4 bytes). A memory access outside the cache is far more expensive than an extra move instruction inside the cache, so it’s worth the cost.</p>
+<p align="center"><img title="sandy1" src="http://blog.cloudera.com/wp-content/uploads/2014/02/sandy1.png" alt="" width="518" height="613" /></p>
+<p>The tiny change worked like magic. It cut the number of cache misses in half for the local job and brought the runtime of the MR2 job on the cluster to less than the runtime of the MR1 job. Win!</p>
+<h2>Case 2: Over-reading in the Shuffle</h2>
+<p>Thanks to a report from a Cloudera partner, we learned that more disk reads were occurring in the shuffle during an MR2 job than during the same one on MR1. To reproduce this issue, I turned to ShuffleText, a benchmark job we run that specifically targets the shuffle. It generates a bunch of data in the mappers, shuffles it, and then throws it away in the reducers.</p>
+<p>I failed to reproduce the problem with a pseudo-distributed setup, but it immediately reared its head when I ran the jobs on the cluster. The job submitted to MR2 took 30 percent longer than the same job submitted to MR1. Even more dramatic, the average time spent per reduce task fetching map output data was a whopping 60 seconds in MR2 compared to 27 seconds in MR1.</p>
+<p>While MapReduce counters are helpful in many situations, they don’t provide machine-wide hardware metrics like number of reads that actually hit disk. Cloudera Manager was invaluable for both measuring the problem and allowing us to dig down into what was wrong. I quickly created charts that showed the total bytes read from disk on machines in the cluster while the job was running: 31.2GB for MR2 compared with 6.4GB for MR1.</p>
+<p align="center"><img title="sandy2a" src="http://blog.cloudera.com/wp-content/uploads/2014/02/mr2perf2.png" alt="" /></p>
+<p>Disk reads happen in a few different places in a MapReduce job: First, when reading the input data from disk; second, when merging map outputs if there are multiple spills; third, when serving data to reducers during the shuffle; and fourth, when merging data on the reduce side.</p>
+<p>The TaskTracker and NodeManager processes are responsible for serving intermediate data to reducers in MR1 and MR2, respectively. Looking at the disk bytes read by these processes in Cloudera Manager confirmed that the extra reads were occurring when serving data to the reducers. Looking at the code, I noticed that the MR2 shuffle had been rewritten to serve data with Netty async IO instead of the Jetty web server, which used a thread per request &#8212; but nothing popped out as to why this specific issue could be occurring. Adding log messages that printed out the total number of bytes read by the shuffle server yielded no useful leads.</p>
+<p>On top of this I noticed a few facts:</p>
+<ol>
+<li>In both MR1 and MR2, the sum of bytes being read from disk during the shuffle phase was smaller than the total map output bytes.</li>
+<li>In MR1, the majority of shuffle disk reads appeared to be occurring on two of the machines, while the rest had nearly 0.</li>
+<li>These two machines happened to have less physical memory than the other machines on the cluster.</li>
+</ol>
+<p align="center"><img title="sandy3" src="http://blog.cloudera.com/wp-content/uploads/2014/02/mr2perf3.png" alt="" /></p>
+<p>The story that best fit all three was that, in MR1, most of the map outputs were able to reside in memory in the OS buffer cache. The two machines were experiencing more disk reads because their smaller physical memory meant they couldn’t fit the map output data in the cache. For some reason, MR2 was not taking advantage of it as well as MR1.</p>
+<p><strong>fadvise</strong></p>
+<p>Turning again to the code, I noticed that MR (both 1 and 2) is very careful about its interactions with the OS buffer cache. The Linux <code>fadvise</code> system call allows providing the OS memory subsystem with suggestions about whether or not to cache regions of files. When the shuffle server receives a request for map output data, it <code>fadvise</code>s file regions that it is about to read with <code>FADV_WILLNEED</code> so that they will be ready in memory. When done with a file region, the server <code>fadvise</code>s it out of memory with <code>FADV_DONTNEED</code> to free up space because it knows that the region likely will not be consumed again.</p>
+<p>Without any obvious bad logic in the code, the next step was to try figuring out more directly what was going on. I turned to <code>strace</code>, which tracks all the system calls made by a process, and listened for <code>fadvise</code>s, file opens, closes, and reads. The amount of data produced by this proved unmanageable to sort by hand. What about simply counting the number of <code>WILLNEED</code>s and <code>DONTNEED</code>s?</p>
+<p>The <code>WILLNEED</code>s had pretty similar numbers between MR1 and MR2, but seemed to vary per run. For the <code>DONTNEED</code>s, MR1 was pegged at 768 per node, which corresponded exactly to the number of map tasks that ran on that node multiplied by the number of reducers. But MR2 was always higher than this; and varied between runs.</p>
+<p>A mere four hours of aggravation later, it all fell into place: In normal operation, reducers will often issue requests for map outputs and then decide they don’t want these outputs yet and terminate the connection. This occurs because reducers have a limited amount of memory into which read map outputs, and they find out how much space a map output will take up from a prefix in the response when they request it from the NodeManager/TaskTracker. (In other words, they don’t know how much space a map output will take up before asking for it, so, when they find out, they may need to abort and come back later when the space is available.)</p>
+<p align="center"><img title="sandy4" src="http://blog.cloudera.com/wp-content/uploads/2014/02/sandy4.png" alt="" width="551" height="612" /></p>
+<p>If the reducer terminates a connection, the shuffle server should not evict the file regions being fetched from the OS cache (not <code>fadvise</code> them as <code>DONTNEED</code>) because the reducer will come back and ask for them later. MR1 was doing this right. MR2 was not, meaning that even if a map output was in memory the first time the fetcher came around, it would be evicted if the reducer terminated the connection, and when the reducer came back it would need to be read from disk.</p>
+<p>The fix merely consisted of the shuffle server not <code>fadvise</code>-ing regions as <code>DONTNEED</code> when a fetch terminates before reading the whole data. This resulted in the average time a reducer spends fetching intermediate data dropping from 60 seconds to 27, the same as MR1. The average job run time also dropped by 30 percent, bringing it in line with MR1 as well.</p>
+<p align="center"><img title="sandy5" src="http://blog.cloudera.com/wp-content/uploads/2014/02/mr2perf5.png" alt="" /></p>
+<p>The astute reader will realize that the situation could be improved even further by communicating the size of map output regions to reducers before they try to fetch them. This would allow us to avoid initiating a fetch when the reducer can’t fit the results inside its merge buffer, and reduce unnecessary seeks on the shuffle server side. (We would like to implement this change in future work.)</p>
+<h2>Conclusion</h2>
+<p>I hope that these experiences will assist you in your own performance regression testing, and maybe give you a tiny drop of solace the next time you’re trapped inside an Eclipse window, wondering whether there’s a way to make everything ok.</p>
+<p>Thanks to these improvements and many others from Cloudera and the rest of the community (the MR2 improvements have gone upstream and will appear in Hadoop 2.3), we are confident that the version of MR2 that will ship inside CDH 5 (in beta at the time of writing; download <a href="http://www.cloudera.com/content/support/en/downloads.html">here</a>) will perform at least as well, and very likely better, than MR1!</p>
+<p><em>Many thanks to Yanpei Chen, Prashant Gokhale, Todd Lipcon, and Chris Leroy for their assistance on this project.</em></p>
+<p><em>Sandy Ryza is a Software Engineer at Cloudera and a Hadoop Committer.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/mapreduce/" title="View all posts in MapReduce" rel="category tag">MapReduce</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>3 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Green Ron</a> /
+			February 20, 2014 / 5:06 AM		</em>
+		<p>Hi,</p>
+<p>Are these improvements all part of Hadoop 2.3?</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			February 20, 2014 / 9:37 AM		</em>
+		<p>Yes: &#8220;The MR2 improvements have gone upstream and will appear in Hadoop 2.3.&#8221;</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Brian</a> /
+			April 01, 2014 / 12:46 PM		</em>
+		<p>It looks like the cache locality change was already in CDH5 Beta 2?  At least that&#8217;s what it looks like from the source code:  <a href="https://github.com/cloudera/hadoop-common/blob/cdh5-2.2.0_5.0.0b2/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/MapTask.java" rel="nofollow">https://github.com/cloudera/hadoop-common/blob/cdh5-2.2.0_5.0.0b2/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/MapTask.java</a></p>
+<p>However my profile with Terasort still shows MapTask$MapOutputBuffer.compare at the top of the Hot Methods taking about 50% of the mapper time.</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='25386' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="0YI=" />
+		<input type="hidden" name="cptch_time" value="1398162633" />
+		<input type="hidden" value="Version: 2.4" />
+		8 &minus; &#115;&#105;x =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

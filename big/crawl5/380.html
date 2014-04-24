@@ -1,0 +1,1321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-to: Analyze Twitter Data with Apache Hadoop | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-to: Analyze Twitter Data with Apache Hadoop"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2012/09/analyzing-twitter-data-with-hadoop/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; How-to: Analyze Twitter Data with Apache Hadoop Comments Feed" href="http://blog.cloudera.com/blog/2012/09/analyzing-twitter-data-with-hadoop/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Community Meetups at Strata + Hadoop World 2012' href='http://blog.cloudera.com/blog/2012/09/community-meetups-at-strata-hadoop-world-2012/' />
+<link rel='next' title='Meet the Engineer: Jon Natkins' href='http://blog.cloudera.com/blog/2012/09/meet-the-engineer-jon-natkins/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2012/09/analyzing-twitter-data-with-hadoop/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=18243' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-18243 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-to: Analyze Twitter Data with Apache Hadoop</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/jonathan-natkins/" title="Posts by Jon Natkins" rel="author">Jon Natkins</a></li>
+				<li>September 19, 2012</li>
+				<li class="comment"><a href="#comments">21 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>Social media has gained immense popularity with marketing teams, and Twitter is an effective tool for a company to get people excited about its products. Twitter makes it easy to engage users and communicate directly with them, and in turn, users can provide word-of-mouth marketing for companies by discussing the products. Given limited resources, and knowing we may not be able to talk to everyone we want to target directly, marketing departments can be more efficient by being selective about whom we reach out to.</p>
+<p>In this post, we’ll learn how we can use <a href="http://flume.apache.org/">Apache Flume</a>, <a href="http://hadoop.apache.org/hdfs/">Apache HDFS</a>, <a href="http://incubator.apache.org/oozie/">Apache Oozie</a>, and <a href="http://hive.apache.org/">Apache Hive</a> to design an end-to-end data pipeline that will enable us to analyze Twitter data. This will be the first post in a series. The posts to follow to will describe, in more depth, how each component is involved and how the custom code operates. All the code and instructions necessary to reproduce this pipeline is available on the <a href="https://github.com/cloudera/cdh-twitter-example">Cloudera Github</a>.</p>
+<h2>Who is Influential?</h2>
+<p>To understand whom we should target, let’s take a step back and try to understand the mechanics of Twitter. A user &#8211; let’s call him Joe &#8211; follows a set of people, and has a set of followers. When Joe sends an update out, that update is seen by all of his followers. Joe can also retweet other users’ updates. A retweet is a repost of an update, much like you might forward an email. If Joe sees a tweet from Sue, and retweets it, all of Joe’s followers see Sue’s tweet, even if they don’t follow Sue. Through retweets, messages can get passed much further than just the followers of the person who sent the original tweet. Knowing that, we can try to engage users whose updates tend to generate lots of retweets. Since Twitter tracks retweet counts for all tweets, we can find the users we’re looking for by analyzing Twitter data.</p>
+<p>Now we know the question we want to ask: Which Twitter users get the most retweets? Who is influential within our industry?</p>
+<h2>How Do We Answer These Questions?</h2>
+<p>SQL queries can be used to answer this question: We want to look at which users are responsible for the most retweets, in descending order of most retweeted. However, querying Twitter data in a traditional RDBMS is inconvenient, since the <a href="https://dev.twitter.com/docs/streaming-apis">Twitter Streaming API</a> outputs <a href="https://dev.twitter.com/docs/platform-objects/tweets">tweets</a> in a <a href="http://www.json.org/">JSON format</a> which can be arbitrarily complex. In the Hadoop ecosystem, the Hive project provides a query interface which can be used to query data that resides in HDFS. The <a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual">query language</a> looks very similar to SQL, but allows us to easily model <a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types">complex types</a>, so we can easily query the type of data we have. Seems like a good place to start. So how do we get Twitter data into Hive? First, we need to get Twitter data into HDFS, and then we’ll be able to tell Hive where the data resides and how to read it.</p>
+<p><img class="aligncenter" title="twitter" src="http://www.cloudera.com/wp-content/uploads/2012/09/twitter.png" alt="" /></p>
+<p>The diagram above shows a high-level view of how some of the CDH (Cloudera&#8217;s Distribution Including Apache Hadoop) components can be pieced together to build the data pipeline we need to answer the questions we have. The rest of this post will describe how these components interact and the purposes they each serve.</p>
+<h2>Gathering Data with Apache Flume</h2>
+<p>The Twitter Streaming API will give us a constant stream of tweets coming from the service. One option would be to use a simple utility like curl to access the API and then periodically load the files. However, this would require us to write code to control where the data goes in HDFS, and if we have a secure cluster, we will have to integrate with security mechanisms. It will be much simpler to use components within CDH to automatically move the files from the API to HDFS, without our manual intervention.</p>
+<p>Apache Flume is a data ingestion system that is configured by defining endpoints in a <a href="http://flume.apache.org/FlumeUserGuide.html#data-flow-model">data flow</a> called sources and sinks. In Flume, each individual piece of data (tweets, in our case) is called an event; sources produce events, and send the events through a channel, which connects the source to the sink. The sink then writes the events out to a predefined location. Flume supports some standard data sources, such as syslog or netcat. For this use case, we’ll need to design a <a href="http://flume.apache.org/FlumeUserGuide.html#custom-source">custom source</a> that accesses the Twitter Streaming API, and sends the tweets through a channel to a <a href="http://flume.apache.org/FlumeUserGuide.html#hdfs-sink">sink that writes to HDFS files</a>. Additionally, we can use the custom source to filter the tweets on a set of search keywords to help identify relevant tweets, rather than a pure sample of the entire Twitter firehose. The custom Flume source code can be found <a href="https://github.com/cloudera/cdh-twitter-example/blob/master/flume-sources/src/main/java/com/cloudera/flume/source/TwitterSource.java">here</a>.</p>
+<h2>Partition Management with Oozie</h2>
+<p>Once we have the Twitter data loaded into HDFS, we can stage it for querying by creating an external table in Hive. Using an external table will allow us to query the table without moving the data from the location where it ends up in HDFS. To ensure scalability, as we add more and more data, we’ll need to also partition the table. A partitioned table allows us to prune the files that we read when querying, which results in better performance when dealing with large data sets. However, the Twitter API will continue to stream tweets and Flume will perpetually create new files. We can automate the periodic process of adding partitions to our table as the new data comes in.</p>
+<p>Apache Oozie is a workflow coordination system that can be used to solve this problem. Oozie is an extremely flexible system for designing <a href="http://incubator.apache.org/oozie/docs/3.2.0-incubating/docs/WorkflowFunctionalSpec.html">job workflows</a>, which can be <a href="http://incubator.apache.org/oozie/docs/3.2.0-incubating/docs/CoordinatorFunctionalSpec.html">scheduled to run</a> based on a set of criteria. We can configure the workflow to run an ALTER TABLE command that adds a partition containing the last hour&#8217;s worth of data into Hive, and we can instruct the workflow to occur every hour. This will ensure that we&#8217;re always looking at up-to-date data.</p>
+<p>The configuration files for the Oozie workflow are located <a href="https://github.com/cloudera/cdh-twitter-example/tree/master/oozie-workflows">here</a>.</p>
+<h2>Querying Complex Data with Hive</h2>
+<p>Before we can query the data, we need to ensure that the Hive table can properly interpret the JSON data. By default, Hive expects that input files use a <a href="http://hive.apache.org/docs/r0.9.0/language_manual/data-manipulation-statements.html">delimited row format</a>, but our Twitter data is in a JSON format, which will not work with the defaults. This is actually one of Hive&#8217;s biggest strengths. Hive allows us to flexibly define, and redefine, how the data is represented on disk. The schema is only really enforced when we read the data, and we can use the <a href="https://cwiki.apache.org/confluence/display/Hive/SerDe">Hive SerDe</a> interface to specify how to interpret what we&#8217;ve loaded.</p>
+<p>SerDe stands for Serializer and Deserializer, which are interfaces that tell Hive how it should translate the data into something that Hive can process. In particular, the Deserializer interface is used when we read data off of disk, and converts the data into objects that Hive knows how to manipulate. We can write a custom SerDe that reads the JSON data in and translates the objects for Hive. Once that&#8217;s put into place, we can start querying. The JSON SerDe code can be found <a href="https://github.com/cloudera/cdh-twitter-example/blob/master/hive-serdes/src/main/java/com/cloudera/hive/serde/JSONSerDe.java">here</a>. The SerDe will take a tweet in JSON form, like the following:</p>
+<pre class="code" style="padding-left: 10px; height: 250px;">{
+   "retweeted_status": {
+      "contributors": null,
+      "text": "#Crowdsourcing – drivers already generate traffic data for your smartphone to suggest alternative routes when a road is clogged. #bigdata",
+      "geo": null,
+      "retweeted": false,
+      "in_reply_to_screen_name": null,
+      "truncated": false,
+      "entities": {
+         "urls": [],
+         "hashtags": [
+            {
+               "text": "Crowdsourcing",
+               "indices": [
+                  0,
+                  14
+               ]
+            },
+            {
+               "text": "bigdata",
+               "indices": [
+                  129,
+                  137
+               ]
+            }
+         ],
+         "user_mentions": []
+      },
+      "in_reply_to_status_id_str": null,
+      "id": 245255511388336128,
+      "in_reply_to_user_id_str": null,
+      "source": "SocialOomph",
+      "favorited": false,
+      "in_reply_to_status_id": null,
+      "in_reply_to_user_id": null,
+      "retweet_count": 0,
+      "created_at": "Mon Sep 10 20:20:45 +0000 2012",
+      "id_str": "245255511388336128",
+      "place": null,
+      "user": {
+         "location": "Oregon, ",
+         "default_profile": false,
+         "statuses_count": 5289,
+         "profile_background_tile": false,
+         "lang": "en",
+         "profile_link_color": "627E91",
+         "id": 347471575,
+         "following": null,
+         "protected": false,
+         "favourites_count": 17,
+         "profile_text_color": "D4B020",
+         "verified": false,
+         "description": "Dad, Innovator, Sales Professional. Project Management Professional (PMP).  Soccer Coach,  Little League Coach  #Agile #PMOT - views are my own -",
+         "contributors_enabled": false,
+         "name": "Scott Ostby",
+         "profile_sidebar_border_color": "404040",
+         "profile_background_color": "0F0F0F",
+         "created_at": "Tue Aug 02 21:10:39 +0000 2011",
+         "default_profile_image": false,
+         "followers_count": 19005,
+         "profile_image_url_https": "https://si0.twimg.com/profile_images/1928022765/scott_normal.jpg",
+         "geo_enabled": true,
+         "profile_background_image_url": "http://a0.twimg.com/profile_background_images/327807929/xce5b8c5dfff3dc3bbfbdef5ca2a62b4.jpg",
+         "profile_background_image_url_https": "https://si0.twimg.com/profile_background_images/327807929/xce5b8c5dfff3dc3bbfbdef5ca2a62b4.jpg",
+         "follow_request_sent": null,
+         "url": "http://facebook.com/ostby",
+         "utc_offset": -28800,
+         "time_zone": "Pacific Time (US &amp; Canada)",
+         "notifications": null,
+         "friends_count": 13172,
+         "profile_use_background_image": true,
+         "profile_sidebar_fill_color": "1C1C1C",
+         "screen_name": "ScottOstby",
+         "id_str": "347471575",
+         "profile_image_url": "http://a0.twimg.com/profile_images/1928022765/scott_normal.jpg",
+         "show_all_inline_media": true,
+         "is_translator": false,
+         "listed_count": 45
+      },
+      "coordinates": null
+   },
+   "contributors": null,
+   "text": "RT @ScottOstby: #Crowdsourcing – drivers already generate traffic data for your smartphone to suggest alternative routes when a road is  ...",
+   "geo": null,
+   "retweeted": false,
+   "in_reply_to_screen_name": null,
+   "truncated": false,
+   "entities": {
+      "urls": [],
+      "hashtags": [
+         {
+            "text": "Crowdsourcing",
+            "indices": [
+               16,
+               30
+            ]
+         }
+      ],
+      "user_mentions": [
+         {
+            "id": 347471575,
+            "name": "Scott Ostby",
+            "indices": [
+               3,
+               14
+            ],
+            "screen_name": "ScottOstby",
+            "id_str": "347471575"
+         }
+      ]
+   },
+   "in_reply_to_status_id_str": null,
+   "id": 245270269525123072,
+   "in_reply_to_user_id_str": null,
+   "source": "web",
+   "favorited": false,
+   "in_reply_to_status_id": null,
+   "in_reply_to_user_id": null,
+   "retweet_count": 0,
+   "created_at": "Mon Sep 10 21:19:23 +0000 2012",
+   "id_str": "245270269525123072",
+   "place": null,
+   "user": {
+      "location": "",
+      "default_profile": true,
+      "statuses_count": 1294,
+      "profile_background_tile": false,
+      "lang": "en",
+      "profile_link_color": "0084B4",
+      "id": 21804678,
+      "following": null,
+      "protected": false,
+      "favourites_count": 11,
+      "profile_text_color": "333333",
+      "verified": false,
+      "description": "",
+      "contributors_enabled": false,
+      "name": "Parvez Jugon",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_background_color": "C0DEED",
+      "created_at": "Tue Feb 24 22:10:43 +0000 2009",
+      "default_profile_image": false,
+      "followers_count": 70,
+      "profile_image_url_https": "https://si0.twimg.com/profile_images/2280737846/ni91dkogtgwp1or5rwp4_normal.gif",
+      "geo_enabled": false,
+      "profile_background_image_url": "http://a0.twimg.com/images/themes/theme1/bg.png",
+      "profile_background_image_url_https": "https://si0.twimg.com/images/themes/theme1/bg.png",
+      "follow_request_sent": null,
+      "url": null,
+      "utc_offset": null,
+      "time_zone": null,
+      "notifications": null,
+      "friends_count": 299,
+      "profile_use_background_image": true,
+      "profile_sidebar_fill_color": "DDEEF6",
+      "screen_name": "ParvezJugon",
+      "id_str": "21804678",
+      "profile_image_url": "http://a0.twimg.com/profile_images/2280737846/ni91dkogtgwp1or5rwp4_normal.gif",
+      "show_all_inline_media": false,
+      "is_translator": false,
+      "listed_count": 7
+   },
+   "coordinates": null
+}
+</pre>
+<p>and translate the JSON entities into queryable columns:</p>
+<pre class="code" style="padding-left: 10px;">SELECT created_at, entities, text, user
+FROM tweets
+WHERE user.screen_name='ParvezJugon'
+  AND retweeted_status.user.screen_name='ScottOstby';
+  </pre>
+<p>which will result in:</p>
+<pre class="code" style="padding-left: 10px;">created_at                        entities                                                                                                                 text                                                                                                                                            user
+Mon Sep 10 21:19:23 +0000 2012    {"urls":[],"user_mentions":[{"screen_name":"ScottOstby","name":"Scott Ostby"}],"hashtags":[{"text":"Crowdsourcing"}]}    RT @ScottOstby: #Crowdsourcing – drivers already generate traffic data for your smartphone to suggest alternative routes when a road is  ...    {"screen_name":"ParvezJugon","name":"Parvez Jugon","friends_count":299,"followers_count":70,"statuses_count":1294,"verified":false,"utc_offset":null,"time_zone":null}
+</pre>
+<p>We&#8217;ve now managed to put together an end-to-end system, which gathers data from the Twitter Streaming API, sends the tweets to files on HDFS through Flume, and uses Oozie to periodically load the files into Hive, where we can query the raw JSON data, through the use of a Hive SerDe.</p>
+<h2>Some Results</h2>
+<p>In my own testing, I let Flume collect data for about three days, filtering on a set of keywords: <br />  <br /> hadoop, big data, analytics, bigdata, cloudera, data science, data scientist, business intelligence, mapreduce, data warehouse, data warehousing, mahout, hbase, nosql, newsql, businessintelligence, cloudcomputing</p>
+<p>The collected data was about half a GB of JSON data, and <a href="https://gist.github.com/3725161">here is an example</a> of what a tweet looks like. The data has some structure, but certain fields may or may not exist. The retweeted_status field, for example, will only be present if the tweet was a retweet. Additionally, some of the fields may be arbitrarily complex. The hashtags field is an array of all the hashtags present in the tweets, but most RDBMS’s do not support arrays as a column type. This semi-structured quality of the data makes the data very difficult to query in a traditional RDBMS. Hive can handle this data much more gracefully.</p>
+<p>The query below will find usernames, and the number of retweets they have generated across all the tweets that we have data for:</p>
+<pre class="code" style="padding-left: 10px;">SELECT
+  t.retweeted_screen_name,
+  sum(retweets) AS total_retweets,
+  count(*) AS tweet_count
+FROM (SELECT
+        retweeted_status.user.screen_name as retweeted_screen_name,
+     	retweeted_status.text,
+     	max(retweet_count) as retweets
+      FROM tweets
+      GROUP BY retweeted_status.user.screen_name,
+               retweeted_status.text) t
+GROUP BY t.retweeted_screen_name
+ORDER BY total_retweets DESC
+LIMIT 10;</pre>
+<p>For the few days of data, I found that these were the most retweeted users for the industry:</p>
+<pre class="code" style="padding-left: 10px;">  retweeted_screen_name		total_retweets		tweet_count
+  mauricefreedman	        493		        1
+  HarvardBiz			362                     6
+  TechCrunch			314			7
+  googleanalytics		244			10
+  BigDataBorat			201			6
+  stephen_wolfram		182		        1
+  CloudExpo			153			28
+  TheNextWeb			150			1
+  GonzalezCarmen		121			10
+  IBMbigdata			100			37
+  </pre>
+<p>From these results, we can see whose tweets are getting heard by the widest audience, and also determine whether these people are communicating on a regular basis or not. We can use this information to more carefully target our messaging in order to get them talking about our products, which, in turn, will get other people talking about our products.</p>
+<h2>Conclusion</h2>
+<p>In this post we’ve seen how we can take some of the components of CDH and combine them to create an end-to-end data management system. This same architecture could be used for a variety of applications designed to look at Twitter data, such as identifying spam accounts, or identifying clusters of keywords. Taking the system even further, the general architecture can be used across numerous applications. By <a title="Analyzing Twitter Data with Hadoop, Part 2: Gathering Data with Flume" href="http://blog.cloudera.com/blog/2012/10/analyzing-twitter-data-with-hadoop-part-2-gathering-data-with-flume/">plugging in different Flume sources and Hive SerDes</a>, this application can be customized for many other applications, like analyzing web logs, to give an example. Grab the <a href="https://github.com/cloudera/cdh-twitter-example">code</a>, and give it a shot yourself.</p>
+<p><em>Jon Natkins (<a href="http://www.twitter.com/nattybnatkins">@nattybnatkins</a>) is a Software Engineer at Cloudera, where he has worked on Cloudera Manager and Hue, and has contributed to a variety of projects in the Apache Hadoop ecosystem. Prior to Cloudera, Jon wrangled databases at Vertica. He holds an Sc.B in Computer Science from Brown University.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cdh/" title="View all posts in CDH" rel="category tag">CDH</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/data-collection/" title="View all posts in Data Collection" rel="category tag">Data Collection</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/flume/" title="View all posts in Flume" rel="category tag">Flume</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hive/" title="View all posts in Hive" rel="category tag">Hive</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/oozie/" title="View all posts in Oozie" rel="category tag">Oozie</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>21 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jef Spicoli</a> /
+			September 19, 2012 / 8:40 AM		</em>
+		<p>Seems like alot of work.  Also, since Twitter is realtime, I notice you&#8217;re periodically using Ooozie to load files in to Hive so they can be queried.  Can you do this in real-time?  If not, thats unfortunate.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Tim</a> /
+			September 19, 2012 / 10:14 AM		</em>
+		<p>Great post.</p>
+<p>FYI the link to the Oozie configs is broken.</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jon Natkins</a> /
+			September 19, 2012 / 3:16 PM		</em>
+		<p>As far as I can tell, the links are working&#8230;Could you double check if they&#8217;re still broken, and if so, show me the link you&#8217;re trying to access?</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jon Natkins</a> /
+			September 19, 2012 / 3:14 PM		</em>
+		<p>Hey Jeff,</p>
+<p>You could definitely do this with out the hour delay if you loaded all the data into a single directory, and had a non-partitioned table. The advantage of partitioning the table is that you can take advantage of Hive&#8217;s partition pruning functionality, which will speed up queries that only need to look at particular periods of time. If that&#8217;s not something of interest.</p>
+<p>Jon</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.sentric.ch">Jean-Pierre</a> /
+			September 19, 2012 / 11:56 PM		</em>
+		<p>Hi Jon.</p>
+<p>Interesting post. We had a similar approach using Flume to aggregate LOG information from our realtime application. We realized that we would end up with a huge amount of very, very small files on HDFS, produced by the Flume HDFS sink. Since HDFS is not designed for small blocks we thought thats not a good idea and didn&#8217;t proceed with this approach.</p>
+<p>I would like to know how you do the house keeping on HDFS? Do you flush the files written by HDFS sink once you have a partition in the table?</p>
+<p>What about the HDFS mantra: write once, read forever?</p>
+<p>From my point of view it should be possible to aggregate a certain amount of tweets (events) within Flume before it&#8217;s written to the disk to archive a reasonable block size. But, that&#8217;s again never realtime.</p>
+<p>What about using HBase as HDFS sink and run PIG jobs to analyse the data. Besides the fact that this approach is again not realtime (cause PIG is batch oriented) one could remove Oozie from the architecture.</p>
+<p>Jean-Pierre</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jon Natkins</a> /
+			September 20, 2012 / 6:15 AM		</em>
+		<p>Hi Jean-Pierre,</p>
+<p>A few thoughts: I hear you on the small files issue. I didn&#8217;t really address that in this post, but one tactic could be to combine the files for an hour&#8217;s data before adding the partition to Hive. That way, you&#8217;d end up with a smaller number of files. This isn&#8217;t so dissimilar from what HBase does during a major compaction. The other option is to increase the batch size for the Flume source, so that it writes files that are larger. However, with both of these, you&#8217;re still going to have trouble achieving truly real-time results. Using HBase may be the best option, since it will manage the files for you, and you can still potentially query HBase using Hive.</p>
+<p>-Natty</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jay</a> /
+			September 21, 2012 / 1:21 AM		</em>
+		<p>Natty, interesting approach. I&#8217;ve been trying to do something similar. Tell me something, why not just use Flume decorators to convert Twitter JSON to a more friendly format? Also, isn&#8217;t flume an overkill for data collection, when you are opening just one single connection to Twitter Streaming API?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jay</a> /
+			September 21, 2012 / 1:23 AM		</em>
+		<p>Also, about your comment on how Flume should batch more records before writing to HDFS &#8211; I don&#8217;t think that would be optimal &#8211; If I read the flume doc correctly, Flume is tuned for a data transfer size of 32KB.</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jon Natkins</a> /
+			September 28, 2012 / 1:32 PM		</em>
+		<p>Jay,</p>
+<p>You could convert the JSON to something else, but the point of the post was to show how you could avoid having to do any post-processing by using the Hive SerDe interface. As for Flume being overkill, I don&#8217;t think it&#8217;s overkill at all. This is a great use case for Flume. We have data coming in from one place, and we need to get it somewhere else. This is precisely what Flume is for.</p>
+<p>As for the data transfer size, I think I may have misspoken slightly. You can tune the size of the flushes to HDFS by changing the batch size on the HDFS sink. The roll count can be used to control the number of events written to a particular file.</p>
+<p>Natty</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://nl.atos.net/bigdata">R. Klopman</a> /
+			November 22, 2012 / 12:24 PM		</em>
+		<p>This is a very useful tutorial. I had however a problem with the software package on <a href="https://github.com/cloudera/cdh-twitter-example" rel="nofollow">https://github.com/cloudera/cdh-twitter-example</a>. I got compilation errors because of a not implemented abstract function and the missing symbol &#8216;setIncludeEntities&#8217;.</p>
+<p>Twitter4j has moved to versions 3.x and the function FilterQuery.setIncludeEntities has disappeared. I made a quick fix by changing in pom.xml the version property of twitter4j to 2.2.6 instead of [2.2,). In the pom.xml there are also references to CDH4.0.1, while we currently are at later versions.</p>
+<p>I would appreciate if the software could be upgraded to twitter4j 3.x, and the readme.md could tell where to set the right hadoop versions.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.csc.com">Allwin Fernandez</a> /
+			January 05, 2013 / 8:54 PM		</em>
+		<p>Interesting post.However when I try to execute the oozie workflow as mentioned,I am getting the error &#8220;variable[wfInput] cannot be resolved.Please help me  to resolve it.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Dan Sandler</a> /
+			January 17, 2013 / 6:16 PM		</em>
+		<p>This sample Twitter agent is a great way to learn the Hadoop stack. Once the example works (it takes time) the flume Twitter Agent will stream tweets in real-time to your HDFS.  </p>
+<p>With regards to the real-time question at the top of the post, once the tweets land on your HDFS, there may be a 4-minute lag before the Oozie workflow adds a new partition to the external table.  Such latency may disqualify the app as real-time, but understand this lag is a worst case scenario (i.e. it only happens when the Oozie workflow adds a partition to the external table) and I believe the 4 minutes in between Oozie job execution is configurable (admittedly I have taken the defaults).</p>
+<p>Once the Oozie workflow adds a partition and, based on the application which adds a partition  every time an subdirectory is added to HDFS on an hourly basis, then any tweet appearing in that hour will be IMMEDIATELY visible in the external table BECAUSE it is an external table.  </p>
+<p>The flume portion of the example is extremely impressive, I tweeted from my Twitter account and before I could type the “hadoop fs -cat &#8230; | grep –I “ command on the tweet file, I saw my tweet on my local HDFS.  So what I was seeing was near real-time streaming from twitter to HDFS.</p>
+<p>Regarding the error variable[wfInput] cannot be resolved, this happens when the Oozie workflow tries to roll forward one hour AND that hour (or more accurately the specified time increment) doesn&#8217;t exist on HDFS.  </p>
+<p>For instance, in job.properties I have the following parameters.  Let&#8217;s say Flume is streaming the tweets to my HDFS folder, /user/flume/tweets/*.  If I have Flume running from 8AM-9AM, but then I pause Flume from 10AM-11AM and resume from 12PM-20PM, then I will get the error “variable[wfInput] cannot be resolved  when Oozie tries to add the partitions for 10AM *aka 2013011710) and 11AM (aka 2013011711) to the external table TWEETS. </p>
+<p>jobStart=2013-01-17T13:00Z<br />
+jobEnd=2013-12-12T23:00Z<br />
+initialDataset=2013-01-17T08:00Z</p>
+<p>Hopefully this makes sense, it took me a while to understand what was happening and to recognize the &#8220;wfInput&#8221; error as a soft error (at least in my case).</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Dan Sandler</a> /
+			January 19, 2013 / 4:24 PM		</em>
+		<p>I made a few changes from above, the what/why of these changes are listed below.  For me, this gets the example closer to real-time, and you can get even closer by tweaking the flume.conf parameters (specifically hdfs.rollCount, hdfs.batchSize, or hdfs.rollInterval).</p>
+<p>1) I removed the following tags (i.e. readyIndicator) from coord-app.xml.  I didn&#8217;t want to wait 1 hour for the logs to roll forward</p>
+<p>2) I &#8220;hid&#8221; the in-process Flume.nnnnnnnnnnnnnn.tmp files from map reduce.  Otherwise you&#8217;ll get an exception (reported in <a href="https://issues.apache.org/jira/browse/FLUME-1702" rel="nofollow">https://issues.apache.org/jira/browse/FLUME-1702</a>).  To avoid this exception:<br />
+   * I implemented the workaround referenced in <a href="https://groups.google.com/a/cloudera.org/forum/?fromgroups=#!topic/cdh-user/FWH80lehYxk" rel="nofollow">https://groups.google.com/a/cloudera.org/forum/?fromgroups=#!topic/cdh-user/FWH80lehYxk</a>.  I created a Java class (code below) to specify a pathFilter of .tmp files, and I created a JAR we can reference in hive-site.xml.<br />
+   * I placed the JAR in the following property in hive-site.xml and made reference the pathFilter.class, thereby ensuring that any hive connections will exclude the Flume temp files.  I also copied this jar to /usr/lib/hadoop and /usr/lib/hdfs</p>
+<p>  hive.aux.jars.path<br />
+  file:///usr/lib/hadoop/hive-serdes-1.0-SNAPSHOT.jar,file:///usr/lib/hadoop/TwitterUtil.jar   </p>
+<p>    mapred.input.pathFilter.class<br />
+    com.twitter.util.FileFilterExcludeTmpFiles</p>
+<p>3) I bounced the hive servers</p>
+<p>I tested this several times, first without the oozie workflow running.  Basically I renamed an existing Flume file so it became a .tmp file, and I got a count * on the tweets table.  As expected, the total tweet count decreased by the number of tweets in the Flume file.</p>
+<p>I then started the oozie workflow and as the workflow added partitions to the table (as expected), the Flume agent wrote to the .tmp files.  I queried the tweets table as it happened and fortunately, the .tmp file was excluded from the query.</p>
+<p> Here is the Java code (BTW I am not a Java developer, the code is lifted nearly verbatim from <a href="https://groups.google.com/a/cloudera.org/forum/?fromgroups=#!topic/cdh-user/FWH80lehYxk" rel="nofollow">https://groups.google.com/a/cloudera.org/forum/?fromgroups=#!topic/cdh-user/FWH80lehYxk</a>).  </p>
+<p> Hope this helps.</p>
+<p> =====================================================</p>
+<p> package com.twitter.util;</p>
+<p> import java.io.IOException;<br />
+ import java.util.ArrayList;<br />
+ import java.util.List;<br />
+ import org.apache.hadoop.fs.Path;<br />
+ import org.apache.hadoop.fs.PathFilter;</p>
+<p> public class FileFilterExcludeTmpFiles implements PathFilter {<br />
+     public boolean accept(Path p) {<br />
+         String name = p.getName();<br />
+         return !name.startsWith(&#8220;_&#8221;) &amp;&amp; !name.startsWith(&#8220;.&#8221;) &amp;&amp; !name.endsWith(&#8220;.tmp&#8221;);<br />
+     }<br />
+ }</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Robin Brouwer</a> /
+			February 10, 2013 / 3:11 AM		</em>
+		<p>Hi,</p>
+<p>Like some other above, I&#8217;m getting &#8220;variable [wfInput] cannot be resolved&#8221; when running the oozie workflow. Can anybody help me resolve this isuee? </p>
+<p>Dan Sandler in some posts above suggests: &#8220;&#8230;this happens when the Oozie workflow tries to roll forward one hour AND that hour (or more accurately the specified time increment) doesn’t exist on HDFS&#8230;&#8221;. However, flume is running, the right folders/files exist on HDFS and the timings all seem right.</p>
+<p>Any help much appreciated.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Pranesh Pandurangan</a> /
+			March 20, 2013 / 2:15 PM		</em>
+		<p>Can you explain where you do each of these steps? The readme in the github is not clear on which steps happen on the server with cloudera manager, and which ones happen in the client nodes</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Rajiv</a> /
+			March 21, 2013 / 2:05 PM		</em>
+		<p>I am new to this. A couple of basic questions :<br />
+1) In this approach does same data get stored twice- 1) In HDFS and 2) external table in HIVE<br />
+2) Is the data stored in HIVE in JSON format?<br />
+2) When we run a query in HIVE, does it call the appropriate SerDe interface to interpret the data? Is this transparent to the user of the query?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Romain</a> /
+			March 25, 2013 / 2:36 PM		</em>
+		<p>This post and the code has been updated in a follow-up:<br />
+<a href="http://blog.cloudera.com/blog/2013/03/how-to-analyze-twitter-data-with-hue/" rel="nofollow">http://blog.cloudera.com/blog/2013/03/how-to-analyze-twitter-data-with-hue/</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Kartik</a> /
+			April 10, 2013 / 11:10 AM		</em>
+		<p>Thank you for the github tutorial. It is very helpful for beginners like me to get started on using hadoop for analyses.<br />
+I have been working on the github tutorial for about a month, I seem to be able to execute all the steps given on the tutorial on a Cloudera VM. But I have not been able to get tweets to start streaming to the Flume directory in HDFS. Are there any checks that I can do to make sure I have done everything right?<br />
+Is there a way I can verify that my flume configuration is correct?<br />
+Any help would be appreciated. </p>
+<p>Thanks.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">venu</a> /
+			May 08, 2013 / 6:22 AM		</em>
+		<p>Hi,</p>
+<p>   I downloaded cloudera quick start vm , iam unable workout with oozie and flume , please send me good tutorial  with examples..</p>
+<p>Regards,<br />
+venu</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='18243' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="uq8=" />
+		<input type="hidden" name="cptch_time" value="1397909956" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &minus; 1 =  &#111;&#110;e	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

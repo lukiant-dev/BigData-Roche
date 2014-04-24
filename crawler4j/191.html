@@ -1,0 +1,1039 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>QuickStart VM: Now with Real-Time Big Data | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="QuickStart VM: Now with Real-Time Big Data"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/06/quickstart-vm-now-with-real-time-big-data/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; QuickStart VM: Now with Real-Time Big Data Comments Feed" href="http://blog.cloudera.com/blog/2013/06/quickstart-vm-now-with-real-time-big-data/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Meetups at Hadoop Summit' href='http://blog.cloudera.com/blog/2013/06/meetups-at-hadoop-summit/' />
+<link rel='next' title='Demo: The New Search App in Hue 2.4' href='http://blog.cloudera.com/blog/2013/06/demo-the-new-search-app-in-hue-2-4/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/06/quickstart-vm-now-with-real-time-big-data/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=22198' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-22198 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">QuickStart VM: Now with Real-Time Big Data</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Sean Mackrory</li>
+				<li>June 20, 2013</li>
+				<li class="comment"><a href="#comments">7 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>For years, Cloudera has provided virtual machines that give you a working Apache Hadoop environment out-of-the-box. It’s the quickest way to learn and experiment with Hadoop right from your desktop.</p>
+<p>We’re constantly updating and improving the <a href="https://ccp.cloudera.com/display/SUPPORT/Cloudera+QuickStart+VM">QuickStart VM</a>, and in the latest release there are two of Cloudera’s new products that give you easier and faster access to your data: <a href="http://www.cloudera.com/content/cloudera/en/products/cdh/search.html">Cloudera Search</a> and <a href="http://www.cloudera.com/content/cloudera/en/products/cdh/impala.html">Cloudera Impala</a>. We’ve also added corresponding applications to <a href="http://gethue.com">Hue</a> &#8211; an open source web-based interface for Hadoop, and the easiest way to interact with your data.</p>
+<p>Cloudera Search integrates Apache Solr with the rest of the platform, to let you do full-text search of the data stored in your cluster, just like you would with an online search-engine! Cloudera Impala, on the other hand, lets you execute SQL queries against that same data, on the same platform, and get results back fast enough to interactively explore and analyze. With both these workloads available on the cluster, it eliminates the pain of having to move large data sizes around.</p>
+<p>To help you get a sense of how these could work for you, we’ve set up a couple of examples in the Cloudera QuickStart VM. You can download the VM <a href="https://ccp.cloudera.com/display/SUPPORT/Cloudera+QuickStart+VM">here</a> for VirtualBox, VMware, and other hypervisors.</p>
+<h2>Starting Services in Cloudera Manager</h2>
+<p>When the QuickStart VM boots, it configures all the services you might expect on a Cloudera cluster. Obviously, this single-node “pseudo-distributed” simple setup does not represent the performance, scalability, and reliability of a fully-distributed cluster &#8211; but it does give you a taste of how easy it is to perform powerful work with your data.</p>
+<p>The core services are already running, but you’ll need to make sure Impala, and Solr, or any other additional service you’d like to try is started before you proceed.</p>
+<h2>Enabling Cloudera Search</h2>
+<p>From the welcome screen, select Cloudera Manager, or navigate to http://localhost:7180 in your browser. Log in with the username and password ‘admin’. When the Services page loads, look for the line with the solr1 service, and click <strong>Actions ? Start&#8230;</strong></p>
+<p align="Center"><img title="vm1" src="http://blog.cloudera.com/wp-content/uploads/2013/06/vm1.png" alt="" width="600" height="178" /></p>
+<p>ZooKeeper, HDFS, MapReduce, and Hue are started automatically and should already be running. Later in the tutorial, you may want to stop Solr and start Impala. If you go beyond the examples in this tutorial, you may need to allocate more memory for your VM. The default is 4GB, but starting more services in Cloudera Manager may require more, depending on your use case.</p>
+<h2>Batch Indexing with MapReduce</h2>
+<p>One way to make data searchable is to index it with a batch job. This is ideal for fixed data sets, like a collection of reports from last year. The script ~/datasets/batch-tweets.sh demonstrates how you would set up a “collection” in Solr and invoke MapReduce for this type of job. You can open the Terminal application from the taskbar at the top, and run this script to load and index some sample data:</p>
+<pre class="code" style="padding-left: 10px;">$ ~/datasets/batch-tweets.sh
+</pre>
+<p>&nbsp;</p>
+<p>Note that this data does not consist of real tweets &#8211; it is just similarly structured data to demonstrate the process. (If you want to see some interesting, real data from Twitter, see the near-real-time example below!) Now that you have some data loaded, you can try out the interfaces for doing full-text search.</p>
+<h2>Searching With Hue and Solr</h2>
+<p>Click the Hue bookmark or navigate to http://localhost:8888/home in the browser, and open the Search app. (Look for <a href="https://raw.github.com/cloudera/hue/f5d6aa668fd28712da3ce1311fcbdf864967d37a/apps/search/static/art/icon_search_24.png">this icon</a>.) You will be presented with a list of collections &#8211; select the batch_tweets collection that we just created and import it. Once it is imported, open that collection, click the <strong>Search It!</strong> link, and you will see all the data from the fake tweets we just indexed. As you type a query, the list is filtered accordingly.</p>
+<p>You can also click the Solr bookmark in Firefox or navigate to http://localhost:8983/solr to access the Solr admin web interface. This interface provides more advanced information about your data and the underlying search infrastructure.</p>
+<p>Hue also allows you to customize which fields in the data are shown, and how they are displayed. Check out <a href="http://vimeo.com/68163713">this video</a> that shows how to quickly make a professional-looking search page like the one below.</p>
+<p align="Center"><img title="vm2" src="http://blog.cloudera.com/wp-content/uploads/2013/06/vm2.png" alt="" width="600" height="332" /></p>
+<h2>Near-real-time Indexing with Flume</h2>
+<p>You can configure Cloudera Search to stream live data from Twitter with Flume, index it with Solr as it comes in, and store it in HDFS for future searches. You’ll need to sign in to dev.twitter.com with your Twitter account, select <strong>My applications</strong> from the drop-down menu in the top-right corner, and <strong>Create a new application</strong> to represent your Search installation. (You don’t need a callback URL, and as you won’t be sharing this ‘app’ with others, you may fill in the other fields according to your own preference.) Once the application is created, click <strong>Create my access token</strong> at the bottom of the page. To configure your cluster to connect to Twitter as this application, you’ll need the <strong>consumer key</strong>, <strong>consumer secret</strong>, <strong>access token</strong>, and <strong>access token secret</strong> from this page. (You may have to refresh to see the access token you created.) Keep this information confidential just as you would your Twitter username and password. You can learn more about Twitter’s public data streams and their policies <a href="https://dev.twitter.com/docs/streaming-apis/streams/public">here</a>.</p>
+<p>The script ~/datasets/nrt-tweets.sh demonstrates how you would configure Flume for this type of job. By providing the Twitter credentials listed above, you can use this script to create a collection and start downloading data:</p>
+<pre class="code" style="padding-left: 10px;">$ ~/datasets/nrt-tweets.sh start [CONSUMER_KEY] [CONSUMER_SECRET] \
+	[ACCESS_TOKEN] [ACCESS_TOKEN_SECRET]
+</pre>
+<p>&nbsp;</p>
+<p>Tweets become searchable seconds later. In the Hue Search application, go to the Collection Manager, and import the new collection. If you don’t see any tweets, look at the log file /var/log/flume-ng/flume.log for any errors that were returned by the Twitter API. If the credentials were wrong when running the setup script, you can edit them in /etc/flume-ng/conf/flume.conf and restart flume. If the VM was not able to set the correct system time during the boot process (<code>`date --utc`</code> must return the current UTC time for authentication), correct it with <code>`ntpdate pool.ntp.org`</code>. You should restart the services in Cloudera Manager after making this change.</p>
+<p>When you want to stop ingesting data, run:</p>
+<pre class="code" style="padding-left: 10px;">$ ~/datasets/nrt-tweets.sh stop
+</pre>
+<p>&nbsp;</p>
+<p>or</p>
+<pre class="code" style="padding-left: 10px;">$ sudo service flume-ng-agent stop
+</pre>
+<p>&nbsp;</p>
+<p>Note that nrt-tweets.sh runs Flume independently of the service in Cloudera Manager, so it will not interfere with any other Flume configuration you might set up in the QuickStart VM using Cloudera Manager. </p>
+<h2>Interactive Querying with Impala</h2>
+<p>Another recent addition to our Big Data platform is Cloudera Impala. Impala allows you to execute SQL queries against your data in Hadoop or HBase, using the same tables and metastore you use with Apache Hive. Impala is designed for extremely low latency &#8211; it’s fast enough to interactively explore and analyze your data.</p>
+<p>Again, a single-node demo doesn’t truly demonstrate the speed and scalability of Impala, but it will let you execute some sample queries and see the performance relative to Hive. As we did with search, make sure the impala1 and hive1 services are started in Cloudera Manager.</p>
+<p>Hue provides some sample data sets for Hive and Impala (and other components too). You can install them from within Hue, just go to <strong>About</strong> (top-left icon)<strong> ? Step 2: Examples</strong>, and click the service you want to try out. The QuickStart VM comes with two additional data sets you can install for Hive and Impala. The first lists the median income for each zip code in the United States from the 2000 Census. The second is a much larger data set from the <a href="http://www.tpc.org/tpcds/">Transaction Processing Performance Council</a> that is used to benchmark databases against realistic business workloads. There are scripts to install and configure each, but be sure to execute the refresh command to make Impala aware of the new data sets:</p>
+<pre class="code" style="padding-left: 10px;">$ ~/datasets/zipcode-setup.sh
+$ ~/datasets/tpcds-setup.sh # requires Internet access
+$ impala-shell -q ‘refresh’
+</pre>
+<p>&nbsp;</p>
+<p>Once these data sets are installed you can explore the tables in the <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/latest/Hue-2-User-Guide/hue25.html">Metastore Manager</a> application in Hue, and you can execute SQL queries through the <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/latest/Hue-2-User-Guide/hue22.html">Hive</a> and <a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/latest/Hue-2-User-Guide/hue23.html">Impala</a> applications (or from the command-line using the <code>hive</code> and <code>impala-shell</code>utilities). Here are some example queries you can try. Compare them and see how much faster you can get results with Impala!</p>
+<pre class="code" style="padding-left: 10px;">select * from zipcode_incomes where zip='59101';
+</pre>
+<p>&nbsp;</p>
+<pre class="code" style="padding-left: 10px;">select 
+   i_item_id,
+   s_state,
+   avg(ss_quantity) agg1,
+   avg(ss_list_price) agg2,
+   avg(ss_coupon_amt) agg3,
+   avg(ss_sales_price) agg4
+FROM store_sales
+JOIN date_dim on (store_sales.ss_sold_date_sk = date_dim.d_date_sk)
+JOIN item on (store_sales.ss_item_sk = item.i_item_sk)
+JOIN customer_demographics on (store_sales.ss_cdemo_sk = customer_demographics.cd_demo_sk)
+JOIN store on (store_sales.ss_store_sk = store.s_store_sk)
+where
+   cd_gender = 'M' and
+   cd_marital_status = 'S' and
+   cd_education_status = 'College' and
+   d_year = 2002 and
+   s_state in ('TN','SD', 'SD', 'SD', 'SD', 'SD')
+group by
+   i_item_id,
+   s_state
+order by
+   i_item_id,
+   s_state
+limit 100;
+</pre>
+<p>&nbsp;</p>
+<h2>Next Steps&#8230;</h2>
+<p>New products from Cloudera like Search and Impala are making it easy to extract valuable information from your data faster than ever before. To learn about how these tools can be used to help solve problems and answer bigger questions, please visit Cloudera’s website:</p>
+<ul>
+<li><a href="http://cloudera.com/content/cloudera/en/campaign/introducing-search.html">Introducing Search</a></li>
+<li><a href="http://www.cloudera.com/content/cloudera/en/campaign/introducing-impala.html">Introducing Impala</a></li>
+<li><a href="http://university.cloudera.com/onlineresources/elearning.html">E-Learning Courses</a></li>
+</ul>
+<p>If you run into any problems or have questions, you can refer to our online documentation or contact us on the appropriate user groups, all of which are detailed <a href="http://www.cloudera.com/content/support/en/documentation.html">here</a>.</p>
+<p>Other links you may find useful:</p>
+<ul>
+<li><a href="https://github.com/cloudera/cdk-examples">Cloudera Development Kit</a></li>
+<li><a href="http://gethue.com">Hue &#8211; The UI for Apache Hadoop</a></li>
+</ul>
+<p><em>Sean Mackrory is a Software Engineer on the infrastructure team and an Apache Bigtop Committer.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hue/" title="View all posts in Hue" rel="category tag">Hue</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/impala/" title="View all posts in Impala" rel="category tag">Impala</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/quickstart-vm/" title="View all posts in QuickStart VM" rel="category tag">QuickStart VM</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/search/" title="View all posts in Search" rel="category tag">Search</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/training-2/" title="View all posts in Training" rel="category tag">Training</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>7 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.zettamonk.com">pranjal rajput</a> /
+			June 22, 2013 / 2:54 PM		</em>
+		<p>impala is well worth the wait.<br />
+thanks for sharing the tutorial.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">mac</a> /
+			February 19, 2014 / 5:16 AM		</em>
+		<p>Thanks for the tutorial, it doesn&#8217;t however seem to be up to date. The batch-tweets.sh script throws an error in the beginning but otherwise completes:<br />
+rm: `/user/cloudera/batch_tweets_indir&#8217;: No such file or directory<br />
+rm: `/user/cloudera/batch_tweets_outdir&#8217;: No such file or directory</p>
+<p>I also can&#8217;t log in with the &#8216;admin&#8217; &#8216;admin&#8217; combo and after starting solr there&#8217;s no sign of any search option&#8230; almost makes me feel like i&#8217;m at the wrong party on the wrong planet&#8230;</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			February 19, 2014 / 12:43 PM		</em>
+		<p>Mac,</p>
+<p>Yes, the datestamp on this is June 13, 2013. Look for a new release of QuickStart VM very soon.</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Amit</a> /
+			March 03, 2014 / 3:44 AM		</em>
+		<p>Mac: Try Clouder Cloudera as the admin username and password.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Luiz Henrique</a> /
+			April 17, 2014 / 9:54 AM		</em>
+		<p>Hi,<br />
+the dataset is home/cloudera/dataset/batch-tweets.sh, but this command does not update conf.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jeanne</a> /
+			April 17, 2014 / 1:44 PM		</em>
+		<p>Can I create an ODBC connection to the VM Hive database and access it from software running on my host machine? If so, how do I configure it? I&#8217;ve tried and no luck so far.</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Justin Kestelyn (@kestelyn)</a> /
+			April 17, 2014 / 2:32 PM		</em>
+		<p>Jeanne,</p>
+<p>For best results, post your question to the &#8220;Hadoop Concepts &#038; QuickStart VM&#8221; area at cloudera.com/community.</p>
+	</li>
+</li>
+</ul>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='22198' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="PWI=" />
+		<input type="hidden" name="cptch_time" value="1398162717" />
+		<input type="hidden" value="Version: 2.4" />
+		s&#101;ven &#43; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> = 15	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

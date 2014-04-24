@@ -1,0 +1,960 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Apache ZooKeeper Resilience at Pinterest | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Apache ZooKeeper Resilience at Pinterest"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2014/03/zookeeper-resilience-at-pinterest/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Apache ZooKeeper Resilience at Pinterest Comments Feed" href="http://blog.cloudera.com/blog/2014/03/zookeeper-resilience-at-pinterest/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Inside Apache Oozie HA' href='http://blog.cloudera.com/blog/2014/03/inside-apache-oozie-ha/' />
+<link rel='next' title='How-to: Implement Role-based Security in Impala using Apache Sentry' href='http://blog.cloudera.com/blog/2014/03/how-to-implement-role-based-security-in-impala-using-apache-sentry/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2014/03/zookeeper-resilience-at-pinterest/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=25725' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-25725 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Apache ZooKeeper Resilience at Pinterest</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/jkestelyn/" title="Posts by Justin Kestelyn (@kestelyn)" rel="author">Justin Kestelyn (@kestelyn)</a></li>
+				<li>March 14, 2014</li>
+				<li class="comment"><a href="#comments">1 comment</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><P><strong>The guest post below was originally authored by Pinterest engineer Raghavendra Prabhu and <a href="http://engineering.pinterest.com/post/77933733851/zookeeper-resilience-at-pinterest">published</a> by the Pinterest Engineering blog. Being big ZooKeeper fans, we re-publish it here for your convenience. Thanks, Pinterest!<br />
+</strong></p>
+<p><a href="http://zookeeper.apache.org/">Apache ZooKeeper </a>is an open source distributed coordination service that&rsquo;s popular for use cases like service discovery, dynamic configuration management and distributed locking. While it&rsquo;s versatile and useful, it has failure modes that can be hard to prepare for and recover from, and if used for site critical functionality, can have a significant impact on site availability.</p>
+<p>It&rsquo;s important to structure the usage of ZooKeeper in a way that prevents outages and data loss, so it doesn&rsquo;t become a single point of failure (SPoF). Here, you&rsquo;ll learn how Pinterest uses ZooKeeper, the problems we&rsquo;ve dealt with, and a creative solution to benefit from ZooKeeper in a fault-tolerant and highly resilient manner.</p>
+<h2>Service Discovery and Dynamic Configuration</h2>
+<p>Like many large scale web sites, Pinterest&rsquo;s infrastructure consists of servers that communicate with backend services composed of a number of individual servers for managing load and fault tolerance. Ideally, we&rsquo;d like the configuration to reflect only the active hosts, so clients don&rsquo;t need to deal with bad hosts as often. ZooKeeper provides a well known pattern to solve this problem.</p>
+<p align="center"><img src="/wp-content/uploads/2014/03/pinZK1.png"></p>
+<p>Each backend service host registers an <a href="http://zookeeper.apache.org/doc/r3.2.1/zookeeperProgrammers.html#Ephemeral+Nodes">ephemeral node </a>in ZooKeeper in a path specific to that service. Clients can watch that path to determine the list of hosts. Since each node is ephemeral, it will automatically be removed by ZooKeeper if the host registering fails or shuts down. New hosts brought up automatically register themselves at the correct path, so clients will notice within a few seconds. Thus the list stays up to date and reflects the hosts that are active, which addresses the issues mentioned above.</p>
+<p>Another use case is any type of application configuration that needs to be updated dynamically and applied within a few seconds to multiple machines.</p>
+<p align="center"><img src="/wp-content/uploads/2014/03/pinZK2.png"></p>
+<p>Imagine a distributed database fronted by a service layer, referred to as &lsquo;Data Service&rsquo;. Let&rsquo;s assume the database is partitioned by a user. When a user request comes in, it needs to know which database holds the information for that user. This information could be deployed statically with the application, but that has the same problems as described above with service discovery. Additionally, it&rsquo;s important that database configuration changes converge quickly across all the Data Service machines. Otherwise, we wouldn&rsquo;t be able to apply the update quickly.</p>
+<p>Here again, ZooKeeper is of help. The configuration can be stored in a node in ZooKeeper that all the Data Service servers watch. A command line tool or GUI can update the node, and within a few seconds, all the Data Service machines will reflect the update. Voila!</p>
+<h2>ZooKeeper Failure Modes</h2>
+<p>While ZooKeeper can play a useful role in a backend infrastructure stack as shown above, like all software systems, it can fail. Here are some possible reasons:</p>
+<ul>
+<li><strong>Too many connections:</strong> Let&rsquo;s say someone brought up a large Hadoop job that needs to communicate with some of the core Pinterest services. For service discovery, the workers need to connect to ZooKeeper. If not properly managed, this could temporarily overload the ZooKeeper hosts with a huge volume of incoming connections, causing it to get slow and partially unavailable.</li>
+<li><strong>Too many transactions: </strong>When there&rsquo;s a surge in ZooKeeper transactions, such as a large number of servers restarting in a short period and attempting to re-register themselves with ZooKeeper (a variant of the <a href="http://en.wikipedia.org/wiki/Thundering_herd_problem">thundering herd problem</a>). In this case, even if the number of connections isn&rsquo;t too high, the spike in transactions could take down ZooKeeper.</li>
+<li><strong>Protocol bugs:</strong> Occasionally under high load, we&rsquo;ve run into protocol bugs in ZooKeeper that result in data corruption. In this case, recovery usually involves taking down the cluster, bringing it back up from a clean slate and then restoring data from backup.</li>
+<li><strong>Human errors: </strong>In all software systems, there&rsquo;s a possibility of human error. For example, we&rsquo;ve had a manual replacement of a bad ZooKeeper host unintentionally take the whole ZooKeeper quorum offline for a short time due to erroneous configuration being put in place.</li>
+<li><strong>Network partitions:</strong> While relatively rare, network connectivity issues resulting in a network partition of the quorum hosts can result in downtime till the quorum can be restored.</li>
+</ul>
+<p>While site outages due to service failures are never completely unavoidable when running a web service as large and fast moving as Pinterest, there were a few reasons why ZooKeeper issues were particularly problematic:</p>
+<ul>
+<li>There was no easy immediate mitigation. If bad code is deployed, we can rollback immediately to resolve the issue and investigate what happened later. If a particular part of the site fails, we can disable that service temporarily to mitigate impact. There wasn&rsquo;t such an option available for ZooKeeper failures.</li>
+<li>Recovery would take multiple hours in some cases, due to a combination of the thundering herd problem and having to restart from a clean slate and recover from backup.</li>
+<li>The centrality of ZooKeeper in our stack meant a pretty wide impact on the site. That is, the outages weren&rsquo;t isolated to a particular part of the site or feature, but rather impacted the site as a whole.</li>
+</ul>
+<h2>Initial Mitigation Attempts</h2>
+<p>A few strategies to mitigate the problem were suggested, but would only provided limited relief.</p>
+<ul>
+<li><strong>Add capacity:</strong> The simplest strategy is to tackle load issues is to add capacity. Unfortunately, this doesn&rsquo;t quite work since the ZooKeeper design and protocol is such that the quorum (voting members) cannot scale out very well. In practice, we have observed that having more than 7-10 hosts tends to make write performance significantly worse.</li>
+<li><strong>Add observers:</strong> ZooKeeper <a href="http://zookeeper.apache.org/doc/trunk/zookeeperObservers.html">observers</a> offer a solution to the scaling problem. These are non-voting members of the ZooKeeper ensemble that otherwise function like any other ZooKeeper host, i.e. can accept watches and other types of requests and proxy them back to the quorum. Adding a fleet of observers and shunting off traffic to them indeed substantially alleviated the load on the ZooKeeper cluster. However, this only helped with watches and other reads, not with writes. It partially addressed failure cause (1) mentioned in the previous section, but not the others.</li>
+<li><strong>Use multiple ZooKeeper clusters for isolation: </strong>A mitigation we attempted was to use different ZooKeeper clusters for each use case, e.g. our deploy system uses a separate cluster from the one used for service discovery, and our <a href="http://hbase.apache.org/">HBase</a> clusters each use independent ZooKeeper clusters. Again, this helped alleviate some of the problems, but wasn&rsquo;t a complete solution.</li>
+<li><strong>Fallback to static files: </strong>Another possibility is to use ZooKeeper for service discovery and configuration in normal operation, but if it fails, fallback to static host lists and configuration files. This is reasonable, but becomes problematic when keeping the static data up-to-date and accurate. This is particularly difficult for services that are auto scaled and have high churn in the host set. Another option is to fallback to a different storage system (e.g. MySQL) in case of failure, but that too is a manageability nightmare, with multiple sources of truth and another system to be provisioned to handle the full query and spike in the event of ZooKeeper failing.</li>
+</ul>
+<p>We also considered a couple more radical steps:</p>
+<ul>
+<li><strong>Look for an alternative technology that is more robust: </strong>There are a few alternative distributed coordinator implementations available through open source, but we found them to generally be less mature than ZooKeeper and less tested in production systems at scale. We also realized these problems are not necessarily implementation specific, rather, any distributed coordinator can be prone to most of the above issues.</li>
+<li><strong>Don&rsquo;t use central coordination at all: </strong>Another radical option was to not use ZooKeeper at all, and go back to using static host lists for service discovery and an alternate way to deploy and update configuration. But doing this would mean compromising on latency of update propagation, ease of use and/or accuracy.</li>
+</ul>
+<h2>Narrowing in on the Solution</h2>
+<p>We ultimately realized that the fundamental problem here was not ZooKeeper itself. Like any service or component in our stack, ZooKeeper can fail. The problem was our <em>complete reliance on it for overall functioning of our site</em>. In essence, ZooKeeper was a Single Point of Failure (SPoF) in our stack. SPoF terminology usually refers to single machines or servers, but in this case, it was a single distributed service.</p>
+<p>How could we continue to take advantage of the conveniences that ZooKeeper provides while tolerate its unavailability? The solution was actually quite simple: <em>decouple our applications from ZooKeeper</em>.</p>
+<p align="center"><img src="/wp-content/uploads/2014/03/pinZK3.png"></p>
+<p align="center">The drawing on the left represents how we were using ZooKeeper originally, and the one on the right shows what we decided to do instead.</p>
+<p>Applications that were consuming service information and dynamic configuration from ZooKeeper connected to it directly. They cached data in memory but otherwise relied on ZooKeeper as the source of truth for the data. If there were multiple processes running on a single machine, each would maintain a separate connection to ZooKeeper. ZooKeeper outages directly impacted the applications.</p>
+<p>Instead of this approach, we moved to a model where the application is in fact completely isolated from ZooKeeper. Instead, a daemon process running on each machine connects to ZooKeeper, establishes watches on the data it is configured to monitor, and whenever the data changes, downloads it into a file on local disk at a well known location. The application itself only consumes the data from the local file and reloads when it changes. It doesn&rsquo;t need to care that ZooKeeper is involved in propagating updates.</p>
+<h2>Looking at Scenarios</h2>
+<p>Let&rsquo;s see how this simple idea helps our applications tolerate the ZooKeeper failure modes. If ZooKeeper is down, no applications are impacted since they read data from the file on local disk. The daemons indefinitely attempt to reestablish connection to ZooKeeper. Until ZooKeeper is back up, configuration updates cannot take place. In the event of an emergency, the files can always be pushed directly to all machines manually. The key point is that there is no availability impact whatsoever.</p>
+<p>Now let&rsquo;s consider the case when ZooKeeper experiences a data corruption and there&rsquo;s partial or complete data loss till data can be restored from backup. It&rsquo;s possible a single piece of data in ZooKeeper (referred to as <a href="http://zookeeper.apache.org/doc/r3.2.1/zookeeperProgrammers.html#sc_zkDataModel_znodes">znode</a>) containing important configuration is wiped out temporarily. We protect against this case by building a fail-safe rule into the daemon: it rejects data that is suspiciously different from the last known good value. A znode containing configuration information entirely disappearing is obviously suspicious and would be rejected, but so would more subtle changes like the set of hosts for a service reducing suddenly by 50%. With carefully tuned thresholds, we&rsquo;ve been able to effectively prevent disastrous configuration changes from propagating to the application. The daemon logs such errors and we can alert an on-call operator so the suspicious change can be investigated.</p>
+<p>One might ask, why build an external daemon? Why not implement some sort of disk backed cache and fail-safe logic directly into the application? The main reason is that our stack isn&rsquo;t really homogenous: we run applications in multiple languages like Python, Java, and Go. Building a robust ZooKeeper client and fault tolerant library in each language would be a non-trivial undertaking, and worse still, painful to manage in the long run since bug fixes and updates would need to be applied to all the implementations. Instead, by building this logic into a single daemon process, we can have the application itself only perform simple file read coupled with periodic check/reload, which is trivial to implement. Another advantage of the daemon is it reduces overall connections into ZooKeeper since we only need one connection per machine rather than one per process. This is particularly a big win for our large Python service fleet, where we typically run 8 to 16 processes per machine.</p>
+<p>How about services <em>registering</em> with ZooKeeper for discovery purposes? That too can in theory be outsourced to an external daemon, with some work to ensure the daemon correctly reflects the server state in all cases. However, we ended up keeping the registration path in the application itself and instead spent some time taking care to harden the code path to make it resilient to ZooKeeper outages and equally importantly, be guaranteed to re-register after an outage. This was considered sufficient since individual machines failing to register does not typically have a large impact on the site. On the other hand, if a large group of machines suddenly lose connection to ZooKeeper thereby getting de-registered, the fail-safe rules in the daemon on the consumption side will trigger and result in a rejection of the update, thereby protecting the service and its clients.</p>
+<h2>Rolling out the Final Product</h2>
+<p>We implemented the daemon and modified our base machine configuration to ensure it was installed on all machine groups that needed to use ZooKeeper. The daemon operation is controlled by a configuration file.</p>
+<p>Here&rsquo;s a sample configuration snippet for the daemon:</p>
+<pre class="prettyprint "> [dataservice]
+ type = service_discovery
+ zk_cluster = default
+ zk_path = /discovery/dataservice/prod
+ command = /usr/local/bin/zk_download_data.py -f /var/service
+ /discovery.dataservice.prod -p /discovery/dataservice/prod
+</pre>
+<p>&nbsp;</p>
+<p>Here we&rsquo;re telling the daemon to monitor the <code>/discovery/dataservice/prod</code> path in the default ZooKeeper cluster for service discovery use, and when ZooKeeper notifies it of a change within that path, to run the zk_download_data script. This script reads all the children znodes of that path, retrieves the host and port information for each server and writes it to the specified file path on local disk, one host:port per line. A configuration file can contain several snippets like the above, comprising service discovery, dynamic configuration and other use cases. The format is designed to be generic enough to be able to extend to other use cases in future.</p>
+<p>Next, our client libraries that deal with configuration or service discovery were modified to use files on local disk instead of ZooKeeper as the source of data. We attempted to make this change as opaque to the application code as possible. For example, some of our Java services use Twitter&rsquo;s <a href="http://twitter.github.io/commons/apidocs/com/twitter/common/zookeeper/ServerSet.html">ServerSet</a> libraries for service discovery. In this case, we built a ServerSet implementation that is backed by host:port combinations retrieved from a file on local disk (e.g. <code>/var/service/discovery.dataservice.prod</code> mentioned above). This implementation takes care of reloading data when the file content changes. Consumers of the ServerSet interface, including RPC client libraries, don&rsquo;t need to be aware of the change at all. Since our services use a common set of RPC libraries, it was fairly easy to roll this change out across all our services. Similar relatively simple changes were made to our Python and other language libraries.</p>
+<h2>Validating the New Design</h2>
+<p>To be sure our infrastructure was resilient to ZooKeeper failure, we ran a number of test scenarios until the real thing happened. A couple of weeks after roll out, there was another ZooKeeper outage, triggered by load introduced by an unrelated bug in one of our client libraries. We were happy to see that this outage caused <em>no site impact</em>, and in fact, went unnoticed till ZooKeeper monitoring alerts themselves fired. Since the outage happened late in the evening, a decision was made to do the cluster restoration the next morning. Thus <em>the entire site functioned normally all night despite ZooKeeper being down</em>, thanks to our resilience changes being in place. </p>
+<p><em>Acknowledgements: This project was a joint effort between the infrastructure and technical operations teams at Pinterest. The core project members were Michael Fu, Raghavendra Prabhu and Yongsheng Wu, but a number of other folks across these teams provided very useful feedback and help along the way to make the project successful.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/guest/" title="View all posts in Guest" rel="category tag">Guest</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/zookeeper/" title="View all posts in ZooKeeper" rel="category tag">ZooKeeper</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>1 Response</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.ivoroshilin.com">Ivan Voroshilin</a> /
+			March 24, 2014 / 6:08 AM		</em>
+		<p>Hi,</p>
+<p>Interesting article!<br />
+I&#8217;m considering ZooKeeper for critical services as well at the moment.<br />
+Can you please list use cases of when ZooKeeper fails?</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='25725' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="IdM=" />
+		<input type="hidden" name="cptch_time" value="1397909757" />
+		<input type="hidden" value="Version: 2.4" />
+		1 &#43; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  t&#101;&#110; 	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

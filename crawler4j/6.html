@@ -1,0 +1,950 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Apache Hadoop YARN: Avoiding 6 Time-Consuming &quot;Gotchas&quot; | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Apache Hadoop YARN: Avoiding 6 Time-Consuming &quot;Gotchas&quot;"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2014/04/apache-hadoop-yarn-avoiding-6-time-consuming-gotchas/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Apache Hadoop YARN: Avoiding 6 Time-Consuming &quot;Gotchas&quot; Comments Feed" href="http://blog.cloudera.com/blog/2014/04/apache-hadoop-yarn-avoiding-6-time-consuming-gotchas/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Sneak Preview: &quot;Case Studies&quot; Track at HBaseCon 2014' href='http://blog.cloudera.com/blog/2014/04/sneak-preview-case-studies-track-at-hbasecon-2014/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2014/04/apache-hadoop-yarn-avoiding-6-time-consuming-gotchas/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=26039' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-26039 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Apache Hadoop YARN: Avoiding 6 Time-Consuming &quot;Gotchas&quot;</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/jwfbean/" title="Posts by Jeff Bean" rel="author">Jeff Bean</a></li>
+				<li>April 21, 2014</li>
+				<li class="comment"><a href="#comments">no comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><strong>Understanding some key differences between MR1 and MR2/YARN will make your migration much easier.</strong></p>
+<p>Here at Cloudera, we recently finished a push to get <a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise.html">Cloudera Enterprise 5</a> (containing CDH 5.0.0 + Cloudera Manager 5.0.0) out the door along with more than 100 partner certifications.</p>
+<p>CDH 5.0.0 is the first release of our software distribution where <a href="http://blog.cloudera.com/blog/2012/10/mr2-and-yarn-briefly-explained/">YARN and MapReduce 2</a> (MR2) is the default MapReduce execution framework, and the migration from MR1 to MR2 was surprisingly easy across our partner ecosystem. Partners certifying on MR2 during our beta program did not report problems running jobs compiled for MR1 on an MR2 cluster. Also, because switching a cluster from MR1 to MR2 is as easy as enabling the YARN service on Cloudera Manager while disabling the MR1 service, the administrative costs of swapping frameworks are trivial. Thus, 99 percent of our certifying partners made the switch to MR2 without major effort; the remaining one percent simply didn&#8217;t bother because Cloudera will continue to support MR1 for the duration of the Cloudera Enterprise 5 lifecycle.</p>
+<p>The Cloudera Engineering team has done a great job explaining YARN basic concepts (<a href="http://www.cloudera.com/content/cloudera/en/resources/library/recordedwebinar/introduction-to-yarn-and-mapreduce-2-slides.html">here</a> and <a href="http://blog.cloudera.com/blog/2012/10/mr2-and-yarn-briefly-explained/">here</a>) as well as <a href="http://blog.cloudera.com/blog/2013/11/migrating-to-mapreduce-2-on-yarn-for-users/">documenting how to move from MR1 to YARN</a>. However, partner certification work for Cloudera Enterprise 5 surfaced a set of six common issues. These issues highlight some key behaviors in MR2/YARN that are often overlooked or misunderstood. They are:</p>
+<ol>
+<li>YARN concurrency</li>
+<li>Performance differences under YARN</li>
+<li>Resource allocation versus resource consumption</li>
+<li>How logs are displayed and processed</li>
+<li>Live lock with concurrent job submission</li>
+<li>Killing of tasks due to virtual memory usage</li>
+</ol>
+<p>Knowing these issues in advance will help you understand when your cluster doesn&#8217;t behave as expected. In this post, you&#8217;ll get an introduction to them.</p>
+<h2>1. YARN Concurrency (aka &#8220;What Happened to Slots?&#8221;)</h2>
+<p>After making the shift to MR2, partners observed a different number of concurrent tasks (usually more) than they expected, which had an impact on observed performance and utilization.</p>
+<p>Prior to MR2, the number of concurrent mappers and reducers per node is specified by the administrator. In addition to specifying those numbers, the administrator sets the default memory allocations per mapper or reducer via the <code>mapred.child.java.opts</code> and <code>mapred.child.ulimit </code>settings. Cloudera&#8217;s recommendation is to allocate mappers and reducers using a 3/2 ratio, with the total tasks being less than the total number of cores on the node. This recommendation aims at optimal cluster performance under heavy load, but the rigid slot count model in MR1 sometimes leaves clusters underutilized.</p>
+<p>In contrast, in MR2, the number of concurrent mappers and reducers (the “slot count”) is calculated by YARN based on allocations by the administrator. Each node dedicates some amount of memory (via the <code>yarn.nodemanager.resource.memory-mb </code>setting) and CPU (via the <code>yarn.nodemanager.resource.cpu-vcores</code> setting) to YARN for any YARN application. Because a MapReduce job is a YARN application, it asks YARN for containers to run its map and reduce tasks, via the settings <code>mapreduce.[map|reduce].memory.mb</code> and <code>mapreduce.[map|reduce].cpu.vcores</code>. The memory and CPU resources managed by YARN are pooled and shared between maps and reduces (and other container requests from other frameworks). A node is eligible to run an MR2 task when its available memory and CPU can satisfy the resource ask of the task.</p>
+<p>This approach is an improvement over that of MR1, because the administrator no longer has to bundle CPU and memory into a Hadoop-specific concept of a “slot” &#8212; but for some people accustomed to MR1, it&#8217;s confusing. To help clear things up, consider the case of an idle cluster that has one large MapReduce job submitted to it that consumes all the available resources. How many tasks run at a time?</p>
+<p>In MR1, the number of tasks launched per node was specified via the settings <code>mapred.map.tasks.maximum</code> and <code>mapred.reduce.tasks.maximum</code>. In MR2, one can determine how many concurrent tasks are launched per node by dividing the resources allocated to YARN by the resources allocated to each MapReduce task, and taking the minimum of the two types of resources (memory and CPU). Specifically, you take the minimum of <code>yarn.nodemanager.resource.memory-mb</code> divided by <code>mapreduce.[map|reduce].memory.mb</code> and <code>yarn.nodemanager.resource.cpu-vcores</code> divided by <code>mapreduce.[map|reduce].cpu.vcores</code>. This will give you the number of tasks that will be spawned per node.</p>
+<p>This approach is illustrated in the spreadsheet shown below:</p>
+<p align="center"><img title="bean-f1" src="http://blog.cloudera.com/wp-content/uploads/2014/04/bean-f1.png" alt="" width="409" height="396" /></p>
+<p>In the above example, a YARN cluster has 42GB of memory and 16 cores allocated to it per node. You can allocate capacity based on memory and CPU. When 2GB and one core are allocated to each map task, the CPU-based allocation takes precedence – thus 16 map tasks are spawned because that is the smaller value.</p>
+<p>Of course, YARN is more dynamic than that, and each job can have unique resource requirements &#8212; so in a multitenant cluster with different types of jobs running, the calculation isn&#8217;t as straightforward. Also, the map and reduce task counts come out of the same pool, so the setting of <code>mapred.slowstart.completed.maps</code> also affects cluster behavior as it allows resources to be allocated to the reduce phase early.</p>
+<p>Regardless, I find the simple logic represented in a spreadsheet to be a good starting point for helping partners understand resource allocation to tasks in a YARN cluster. If you&#8217;d like, you can save <a href="http://tiny.cloudera.com/MRSheet">this spreadsheet</a> locally as a Microsoft Excel file and tinker with the bolded values yourself in order to gain a better understanding of how MapReduce jobs running on your cluster will behave under YARN.</p>
+<h2>2. Performance Differences under YARN</h2>
+<p>After upgrading to Cloudera Enterprise 5 and enabling the YARN service, administrators are often asked to demonstrate the improved performance using a widely accepted MapReduce job such as TeraSort or TestDFSIO. However, it&#8217;s important to <a href="http://blog.cloudera.com/blog/2014/02/getting-mapreduce-2-up-to-speed/">ensure a proper performance comparison</a>. TeraSort has also changed with this release, using values that are less compressible and therefore cause more network transfer. The reported numbers from TeraSort might be disappointing unless you&#8217;re aware of that change.</p>
+<p>Likewise, due to the slot calculation logic detailed above, your TestDFSIO run might not see the dramatic improvement you expect. TestDFSIO runs best when a task gets a dedicated CPU and a dedicated disk. When slot counts are specified, it&#8217;s easy to engineer this situation, but it&#8217;s trickier with YARN. If YARN calculates that it can run more concurrent TestDFSIO mappers than you have available disk, you&#8217;ll see contention between mappers and performance will suffer.</p>
+<p>It&#8217;s therefore important to understand how benchmarks like TestDFSIO and Terasort differ from real-world workloads. Benchmarks modeled after such workloads, such as <a href="https://github.com/SWIMProjectUCB/SWIM/wiki">SWIM</a>, will better expose the benefits of YARN&#8217;s resource allocation.</p>
+<h5>2a: Cloudera Manager Defaults (an aside)</h5>
+<p>One partner reported degraded performance after a default installation of Cloudera Manager in an environment that had not previously used it. This partner was running a set of benchmarks on “out-of-the-box” configurations from various vendors, and Cloudera appeared to come up short. As it turned out, the various additional services installed by Cloudera Manager were causing the problem.</p>
+<p>At install time, you can tell Cloudera Manager to install lots of services on the cluster, including resource-intensive services like Apache HBase, Cloudera Impala, and Cloudera Search. While this feature is fantastic for getting numerous Hadoop-related services up and running quickly, it also divides your cluster resources across the selected services, negatively impacting the results of any test that uses any single service with the expectation of full access to the cluster. If you&#8217;re running a benchmark that affects one service exclusively, obtain a fair value by removing unused services.</p>
+<h2>3. Resource Allocation versus Resource Consumption</h2>
+<p>YARN&#8217;s Resource Manager does resource allocation, but it does not specify the heap settings of any spawned processes. For example, the memory provided to a mapper process by the NodeManager is specified to YARN via the per-job <code>mapreduce.map.memory.mb</code>. However, the JVM itself has memory overhead. So the heap size available to the mapper is determined by settings such as <code>mapred.[map|reduce].child.java.opts</code>, which specifies the heap size for the launched Java process. When resources allocated by YARN don&#8217;t match the resources consumed by the MR2 job, you&#8217;ll see either cluster underutilization or jobs being killed, depending on the direction of the mismatch.</p>
+<p>Until we can automate this check in Cloudera Manager, you might not be aware that you can change a setting that&#8217;s defaulting to a value that&#8217;s too small.</p>
+<h2>4. Changes in Logs and Debugging Techniques</h2>
+<p>In MR1, it&#8217;s fairly easy to debug a failing MapReduce job (or task) by using Cloudera Manager&#8217;s distributed log search feature (or a distributed grep) to search for the numeric portion of the job ID or task ID in the Hadoop logs. This will return HDFS operations that use that task ID as a client from the NameNode logs, scheduling operations from the JobTracker, and messages from the processes spawned by the TaskTrackers. Here is a screenshot of searching the MapReduce logs for a MapReduce job ID in a CDH 4.6 cluster running MR1. Job_201404101622_0001 is a <code>randomwriter</code> job:</p>
+<p align="center"><img title="bean-f2" src="http://blog.cloudera.com/wp-content/uploads/2014/04/bean-f2.png" alt="" width="600" height="428" /></p>
+<p>That set of entries from numerous log files shows MapReduce-specific information, including job initialization, task assignment, and task launch of mapper 41. The Hadoop process logs show MapReduce-specific information that you can use to inform a troubleshooting exercise.</p>
+<p>With YARN, MR2 is one of many processing frameworks that you can deploy. As such, the log files from YARN are more generic.</p>
+<p>Here is the output of the same search by job ID for the same <code>randomwriter</code> job on a Cloudera Enterprise 5 cluster running YARN/MR2:</p>
+<p align="center"><img title="bean-f3" src="http://blog.cloudera.com/wp-content/uploads/2014/04/bean-f3.png" alt="" width="600" height="392" /></p>
+<p>Not only has the terminology changed in the processes generating the log messages (you now see ResourceManager logs instead of JobTracker logs, for instance), but you can&#8217;t tell from the YARN messages that the “application” is a MapReduce job and the individual containers are, in fact, running mappers.</p>
+<p>Container_1397175901787_01_000009 corresponds to a mapper, but it doesn&#8217;t follow the established MapReduce task naming convention of “<code>attempt_jobid_m_task-id_attempt-id</code>” in these logs. That ID belongs to the task running inside the container. Hadoop still provides this information, and the best way to retrieve it is starting from the ResourceManager web UI:</p>
+<p align="center"><img title="bean-f4" src="http://blog.cloudera.com/wp-content/uploads/2014/04/bean-f4.png" alt="" width="600" height="202" /></p>
+<p>Although the application is referenced by an ID, you still don&#8217;t know what kind of application it is. However, when you click on the application ID, you discover it is MapReduce, and you can also drill down to the individual tasks from either phase:</p>
+<p align="center"><img title="bean-f5" src="http://blog.cloudera.com/wp-content/uploads/2014/04/bean-f5.png" alt="" width="600" height="224" /></p>
+<p>One other notable change between MR1 and MR2 has nothing to do with YARN: Upon completion a job, the logs for the job are stored in HDFS and the information about the job is shipped off to a dedicated server called the JobHistory Server. While this fixes a scalability issue in MR1, it does require administrators and developers to become accustomed to obtaining troubleshooting information from a new location.</p>
+<p>One thing partners do still find tricky is correlating entries discussing individual containers in YARN logs with individual map or reduce tasks in MR logs. However, this isn&#8217;t really a necessary connection to make for most troubleshooting efforts, as you still have plenty of information at your disposal.</p>
+<h2>5. Live Lock with Concurrent Job Submission</h2>
+<p>There was one issue that occurred with certification tests running on YARN: a logjam with concurrent job submission. Our certification suite spawns many jobs simultaneously, simulating the workload of a busy “real-world” cluster. The first runs of the certification suite on YARN encountered a funny logjam issue where the jobs would appear as submitted, but none of them would make any progress. The web UI shows lots of jobs in flight or in the “pending” state, but cluster metrics come back idle.</p>
+<p>Some investigation revealed that all available resources were allocated to application masters, leaving no room for tasks. The cluster sits in this state pretty much indefinitely. If you observe no progress in your jobs after submitting a bunch of them at the same time, this is probably what&#8217;s going on. We&#8217;ve <a href="https://issues.apache.org/jira/browse/YARN-1913">filed this issue as a Fair Scheduler bug</a>, but it&#8217;s a good condition to be aware of until this has been resolved.</p>
+<p>Here&#8217;s a snapshot from a web UI of a cluster in this state:</p>
+<p align="center"><img title="bean-f6" src="http://blog.cloudera.com/wp-content/uploads/2014/04/bean-f6.png" alt="" width="600" height="336" /></p>
+<p>If you see the issue, the resolution is fairly straightforward. You can configure the scheduler to put a limit on the number of concurrent running jobs per node. This number is set in the scheduler configuration, surfaced in Cloudera Manager using the Dynamic Pools editor. By setting this limit to some specific, reasonable value (perhaps somewhere between 2 and 8 depending on cluster capacity), the ResourceManager will leave resources for the task containers in addition to the application masters.</p>
+<p align="center"><img title="bean-f7" src="http://blog.cloudera.com/wp-content/uploads/2014/04/bean-f7.png" alt="" width="600" height="448" /></p>
+<p align="center"><img title="bean-f8" src="http://blog.cloudera.com/wp-content/uploads/2014/04/bean-f8.png" alt="" width="600" height="376" /> </p>
+<h2>6. Killing of Tasks Due to Virtual Memory Usage</h2>
+<p>In Cloudera Enterprise 5 Beta 2, a few partners reported an issue of tasks being killed due to excessive virtual memory usage. For example, a resource manager log might show something like this:</p>
+<pre class="code">Application application_1392853856445_0900 failed 2 times due to AM
+Container for appattempt_1392853856445_0900_000002 exited with exitCode: 143 due to: Container [pid=27408,containerID=container_1392853856445_0900_02_000001] is running beyond virtual memory limits.
+Current usage: 337.6 MB of 1 GB physical memory used; 2.2 GB of 2.1 GB virtual memory used. Killing container.
+</pre>
+<p>&nbsp;</p>
+<p>Investigation revealed that this was happening on Centos/RHEL 6 due to its aggressive allocation of virtual memory. <a href="https://www.ibm.com/developerworks/community/blogs/kevgrig/entry/linux_glibc_2_10_rhel_6_malloc_may_show_excessive_virtual_memory_usage?lang=en">Here</a> is a decent discussion of the issue.</p>
+<p>In YARN, the workaround was to turn off this enforcement by setting <code>yarn.nodemanager.vmem-check.enabled</code> to false from its default of true. We&#8217;ve fixed this default for you in CDH 5.0.0, but if you see this happening sporadically during job executions on a YARN cluster, be sure to check this setting.</p>
+<h2>Conclusion</h2>
+<p>Now that it&#8217;s production-ready, there are some key benefits to moving to YARN/MR2 now. It solves some key issues with MR1, particularly around JobTracker history and cluster underutilization. Plus, by separating resource allocation from process execution, it opens Hadoop up to different computation frameworks.</p>
+<p>I hope this overview saves you some time in your own evaluation of YARN and saves you some time during your migration to MR2!</p>
+<p><em>Jeff Bean has been at Cloudera since 2010, serving on our Solutions Architect Team, Support Team, Training Team, and more recently, Partner Engineering Team. With the release of Cloudera Enterprise 5, Jeff has been helping lots of partners migrate to YARN.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/yarn/" title="View all posts in YARN" rel="category tag">YARN</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>No Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='26039' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="1K4=" />
+		<input type="hidden" name="cptch_time" value="1398162610" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &times; 5 =  t&#101;n 	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

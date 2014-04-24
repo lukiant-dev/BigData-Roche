@@ -1,0 +1,1089 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-to: Set Up an Apache Hadoop/Apache HBase Cluster on EC2 in (About) an Hour | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-to: Set Up an Apache Hadoop/Apache HBase Cluster on EC2 in (About) an Hour"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2012/10/set-up-a-hadoophbase-cluster-on-ec2-in-about-an-hour/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; How-to: Set Up an Apache Hadoop/Apache HBase Cluster on EC2 in (About) an Hour Comments Feed" href="http://blog.cloudera.com/blog/2012/10/set-up-a-hadoophbase-cluster-on-ec2-in-about-an-hour/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Videos: Get Started with Hadoop Using Cloudera Enterprise' href='http://blog.cloudera.com/blog/2012/10/videos-get-started-with-hadoop-using-cloudera-enterprise/' />
+<link rel='next' title='New Additions to the Apache HBase Team' href='http://blog.cloudera.com/blog/2012/10/new-additions-to-the-hbase-team/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2012/10/set-up-a-hadoophbase-cluster-on-ec2-in-about-an-hour/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=18757' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-18757 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-to: Set Up an Apache Hadoop/Apache HBase Cluster on EC2 in (About) an Hour</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by George London</li>
+				<li>October 21, 2012</li>
+				<li class="comment"><a href="#comments">2 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><strong>Note (added July 8, 2013): The information below is deprecated; we suggest that you refer to <a href="http://blog.cloudera.com/blog/2013/03/how-to-create-a-cdh-cluster-on-amazon-ec2-via-cloudera-manager/">this post</a> for current instructions.</strong></p>
+<p><em>Today we bring you one user&#8217;s experience using Apache Whirr to spin up a CDH cluster in the cloud. This post was originally published <a href="http://rogueleaderr.tumblr.com/post/32768181371/set-up-and-run-a-fully-distributed-hadoop-hbase-cluster" target="_blank">here</a> by George London (<a href="https://twitter.com/rogueleaderr" target="_blank">@rogueleaderr</a>) based on his personal experiences; he has graciously allowed us to bring it to you here as well in a condensed form. (Note: the configuration described here is intended for learning/testing purposes only.)</em></p>
+<p>I’m going to walk you through a (relatively) simple set of steps that will get you up and running MapReduce programs on a cloud-based, six-node distributed Apache Hadoop/Apache HBase cluster as fast as possible. This is all based on what I’ve picked up on my own, so if you know of better/faster methods, please let me know in comments!</p>
+<p>We’re going to be running our cluster on Amazon EC2, and launching the cluster using <a href="http://whirr.apache.org">Apache Whirr</a> and configuring it using <a href="http://www.cloudera.com/products-services/tools/">Cloudera Manager Free Edition</a>.  Then we’ll run some basic programs I’ve posted on Github that will parse data and load it into <a href="http://hbase.apache.org">Apache HBase</a>.</p>
+<p>All together, this tutorial will take a bit over one hour and cost about $10 in server costs.</p>
+<h2>Step 1: Get the Cluster Running</h2>
+<p>I’m going to assume you already have an Amazon Web Services account (because it’s awesome, and the basic tier is free.) If you don’t, <a href="http://aws.amazon.com/free/?utm_source=AWS&amp;utm_medium=website&amp;utm_campaign=LP_hero" target="_blank">go get one</a>. Amazon’s directions for getting started are pretty clear, or you can easily find a guide with Google. We won’t actually be interacting with the Amazon management console much, but you will need two pieces of information, your AWS Access Key ID and your AWS Secret Access Key.</p>
+<p>To find these, go to <a href="https://portal.aws.amazon.com/gp/aws/securityCredentials" target="_blank">https://portal.aws.amazon.com/gp/aws/securityCredentials</a>. You can write these down, or better yet add them to your shell startup script by doing:</p>
+<pre class="code" style="padding-left: 10px;">$ echo "export AWS_ACCESS_KEY_ID=" &gt; ~/.bashrc
+$ echo "export AWS_SECRET_ACCESS_KEY="your_key_here&gt;" &gt; ~/.bashrc
+$ exec $SHELL </pre>
+<p>You will also need a security certificate and private key that will let you use the command-line tools to interact with AWS. From the AWS Management Console go to<strong> Account &gt; Security Credentials &gt; Access Credentials</strong>, select the “X.509 Certificates” tab and click on <strong>Create a new Certificate</strong>. Download and save this somewhere safe (e.g. ~/.ec2)</p>
+<p>Then do:</p>
+<pre class="code" style="padding-left: 10px;">$ export EC2_PRIVATE_KEY=~/.ec2/.pem
+$ export EC2_CERT=~/.ssh/.pem
+</pre>
+<p>Finally, you’ll need a different key to log into your servers using SSH. To create that, do:</p>
+<pre class="code" style="padding-left: 10px;">$ mkdir ~/.ec2
+$ ec2-add-keypair --region us-east-1 hadoop | sed 1d &gt; ~/.ec2/hadoop
+$ chmod 600 ~/.ec2/hadoop
+(to lock down the permissions on the key so that SSH will agree to use it)
+ </pre>
+<p>You have the option of manually creating a bunch of EC2 nodes, but that’s a pain. Instead, we’re going to use <a href="http://whirr.apache.org/" target="_blank">Whirr</a>, which is specifically designed to allow push-button setup of clusters in the cloud.</p>
+<p>To use Whirr, we are going to need to create one node manually, which we are going to use as our “control center.” I’m assuming you have the EC2 command-line tools installed (if not, go <a href="http://aws.amazon.com/developertools/351?_encoding=UTF8&amp;queryArg=searchQuery&amp;x=0&amp;fromSearch=1&amp;y=0&amp;searchPath=developertools&amp;searchQuery=ec2-api-tools" target="_blank">here</a> and follow directions).</p>
+<p>We’re going to create an instance running Ubuntu 10.04 (it’s old, but all of the tools we need run on it in stable fashion), and launch it in the USA-East region. You can find AMIs for other Ubuntu versions and regions <a href="http://alestic.com/" target="_blank">here</a>.</p>
+<p>So, do:</p>
+<pre class="code" style="padding-left: 10px;">$ ec2-run-instances ami-1db20274 -k "hadoop"
+</pre>
+<p>This creates an EC2 instance using a minimal Ubuntu image, with the SSH key “hadoop_tutorial” that we created a moment ago. The command will produce a bunch of information about your instance. Look for the “instance id” that starts with i- , then do:</p>
+<pre class="code" style="padding-left: 10px;">$ ec2-describe-instance [i-whatever]</pre>
+<p>This will tell you the IP of your new instance (it will start ec2-). Now we’re going to remotely log in to that server.</p>
+<pre class="code" style="padding-left: 10px;">$ ssh -i ~/.ec2/hadoop ubuntu@ec2-54-242-56-86.compute-1.amazonaws.com
+</pre>
+<p>Now we’re in! This server is only going to run two programs, Whirr and the Cloudera Manager. First we’ll install Whirr.  Find a mirror at (<a href="http://www.apache.org/dyn/closer.cgi/whirr/" target="_blank">http://www.apache.org/dyn/closer.cgi/whirr/</a>), then download to your home directory using wget:</p>
+<pre class="code" style="padding-left: 10px;">$ wget http://www.motorlogy.com/apache/whirr/whirr-0.8.0/whirr-0.8.0.tar.gz
+</pre>
+<p>Untar and unzip:</p>
+<pre class="code" style="padding-left: 10px;">$ tar -xvf whirr-0.8.0.tar.gz
+$ cd whirr-0.8.0
+</pre>
+<p>Whirr will launch clusters for you in EC2 according to a “properties” file you pass it. It’s actually quite powerful and allows a lot of customization (and can be used with non-Amazon cloud providers) or you to set up complicated servers using Chef scripts. But for our purposes, we’ll keep it simple.</p>
+<p>Create a file called hadoop.properties:</p>
+<pre class="code" style="padding-left: 10px;">$ nano hadoop.properties
+</pre>
+<p>And give it these contents:</p>
+<pre class="code" style="padding-left: 10px;">whirr.cluster-name=whirrly
+whirr.instance-templates=6 noop
+whirr.provider=aws-ec2
+whirr.identity=
+whirr.credential=
+whirr.cluster-user=huser
+whirr.private-key-file=${sys:user.home}/.ssh/id_rsa
+whirr.public-key-file=${sys:user.home}/.ssh/id_rsa.pub
+whirr.env.repo=cdh4
+whirr.hardware-id=m1.large
+whirr.image-id=us-east-1/ami-1db20274
+whirr.location-id=us-east-1
+</pre>
+<p>This will launch a cluster of six unconfigured “large” EC2 instances. (Whirr refused to create small or medium instances for me. Please let me know in comments if you know how to do that.)</p>
+<p>Before we can use Whirr, we’re going to need to install Java, so do:</p>
+<pre class="code" style="padding-left: 10px;">$ sudo apt-get update
+$ sudo apt-get install openjdk-6-jre-headless</pre>
+<p>Next we need to create that SSH key that will let our control node log into to our cluster. </p>
+<pre class="code" style="padding-left: 10px;">$ ssh-keygen -t rsa -P ''
+</pre>
+<p>And hit [enter] at the prompt.</p>
+<p>Now we’re ready to launch!</p>
+<pre class="code" style="padding-left: 10px;">$ bin/whirr launch-cluster --config hadoop.properties
+</pre>
+<p>This will produce a bunch of output and end with commands to SSH into your servers.</p>
+<p>We’re going to need these IPs for the next step, so copy and paste these lines into a new file:</p>
+<pre class="code" style="padding-left: 10px;">$ nano hosts.txt
+</pre>
+<p>Then use this bit of regular expression magic to create a file with just the IP’s:</p>
+<pre class="code" style="padding-left: 10px;">$ sed -rn "\|.*@(.*)'| s/.*@(.*)'/\1/p" hosts.txt &gt;&gt; ips.txt
+</pre>
+<h2>Step 2: Configure the Cluster</h2>
+<p>From your Control Node, download Cloudera Manager; we will install the Free Edition, which can be used for up to 50 nodes:</p>
+<pre class="code" style="padding-left: 10px;">$ wget http://archive.cloudera.com/cm4/installer/latest/cloudera-manager-installer.bin
+</pre>
+<p>Then install it:</p>
+<pre class="code" style="padding-left: 10px;">$ sudo chmod +x cloudera-manager-installer.bin
+$ sudo ./cloudera-manager-installer.bin
+ </pre>
+<p>This will pop up an extreme green install wizard; just hit &#8220;yes&#8221; to everything.</p>
+<p>Cloudera Manager works poorly with textual browsers like Lynx. (It has <a href="http://www.cloudera.com/blog/2012/09/automating-your-cluster-with-cloudera-manager-api/">an API</a>, but we won&#8217;t cover that here.) Luckily, we can access the web interface from our laptop by looking up the public DNS address we used to log in to our control node, and appending “:7180” to the end in our web browser.</p>
+<p>First, you need to tell Amazon to open that port. The manager also needs a pretty ridiculously long list of open ports to work, so we’re just going to tell Amazon to open all TCP ports. That’s not great for security, so you can add the individual ports if you care enough (<a href="https://ccp.cloudera.com/display/ENT4DOC/Configuring+Ports+for+Cloudera+Manager" target="_blank">lists here</a>):</p>
+<pre class="code" style="padding-left: 10px;">$ ec2-authorize default -P tcp -p 0-65535 -o "jclouds#whirrly"
+$ ec2-authorize default -P tcp -p 7180 -o 0.0.0.0/0
+$ ec2-authorize default -P udp -p 0-65535 -o "jclouds#whirrly"
+$ ec2-authorize default -P icmp -t -1:-1 -o "jclouds#whirrly"
+</pre>
+<p>Then fire up Chrome and visit <a href="http://ec2-%3Cwhatever%3E.compute-1.amazonaws.com:7180/" target="_blank">http://ec2-.compute-1.amazonaws.com:7180/</a> .</p>
+<p>Log in with the default credentials user: “admin” pass: “admin”</p>
+<p>Click “just install the free edition”, “continue”, then “proceed” in tiny text at the bottom right of the registration screen.</p>
+<p>Now go back to that ips.txt file we created in the last part and copy the list of IPs. Past them into the box on the next screen, and click “search”, then “install CDH on selected hosts.”</p>
+<p>Next the manager needs credentials that’ll allow it to log into the nodes in the cluster to set them up. You need to give it a SSH key, but that key is on the server and can’t be directly accessed from you laptop. So you need to copy it to your laptop.</p>
+<pre class="code" style="padding-left: 10px;"> $ scp -r -i ~/.ec2/hadoop_tutorial.pem ubuntu@ec2-54-242-62-52.compute-1.amazonaws.com:/home/ubuntu/.ssh ~/Downloads/hadoop_tutorial
+ </pre>
+<p>(“scp” is a program that securely copies files through ssh, and the –r flag will copy a directory.)</p>
+<p>Now you can give the manager the username “huser”, and the SSH keys you just downloaded:</p>
+<p>Click “start installation,” then “ok” to log in with no passphrase. Now wait for a while as CDH is installed on each node.</p>
+<p>Next, Cloudera Manager will inspect the hosts and issues some warnings but just click &#8220;continue.&#8221; Then it will ask you which services you want to start – choose “custom” and then select Zookeeper, HDFS, HBase, and MapReduce.</p>
+<p>Click &#8220;continue&#8221; on the “review configuration changes” page, then wait as the manager starts your services.</p>
+<p>Click &#8220;continue&#8221; a couple more times when prompted, and now you’ve got a functioning cluster.</p>
+<h2>Step 3: Do Something</h2>
+<p>To use your cluster, you need to SSH login to one of the nodes. Pop open the “hosts.txt” file we made earlier, grab any of the lines, and paste it into the terminal.</p>
+<pre class="code" style="padding-left: 10px;">$ ssh -i /home/ubuntu/.ssh/id_rsa -o "UserKnownHostsFile /dev/null" \
+ -o StrictHostKeyChecking=no huser@75.101.233.156
+</pre>
+<p>If you already know how to use Hadoop and HBase, then you’re all done. Your cluster is good to go. If you don’t, here’s a brief overview:</p>
+<p>The basic Hadoop workflow is to run a “job” that reads some data from HDFS, “maps” some function onto that data to process it, “reduces” the results back to a single set of data, and then stores the results back to HDFS. You can also use HBase as the input and/or output to your job.</p>
+<p>You can interact with HDFS directly from the terminal through commands starting “hadoop fs”. In CDH, Cloudera&#8217;s open-source Hadoop distro, you need to be logged in as the “hdfs” user to manipulate HDFS, so let’s log in as hdfs, create a users directory for ourselves, then create an input directory to store data.</p>
+<pre class="code" style="padding-left: 10px;">$ sudo su - hdfs
+$ hadoop fs -mkdir -p /user/hdfs/input</pre>
+<p>You can list the contents of HDFS by typing:</p>
+<pre class="code" style="padding-left: 10px;">$ hadoop fs -ls -R /user
+</pre>
+<p>To run a program using MapReduce, you have two options. You can either:</p>
+<ul>
+<li>Write a program in Java using the MapReduce API and package it as a JAR</li>
+<li>Use Hadoop Streaming, which allows you to write your mapper and reducer”scripts in whatever language you want and transmit data between stages by reading/writing to StdOut.</li>
+</ul>
+<p>If you’re used to scripting languages like Python or Ruby and just want to crank through some data, Hadoop Streaming is great (especially since you can add more nodes to overcome the relative CPU slowness of a higher level language). But interacting programmatically with HBase is a lot easier through Java. (Interacting with HBase is tricky but not impossible with Python. There is a package called “<a href="https://github.com/wbolster/happybase" target="_blank">Happybase</a>” which lets you interact “pythonically” with HBase; the problem is that you have to run a special service called Thrift on each server to translate the Python instructions into Java, or else transmit all of your requests over the wire to a server on one node, which I assume will heavily degrade performance. Cloudera Manager will not set up Thrift for you, though you could do it by hand or using Whirr+Chef.) So I’ll provide a quick example of Hadoop streaming and then a more extended HBase example using Java.</p>
+<p>Now, grab my example code repo off Github. We’ll need git.</p>
+<p>(If you’re still logged in as hdfs, do “exit” back to “huser” since hdfs doesn’t have sudo privileges by default.)</p>
+<pre class="code" style="padding-left: 10px;">$ sudo apt-get install -y git-core
+$ sudo su - hdfs
+$ git clone https://github.com/rogueleaderr/Hadoop_Tutorial.git $ cd Hadoop_Tutorial/hadoop_tutorial
+</pre>
+<p>Cloudera Manager won&#8217;t tell the nodes where to find the configuration files it needs to run (i.e. “set the classpath”), so let’s do that now:</p>
+<pre class="code" style="padding-left: 10px;">$ export HADOOP_CLASSPATH=/etc/hbase/conf.cloudera.hbase1/:/etc/hadoop/conf.cloudera.mapreduce1/:/etc/hadoop/conf.cloudera.hdfs1/
+</pre>
+<h4>Hadoop Streaming</h4>
+<p>Michael Noll has a good tutorial on Hadoop streaming with Python <a href="http://www.michael-noll.com/tutorials/writing-an-hadoop-mapreduce-program-in-python/" target="_blank">here</a>. I’ve stolen the code and put it in Github for you, so to get going. Load some sample data into hdfs:</p>
+<pre class="code" style="padding-left: 10px;">$ hadoop fs -copyFromLocal data/sample_rdf.nt input/sample_rdf.nt
+$ hadoop fs -ls -R
+(to see that the data was copied)
+</pre>
+<p>Now let’s Hadoop:</p>
+<pre class="code" style="padding-left: 10px;">$ hadoop jar /usr/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.0.0-mr1-cdh4.0.1.jar \
+-file python/mapper.py -mapper python/mapper.py \
+-file python/reducer.py -reducer python/reducer.py \
+-input /user/hdfs/input/sample_rdf.nt -output /user/hdfs/output/1
+</pre>
+<p>That’s a big honking statement, but what it’s doing is telling Hadoop (which Cloudera Manager installs in /usr/lib/hadoop-0.20-mapreduce) to execute the “streaming” jar, to use the mapper and reducer “mapper.py” and “reducer.py”, passing those actual script files along to all of the nodes, telling it to operate on the sample_rdf.nt file, and to store the output in the (automatically created) output/1/ folder.</p>
+<p>Let that run for a few minutes, then confirm that it worked by looking at the data:</p>
+<pre class="code" style="padding-left: 10px;">$ hadoop fs -cat /user/hdfs/output/1/part-00000
+</pre>
+<p>That’s Hadoop Streaming in a nutshell. You can execute whatever code you want for your mappers/reducers (e.g. Ruby or even shell commands like “cat”. If you want to use non-standardlib Python packages &#8211; e.g. “rdflib” for actually parsing the RDF &#8211; you need to zip the packages and pass those files to hadoop streaming using -file [package.zip].)</p>
+<h4><strong>Hadoop/HBase API</strong></h4>
+<p>If you want to program directly into Hadoop and HBase, you’ll do that using Java. The necessary Java code can be pretty intimidating and verbose, but it’s fairly straightforward once you get the hang of it.</p>
+<p>The Github repo we downloaded in Step 3 contains some example code that should just run if you’ve followed this guide carefully, and you can incrementally modify that code for your own purposes. (The basic code is adapted from the code examples in Lars George&#8217;s <a href="http://www.amazon.com/HBase-Definitive-Guide-Lars-George/dp/1449396100" target="_blank"><em>HBase, the Definitive Guide</em></a>. The full original code can be found <a href="http://github.com/larsgeorge/hbase-book" target="_blank">here</a>.  That code has its own license, but my marginal changes are released into the public domain.)</p>
+<p>All you need to run the code is Maven. Grab that:</p>
+<p>(If you’re logged in as user “hdfs”, type “exit” until you get back to huser. Or give hdfs sudo privileges with “visudo” if you know how.)</p>
+<pre class="code" style="padding-left: 10px;">$ sudo apt-get install maven2
+$ sudo su - hdfs $ cd Hadoop_Tutorial/hadoop_tutorial
+</pre>
+<p>When you run Hadoop jobs from the command line, Hadoop is literally shipping your code over the wire to each of the nodes to be run locally. So you need to wrap your code up into a JAR file that contains your code and all the dependencies. (There are other ways to bundle or transmit your code but I think fully self-contained “fat jars” are the easiest. You can make these using the “shade” plugin which is included in the example project. )</p>
+<p>Build the jar file by typing:</p>
+<pre class="code" style="padding-left: 10px;">$ export JAVA_HOME=/usr/lib/jvm/j2sdk1.6-oracle/
+ (to tell maven where java lives)
+ $ mvn package
+ </pre>
+<p>That will take an irritatingly long time (possibly 20+ minutes) as Maven downloads all the dependencies, but it requires no supervision.</p>
+<p>(If you’re curious, you can look at the code with a text editor at /home/users/hdfs/Hadoop_Tutorial/hadoop_tutorial/src/main/java/com/tumblr/rogueleaderr/hadoop_tutorial/HBaseMapReduceExample.java). There’s a lot going on there, but I’ve tried to make it clearer via comments.</p>
+<p>Now we can actually run our job:</p>
+<pre class="code" style="padding-left: 10px;">$  cd /var/lib/hdfs/Hadoop_Tutorial/hadoop_tutorial
+$ hadoop jar target/uber-hadoop_tutorial-0.0.1-SNAPSHOT.jar com.tumblr.rogueleaderr.hadoop_tutorial.HBaseMapReduceExample
+</pre>
+<p>If you get a bunch of connection errors, make sure your classpath is set correctly by doing:</p>
+<pre class="code" style="padding-left: 10px;">$ export HADOOP_CLASSPATH=/etc/hbase/conf.cloudera.hbase1/:/etc/hadoop/conf.cloudera.mapreduce1/:/etc/hadoop/conf.cloudera.hdfs1/
+</pre>
+<p>Confirm that it worked by opening up the hbase commandline shell:</p>
+<pre class="code" style="padding-left: 10px;">$ hbase shell
+hbase(main):001:0&gt; scan "parsed_lines"
+</pre>
+<p>If you see a whole bunch of lines of data, then &#8211; congratulations! You’ve just parsed RDF data using a six-node Hadoop Cluster, and stored the results in HBase!</p>
+<h2>Next Steps</h2>
+<p>If you’re planning on doing serious work with Hadoop and HBase, just buy the books:</p>
+<ul>
+<li><a href="http://shop.oreilly.com/product/9780596521981.do" target="_blank"><em>Hadoop, the Definitive Guide</em></a></li>
+<li><em><a href="http://www.amazon.com/HBase-Definitive-Guide-Lars-George/dp/1449396100" target="_blank">HBase, the Definitive Guide</a></em></li>
+</ul>
+<p>The official tutorials for <a href="http://whirr.apache.org/docs/0.8.0/quick-start-guide.html" target="_blank">Whirr</a>, <a href="http://hadoop.apache.org/docs/r0.20.2/mapred_tutorial.html" target="_blank">Hadoop</a>, and <a href="http://hbase.apache.org/book/book.html" target="_blank">HBase</a> are okay, but pretty intimidating for beginners.</p>
+<p>Beyond that, you should be able to Google up some good tutorials.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/cdh/" title="View all posts in CDH" rel="category tag">CDH</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/cloud-2/" title="View all posts in Cloud" rel="category tag">Cloud</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/cloudera-manager/" title="View all posts in Cloudera Manager" rel="category tag">Cloudera Manager</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/whirr/" title="View all posts in Whirr" rel="category tag">Whirr</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>2 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.cs.duke.edu/~kmoses">Kyle Moses</a> /
+			November 11, 2012 / 2:05 PM		</em>
+		<p>Great tutorial!  Thanks for posting.  I couldn&#8217;t get the regexp for sed to work for some reason.  A simple alternative is:</p>
+<p>awk -F&#8217;@&#8217; &#8216;{print $2}&#8217; hosts.txt &gt; ips.txt</p>
+<p>I&#8217;d also recommend adding a comment to Step 1 reminding users to fill in their EC2 access info for whirr.credential and whirr.identity.</p>
+<p>I missed this implicit step and the resulting Java error message was a bit cryptic and only stated &#8220;Empty key&#8221;.  The Whirr installation guide (link below) helped me realize my mistake:</p>
+<p><a href="https://ccp.cloudera.com/display/CDHDOC/Whirr+Installation" rel="nofollow">https://ccp.cloudera.com/display/CDHDOC/Whirr+Installation</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Mehul</a> /
+			September 26, 2013 / 1:22 PM		</em>
+		<p>Nice stuff. Can you tell me how you installed java on the rest of the machines that were launched by whirr? Is cloudera manager responsible for installing even java on these machines?</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='18757' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="+9A=" />
+		<input type="hidden" name="cptch_time" value="1398162825" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &minus; 2 =  t&#104;&#114;ee	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

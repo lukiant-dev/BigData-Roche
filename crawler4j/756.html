@@ -1,0 +1,1026 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Securing an Apache Hadoop Cluster Through a Gateway | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Securing an Apache Hadoop Cluster Through a Gateway"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2008/12/securing-a-hadoop-cluster-through-a-gateway/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Securing an Apache Hadoop Cluster Through a Gateway Comments Feed" href="http://blog.cloudera.com/blog/2008/12/securing-a-hadoop-cluster-through-a-gateway/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Job Scheduling in Apache Hadoop' href='http://blog.cloudera.com/blog/2008/11/job-scheduling-in-hadoop/' />
+<link rel='next' title='Testing Apache Hadoop' href='http://blog.cloudera.com/blog/2008/12/testing-hadoop/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2008/12/securing-a-hadoop-cluster-through-a-gateway/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=140' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-140 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Securing an Apache Hadoop Cluster Through a Gateway</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/aaron/" title="Posts by Aaron Kimball" rel="author">Aaron Kimball</a></li>
+				<li>December 03, 2008</li>
+				<li class="comment"><a href="#comments">12 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><strong>(Added 6/4/2013) Please note the instructions below are deprecated. Please refer to the <em><a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/latest/CDH4-Security-Guide/CDH4-Security-Guide.html">CDH4 Security Guide</a></em> for up-to-date procedures.</strong></p>
+<p>A few weeks ago we ran an Apache Hadoop hackathon. ApacheCon participants were invited to use our 10-node Hadoop cluster to explore Hadoop and play with some datasets that we had loaded on in advance. One challenge we had to face was, how do we do this in a secure way? Hadoop does not offer much in the way of security. Hadoop provides a rudimentary file permission system on its distributed filesystem, HDFS, but does not verify the appropriateness of the username you are using. (Whatever username you use to start your local Hadoop client process is used as your HDFS username; this account does not necessarily need to exist on the machines which host the HDFS NameNode or DataNodes.)</p>
+<p>Even more problematically, anyone who can connect to the JobTracker can submit arbitrary code to run with the authority of the account used to start the Hadoop TaskTrackers on each node.</p>
+<p>While there is not a perfect solution to multitenancy in a Hadoop environment, by using a proxying gateway, you can at least control which users have access to your cluster. The rest of this post describes how to set up such a gateway configuration.</p>
+<p>The basic idea behind a proxying gateway is that direct connections to the JobTracker, NameNode, and slave machines (hosting the DataNodes and TaskTrackers) are disallowed except from within your internal network. These machines can all have private IP addresses. We configured our Hadoop machines to use addresses in the 10.x.x.x space. A separate machine,<br /> called the gateway, has a public IP address. Users can connect to the gateway machine through ssh and set up a SOCKS tunnel which &#8220;passes through&#8221; connections to the internal nodes. The primary benefit of this system is that only users who have linux accounts on the gateway machine can access the Hadoop cluster.</p>
+<p><strong>Client Configuration</strong></p>
+<p>For a user to connect to our Hadoop cluster, they&#8217;d have to modify their hadoop-site.xml file to include our master node&#8217;s DNS address in the <tt>fs.default.name</tt> and <tt>mapred.job.tracker</tt> fields. We gave them a prototype hadoop-site.xml file to download that looked like the following:</p>
+<div><tt> </tt></p>
+<pre><tt>&lt;?xml version="1.0"?&gt; &lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt; &lt;!-- Put site-specific property overrides in this file. --&gt; &lt;configuration&gt; &lt;!-- put your hadoophack username in here twice as comma,separated,values --&gt; &lt;property&gt; &lt;name&gt;hadoop.job.ugi&lt;/name&gt; &lt;value&gt;YOUR_USER_NAME,YOUR_USER_NAME&lt;/value&gt; &lt;/property&gt; &lt;!-- If you changed your tunnel port, change it here. If you don't know what this means, then leave it alone. --&gt; &lt;property&gt; &lt;name&gt;hadoophack.tunnel.port&lt;/name&gt; &lt;value&gt;2600&lt;/value&gt; &lt;/property&gt; &lt;!-- change these only if you know what you're doing --&gt; &lt;property&gt; &lt;name&gt;mapred.reduce.tasks&lt;/name&gt; &lt;value&gt;8&lt;/value&gt; &lt;/property&gt; &lt;property&gt; &lt;name&gt;mapred.child.java.opts&lt;/name&gt; &lt;value&gt;-Xmx512m&lt;/value&gt; &lt;/property&gt; &lt;!-- Don't change anything below here --&gt; &lt;property&gt; &lt;name&gt;mapred.submit.replication&lt;/name&gt; &lt;value&gt;5&lt;/value&gt; &lt;/property&gt; &lt;property&gt; &lt;name&gt;dfs.block.size&lt;/name&gt; &lt;value&gt;134217728&lt;/value&gt; &lt;/property&gt; &lt;property&gt; &lt;name&gt;fs.default.name&lt;/name&gt; &lt;value&gt;hdfs://server1.cloudera.com:9000/&lt;/value&gt; &lt;/property&gt; &lt;property&gt; &lt;name&gt;mapred.job.tracker&lt;/name&gt; &lt;value&gt;server1.cloudera.com:9001&lt;/value&gt; &lt;/property&gt; &lt;property&gt; &lt;name&gt;mapred.system.dir&lt;/name&gt; &lt;value&gt;/hadoop/mapred/system&lt;/value&gt; &lt;final&gt;true&lt;/final&gt; &lt;/property&gt; &lt;property&gt; &lt;name&gt;hadoop.socks.server&lt;/name&gt; &lt;value&gt;localhost:${hadoophack.tunnel.port}&lt;/value&gt; &lt;/property&gt; &lt;property&gt; &lt;name&gt;hadoop.rpc.socket.factory.class.default&lt;/name&gt; &lt;value&gt;org.apache.hadoop.net.SocksSocketFactory&lt;/value&gt; &lt;/property&gt; &lt;/configuration&gt; </tt></pre>
+<p>&nbsp;</p>
+</div>
+<p>The username that is applied to files you create and use in HDFS is taken, by default, from whatever username you use to start your Hadoop jobs. Since a user might not have the same user account on our cluster as on their home machine, we wanted them to override this behavior. The <tt>hadoop.job.ugi</tt> parameter contains a comma-delimited list containing first the username, and then whatever UNIX-style groups should be associated with the user. We asked our users to change this to the username we assigned to their account. Since you must be in at least one group (which can have the same name as your username), your username needs to be entered in this field twice.</p>
+<p>The <tt>fs.default.name</tt> and <tt>mapred.job.tracker</tt> fields were filled in with our head node (server1)&#8217;s DNS name. Since Hadoop MapReduce determines the <tt>mapred.system.dir</tt> property at job creation time, regardless of values set at the JobTracker or TaskTrackers, we set that for them as well as the default block size, and the default number of reduce tasks.</p>
+<p>Finally, this file also instructs Hadoop to make all connections through a SOCKS proxy (by way of the <tt>hadoop.socks.server</tt> and <tt>hadoop.rpc.socket.factory.class.default</tt> properties). This means that given the presence of a tunnel to our gateway node, Hadoop&#8217;s connections should be made through this tunnel.</p>
+<p><strong>Server Configuration</strong></p>
+<p>Since properties are initially set at the client when a Hadoop job is started, and then inherited throughout the rest of the system, a configuration change was important inside the cluster as well. The hadoop-site.xml file that we propagated to the master node as well as all of the slaves contained the setting:</p>
+<div><tt> </tt></p>
+<pre><tt>&lt;property&gt; &lt;name&gt;hadoop.rpc.socket.factory.class.default&lt;/name&gt; &lt;value&gt;org.apache.hadoop.net.StandardSocketFactory&lt;/value&gt; &lt;final&gt;true&lt;/final&gt; &lt;/property&gt; </tt></pre>
+<p>&nbsp;</p>
+</div>
+<p>The nodes inside the cluster should connect directly to one another &#8212; these should <strong>not</strong> route connections through the SOCKS proxy. So we set the socket factory to the standard one, and made sure that the parameter was marked as <strong>final</strong> so that jobs couldn&#8217;t override it.</p>
+<p>One &#8220;gotcha&#8221; of Hadoop is that the HDFS instance has a canonical name associated with it, based on the DNS name of the machine &#8212; not its IP address. If you provide an IP address for the <tt>fs.default.name</tt>, it will reverse-DNS this back to a DNS name, then subsequent connections will perform a forward-DNS lookup on the canonical DNS name (and will not forward the DNS lookups through the SOCKS proxy). For users outside our firewall, this means trouble. So even though server1.cloudera.com has a private IP address, we created a public DNS &#8220;A&#8221; record for it on our public DNS server &#8212; pointing to the private IP address. The upshot of this is that if you&#8217;ve got a connection to the gateway, you&#8217;ll be able to transparantly use the master server&#8217;s JobTracker and NameNode instances as though they were on your network. If not, you&#8217;re out of luck. Much more secure!</p>
+<p>We also found that if a user mistakenly tried to run <strong>bin/start-dfs.sh</strong> (or start-all, etc) on their own machine, they would start a DataNode which would connect to our NameNode. This caused a lot of seemingly-inexplicable HDFS access and stability issues. The solution? Control which machines can register as DataNodes. We added a <strong>hosts file</strong> to HDFS which provides a whitelist of machines which can act as DataNodes. In hadoop-site.xml, we added the setting:</p>
+<div><tt> </tt></p>
+<pre><tt>&lt;property&gt; &lt;name&gt;dfs.hosts&lt;/name&gt; &lt;value&gt;/usr/local/hadoop/conf/hosts&lt;/value&gt; &lt;/property&gt; </tt></pre>
+<p>&nbsp;</p>
+</div>
+<p>The <tt>dfs.hosts</tt> setting indicates a filename which contained the list of DNS names associated with our desired DataNodes, one name per line. Restart HDFS with that, and the errant user&#8217;s DataNode goes away, and the issues were resolved.</p>
+<p><strong>Client Usage Instructions</strong></p>
+<p>We then created user accounts on the gateway machine for all our hackathon participants. For them to use the Hadoop cluster, they had to open an SSH session to the gateway machine, opening a <em>dynamic port-forwarding tunnel</em>. This isn&#8217;t as hard as it sounds; it&#8217;s accomplished by:</p>
+<div><tt> </tt></p>
+<pre><tt>you@localhost:~$ ssh -D 2600 clouderaUsername@gateway.cloudera.com </tt></pre>
+<p>&nbsp;</p>
+</div>
+<p>The <em>-D 2600</em> instructs SSH to open a SOCKS proxy on local port 2600. The SOCKS-based SocketFactory in Hadoop will then create connections forwarded over this SOCKS proxy. After this connection is established, you can minimize the ssh session and forget about it. Then just run Hadoop jobs in another terminal the normal way:</p>
+<div><tt> </tt></p>
+<pre><tt>you@localhost:~$ $HADOOP_HOME/bin/hadoop fs -ls / you@localhost:~$ $HADOOP_HOME/bin/hadoop jar myJarFile.jar myMainClass etc... </tt></pre>
+<p>&nbsp;</p>
+</div>
+<p><strong>FoxyProxy</strong></p>
+<p>A disadvantage of putting your nodes behind a firewall is that users can no longer access the web-based status monitoring tools that come with Hadoop. The JobTracker status page on port 50030 and NameNode status page on port 50070 are inaccessible. Configuring a web browser to route all traffic through the SOCKS proxy wouldn&#8217;t be a good idea, because then they&#8217;d be unable to access any other web sites they might need. By using <strong>FoxyProxy</strong>, a set of regular expression-based rules can be set up which determine what URLs get forwarded through a proxy, and what URLs are accessed without one.</p>
+<p>Users were instructed to download <a href="http://foxyproxy.mozdev.org/index.html">FoxyProxy</a>, a free extension for FireFox. They were told to add rules forwarding <tt>http://server*.cloudera.com:*/*</tt> and <tt>http://10.1.130.*:*/*</tt> through a SOCKS proxy at <tt>localhost:2600</tt>. Now they were able to see the status pages, browse the DFS through their web browser, and access the error logs associated with the Hadoop daemons in case something went wrong with their jobs. This is used in conjunction with the SSH-based tunnel which they opened earlier.</p>
+<p><strong>Advanced Server Configuration with IPTables</strong></p>
+<p>If we just wanted to leave our servers with private IPs only, we could have left it at that. But we wanted these servers to also be able to connect out to the rest of the Internet. Doing this requires giving the machines public IP addresses again (or configuring them behind a NAT firewall). How to ensure that we could open outbound connections, but drop all inbound connections? We employed some simple IPTables rules to drop all incoming connections on the ethernet device with the public IP address. The output of <tt>/sbin/iptables -L</tt> on any of the private-network machines is as follows:</p>
+<div><tt> </tt></p>
+<pre><tt>Chain INPUT (policy DROP) target prot opt source destination ACCEPT all -- static-internal.reverse.cloudera.com/28 anywhere DROP all -- anywhere anywhere ACCEPT all -- anywhere anywhere ACCEPT all -- anywhere anywhere Chain FORWARD (policy ACCEPT) target prot opt source destination Chain OUTPUT (policy ACCEPT) target prot opt source destination ACCEPT all -- anywhere anywhere ACCEPT all -- anywhere anywhere </tt></pre>
+<p>&nbsp;</p>
+</div>
+<p>This tells the machines to accept any inbound connections in the /28 where we host our machines, but drop all other inbound new connections. Outbound connections to any destination are allowed.</p>
+<p><strong>Future Steps&#8230;</strong></p>
+<p>We started doing this process a little later than we&#8217;d have liked, and learned along the way what did and did not work so well. Configuring FoxyProxy turned out to be a cumbersome exercise for users. (There are a lot of button clicks and windows involved in setting up those relatively straightforward rules.) We&#8217;ve also found out that FoxyProxy can export its rules in a &#8220;PAC&#8221; file, which other users can then import. Newer users of our cluster just download and install this file in their FoxyProxy config. Ultimately, what we&#8217;d like best is to install an HTTP Forwarding Proxy on the gateway node, which would allow our users to see the server status and logs without having to install software and configure a dynamic proxy. Currently this is still on the to-do list though.</p>
+<p>Hadoop is pretty straightforward to use, but securing it can be tricky. There were a bunch of steps we had to follow above, but we achieved the end goal of imposing few demands on our legitimate users. Overall, this provided us with much better assurances about our cluster. The two major areas where this does not provide security are that users can impersonate one another with respect to the distributed filesystem, and they also all run processes in the same user&#8217;s process space &#8212; so they could theoretically interfere with other Hadoop user processes, or the Hadoop daemons themselves. But clamping down on who has access to the Hadoop cluster in the first place goes a long way toward keeping a system healthy.</p>
+<p>Stay tuned soon, for when we announce the contest winners!</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>12 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Steven Wong</a> /
+			July 14, 2009 / 6:15 PM		</em>
+		<p>Question: &#8220;an HTTP Forwarding Proxy on the gateway node&#8221; &#8212; are you referring to a reverse proxy?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Aaron</a> /
+			August 04, 2009 / 10:31 AM		</em>
+		<p>yes.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Andy</a> /
+			September 10, 2009 / 5:42 PM		</em>
+		<p>Great post!  Very helpful and much appreciated.</p>
+<p>You mention you use hadoop.job.ugi to set the username/group for submitted jobs.  Should that configuration also work for basic hdfs operations as well ( e.g., -copyFromLocal )?  My quick attempt ( with hadoop 0.20 from a windows vista client ) did not seem to honor hadoop.job.ugi for &#8216;hadoop dfs&#8217; commands.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Andy</a> /
+			September 10, 2009 / 6:01 PM		</em>
+		<p>Please ignore my previous comment.  Wrong configuration parameter was used ( dfs.web.ugi ).</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Hawksury</a> /
+			August 25, 2010 / 10:37 AM		</em>
+		<p>Great post mate, I have few questions would much appreciate if you could help/answer.</p>
+<p>The data I want to process is on a local machine (3TB in size) i want to use EC2 machines to process this data by submitting Hive Queries from a local machine that is outside of Amazon EC2.</p>
+<p>Could you please help or point me to the correct post where the process is explained.</p>
+<p>Many Thanks,<br />
+Hawksury</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Aaron</a> /
+			August 25, 2010 / 4:47 PM		</em>
+		<p>Hawksury,</p>
+<p>After you&#8217;ve got your cluster configured and have your local system configured to talk to it, you can copy your data up to HDFS, and then operate on it with Hive as usual.</p>
+<p>You may want to watch our training video on how to use Hive: <a href="http://www.cloudera.com/videos/introduction_to_hive" rel="nofollow">http://www.cloudera.com/videos/introduction_to_hive</a></p>
+<p>- Aaron</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://zjffdu.com">Jeff</a> /
+			June 16, 2011 / 11:07 PM		</em>
+		<p>I think you made a mistake in the post.</p>
+<p>property hadoop.rpc.socket.factory.class.default should been set to org.apache.hadoop.net.SocksSocketFactory rather than org.apache.hadoop.net.StandardSocketFactory</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">vbarat</a> /
+			July 17, 2012 / 4:23 AM		</em>
+		<p>Great post! That&#8217;s definitively what we were looking for.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">vbarat</a> /
+			July 17, 2012 / 4:36 AM		</em>
+		<p>Actually, by changing hadoop.job.ugi, you can acquire the right of any user you want.</p>
+<p>So event if the solution is good to protect your cluster from unwanted users, you don&#8217;t protect your granted users from each other (one of them can very easily steal the data of any other user).</p>
+<p>Any solution for that?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Todd Lipcon</a> /
+			July 23, 2012 / 5:29 PM		</em>
+		<p>Hi V Barat,</p>
+<p>Since CDH3, you can configure true security on CDH. The &#8220;hadoop.job.ugi&#8221; parameter no longer exists. If a cluster has been secured, it uses Kerberos to provide strong authentication, and then POSIX permissions for authorization.</p>
+<p>Please see the CDH3 or CDH4 Security Guide documentation for details.</p>
+<p>-Todd</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jeff</a> /
+			April 25, 2013 / 1:39 AM		</em>
+		<p>If I use kerberos authentication, How can I use socks proxy to connect to hadoop ? Is there any tutorial for that ? Thanks</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='140' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="J4M=" />
+		<input type="hidden" name="cptch_time" value="1398163062" />
+		<input type="hidden" value="Version: 2.4" />
+		6 &times; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  &#102;&#111;rt&#121; &#116;&#119;o	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

@@ -1,0 +1,1131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Tracking Trends with Hadoop and Hive on EC2 | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Tracking Trends with Hadoop and Hive on EC2"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2009/07/tracking-trends-with-hadoop-and-hive-on-ec2/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Tracking Trends with Hadoop and Hive on EC2 Comments Feed" href="http://blog.cloudera.com/blog/2009/07/tracking-trends-with-hadoop-and-hive-on-ec2/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Advice on QA Testing Your MapReduce Jobs' href='http://blog.cloudera.com/blog/2009/07/advice-on-qa-testing-your-mapreduce-jobs/' />
+<link rel='next' title='Doug Cutting joins Cloudera' href='http://blog.cloudera.com/blog/2009/08/doug-cutting-joins-cloudera/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2009/07/tracking-trends-with-hadoop-and-hive-on-ec2/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=912' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-912 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Tracking Trends with Hadoop and Hive on EC2</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/aaa/" title="Posts by Amr Awadallah" rel="author">Amr Awadallah</a></li>
+				<li>July 31, 2009</li>
+				<li class="comment"><a href="#comments">10 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<blockquote><p><em><br />
+At Cloudera, we frequently work with leading Hadoop developers to produce guest blog posts of general interest to the community. We started a project with <a href="http://www.linkedin.com/in/peterskomoroch">Pete Skomoroch</a> a&#160;while back, and we were so impressed with his work, we&#8217;ve decided to bring Pete on as a regular guest blogger. Pete can show you how to do some pretty amazing things with Hadoop, Pig and Hive and has a particular bias towards Amazon EC2. With that, I&#8217;m happy to welcome Pete to the blog, and hope you enjoy his first post as much as we did. -Christophe<br />
+</em></p></blockquote>
+<p><a title="Trending Topics" href="http://www.trendingtopics.org/">Trendingtopics.org</a> was built by <a title="Data Wrangling" href="http://www.datawrangling.com/">Data Wrangling</a> to demonstrate how Hadoop and <a id="c58e" title="Amazon EC2" href="http://aws.amazon.com/ec2/">Amazon EC2</a> can be used with <a href="http://rubyonrails.org/">Rails</a> to power a data-driven website.&#160; This post will give an overview of how trendingtopics.org was put together and show some basic approaches for finding trends in log data with Hive.&#160; The source code for trendingtopics is available <a title="Rails app on Github" href="http://github.com/datawrangling/trendingtopics/tree/master">on Github</a> and a <a id="cb01" title="tutorial" href="http://www.cloudera.com/hadoop-data-intensive-application-tutorial">tutorial</a> is provided on the Cloudera site which describes many of the data processing steps in greater detail.</p>
+<p>The trendingtopics Rails application identifies recent trends on the web by periodically launching an EC2 cluster running <a title="cloudera's distribution for hadoop" href="/hadoop/">Cloudera&#8217;s Distribution for Hadoop</a> to process Wikipedia log files.&#160; The cluster runs a <a id="uq67" title="Hive" href="/videos/introduction_to_hive">Hive</a> batch job that analyzes hourly pageview statistics for millions of Wikipedia articles, and then loads the resulting trend parameters into the application&#8217;s MySQL database.</p>
+<div style="text-align: left;"><img class="alignnone size-full wp-image-924" src="http://blog.cloudera.com/blog/wp-content/uploads/2009/06/accg8khj3q9b_76cvh9b7h9_b.png" alt="accg8khj3q9b_76cvh9b7h9_b" width="679" height="497" /></div>
+<h3>Application Features</h3>
+<ul>
+<li>Ranked list of the most significant trends over the last 30 days along with total pageviews</li>
+<li>Ranked list of rising articles that have been trending in the last 24 hours</li>
+<li>Daily time series charts and <a title="sparklines" href="http://en.wikipedia.org/wiki/Sparkline">sparklines</a> for over 2.5 million Wikipedia articles</li>
+<li>Autocomplete functionality and search results ranked by article trend score</li>
+<li>Category based trends for People or Companies</li>
+</ul>
+<h3>How Hadoop is Used in the Application</h3>
+<ul>
+<li>Cleaning raw log data and joining article title strings with Wikipedia page IDs</li>
+<li>Aggregating hourly time series data for daily pageview charts and sparklines</li>
+<li>Running periodic trend estimation jobs and regressions</li>
+<li>Generating statistics to power search autocomplete and the ranking of search results</li>
+</ul>
+<h2>Preprocessing the Raw Data</h2>
+<p>The daily pageview charts on the site were created by running an initial MapReduce job on 1TB of hourly <a title="traffic logs" href="http://stats.grok.se/">traffic logs</a> collected from Wikipedia&#8217;s squid proxy by Domas Mituzas.&#160; We made the first seven months of this hourly log data available as an <a id="nqvr" title="Amazon Public Data Set" href="http://www.datawrangling.com/wikipedia-page-traffic-statistics-dataset">Amazon Public Data Set</a> which covers the period from October 1, 2008 to April 30, 2009.&#160; We run a cron job on the trendingtopics.org server to fetch the latest log files every hour and store a copy on Amazon S3 for processing by Hadoop.</p>
+<p>The log files are named with the date and time of collection. Individual hourly files are around 55 MB when compressed, so eight months of compressed data takes up about 300 GB of space.</p>
+<p>Each line in a pagecount file has four fields: projectcode, pagename, pageviews, and bytes:</p>
+<p><span style="font-family: Courier New;">$ grep &#8216;^en Barack&#8217; pagecounts-20090521-100001<br />
+en Barack 8 1240112<br />
+en Barack%20Obama 1 1167<br />
+en Barack_H._Obama 1 142802<br />
+en Barack_H_Obama 3 428946<br />
+en Barack_H_Obama_Jr. 2 285780<br />
+en Barack_Hussein_Obama,_Junior 2 285606<br />
+en Barack_O%27Bama 1 142796<br />
+en Barack_Obama 701 139248439<br />
+en Barack_Obama%27s_first_100_days 2 143181<br />
+en Barack_Obama,_Jr 2 285755</span></p>
+<p>Many records in the log file are actually Wikipedia redirects that point to other articles in the Wikipedia &#8220;Pages&#8221; table. As part of our Hadoop processing, we clean the page names and perform a join in Hive against the contents of a MySQL redirect table to find the true Wikipedia page_id for each page title.</p>
+<div style="text-align: left;"><img style="width: 648px; height: 233px;" src="https://docs.google.com/File?id=accg8khj3q9b_895sj8pc6z_b" alt="" /></div>
+<h2>Aggregating the Hourly Data</h2>
+<p><img src="http://trendingtopics.s3.amazonaws.com/images/american_idol_daily_pageviews.png" alt="" /></p>
+<p>For the initial log file text normalization and filtering, we used a simple <a href="http://hadoop.apache.org/core/docs/r0.18.3/streaming.html">Hadoop Streaming</a> job with Python.&#160; The first MapReduce pass restricts pageviews to a subset of English Wikipedia pages, filters out bad records, and then sums hourly pageviews keyed by article-date. You will notice that the date is not actually in the raw log data itself, but is part of the filename. We can access this parameter in our streaming script using a Hadoop environment variable. You could fetch this job parameter in Java via <span style="font-family: Courier New;">job.get(&#8220;mapred.input.file&#8221;)</span>, but Hadoop also makes it available as an environment variable directly accessible to streaming jobs. For example, in Python you can access the file name as follows:</p>
+<p><span style="font-family: Courier New;">filepath = os.environ["map_input_file"]<br />
+filename = os.path.split(filepath)[-1]<br />
+</span></p>
+<p>Our second MapReduce pass maps the daily aggregations by article name:</p>
+<p><span style="font-family: Courier New;">Barack_Obama 20090422 129<br />
+Barack_Obama 20090419 143<br />
+Barack_Obama 20090421 163<br />
+Barack_Obama 20090420 152<br />
+</span></p>
+<p>These records are merged at the reducers to generate a daily time series for each article in serialized JSON format.</p>
+<p><span style="font-family: Courier New;">Format</span>:</p>
+<p><span style="font-family: Courier New;"><strong>article</strong>\t<strong>dates</strong>\t<strong>pagecounts</strong>\t<strong>total_pageviews</strong></span></p>
+<p><span style="font-family: Courier New;">&#8216;Barack_Obama\t[20090419,20090420,20090421,20090422]\t[143,152,163,129]\t587&#8242;</span></p>
+<p>These records are joined with the Wikipedia page ID using Hive, and the resulting output is loaded into MySQL where it is indexed for fast lookups by the web application.&#160; For the first version of the site, we chose a simple key-value store approach where the time series for a single article is stored in JSON&#160; format. &#160; This format is simple to work with using R or Python and can be loaded quickly by the dynamic charts on the website.</p>
+<h2>Daily Trend Estimation</h2>
+<p>After the historical timeline aggregation was complete, we began running a daily batch job in Hive on EC2 to aggregate recent log data and detect topics trending over the previous 24 hours.&#160; This MapReduce job only operates on the last 30 days of data for trend estimation, so it is less resource intensive than a pass over the full Wikipedia log dataset.</p>
+<p><img style="width: 648px; height: 425px;" src="https://docs.google.com/File?id=accg8khj3q9b_77djstg3d7_b" alt="" /></p>
+<p>For MapReduce operations that go beyond the basic cleaning and aggregation of data, using higher level tools, such as Hive, can accelerate the development process. Hive supports a range of <a id="ry36" title="SQL like operators" href="http://wiki.apache.org/hadoop/Hive/LanguageManual/UDF">SQL-like operators</a>, <a id="x3kw" title="random sampling" href="http://wiki.apache.org/hadoop/Hive/LanguageManual/Sampling">random sampling</a>, <a id="fyaf" title="bucketing of tables" href="http://wiki.apache.org/hadoop/Hive/LanguageManual/DDL/BucketedTables">bucketing of tables</a>, and calling of external functions through custom MapReduce scripts.</p>
+<p>To find trending articles, we load the latest timeline data into Hive and run a HiveQL query that applies a simple Python trend estimation algorithm to all 2.5 Million Wikipedia articles:</p>
+<pre>hive&gt; INSERT OVERWRITE TABLE daily_trends
+      SELECT u.page_id, u.daily_trend, u.error
+        FROM ( FROM daily_timelines ndt
+               MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews
+               USING 'python hive_trend_mapper.py'
+               AS page_id, daily_trend, error) u;</pre>
+<p>The file <span style="font-family: Courier New;">hive_trend_mapper.py</span> looks something like this:</p>
+<pre>#!/usr/bin/env python
+# encoding: utf-8
+
+import sys, os, re
+from math import log, sqrt
+import simplejson
+
+def calc_daily_trend(dates, pageviews, total_pageviews):
+  # pageviews for most recent day
+  y2 = pageviews[-1]
+  # pageviews for previous day
+  y1 = pageviews[-2]
+  # Simple baseline trend algorithm
+  slope = y2 - y1
+  trend = slope  * log(1.0 +int(total_pageviews))
+  error = 1.0/sqrt(int(total_pageviews))
+  return trend, error  
+
+for line in sys.stdin:
+  (page_id, dates, pageviews, total_pageviews) = line.strip().split("\t")
+  dates = simplejson.loads(dates)
+  pageviews = simplejson.loads(pageviews)
+  try:
+    daily_trend, error = calc_daily_trend(dates, pageviews, total_pageviews)
+  except:
+    # skip bad rows
+    daily_trend = 0
+    error = 0
+  sys.stdout.write('%s\t%s\t%s\n' % (page_id, daily_trend, error))</pre>
+<p>The nice thing about this approach is that analysts who use Python or R can easily substitute more advanced algorithms by replacing the <span style="font-family: Courier New;">calc_daily_trend </span>method.&#160; We describe the trend estimation process in more detail in the tutorial on <a title="Hadoop EC2 tutorial" href="http://www.cloudera.com/hadoop-data-intensive-application-tutorial">building data intensive web applications with Hadoop</a>.</p>
+<h2>Running the Batch Jobs with Hadoop and Hive on EC2</h2>
+<p class="medium">One of the advantages of using the <a id="zbqa" title="Cloudera Distribution for Hadoop on EC2" href="/hadoop/">Cloudera Distribution for Hadoop on EC2</a> is that it gives you full control over the configuration of your Hadoop cluster and operating system environment.&#160; To run batch jobs for trendingtopics.org, we use the Cloudera command line tools within cron or Rake tasks to launch Hadoop clusters on EC2:</p>
+<p class="medium" style="font-family: Courier New;">./hadoop-ec2 launch-cluster &#8211;user-packages &#8216;r-base python-simplejson git-core s3cmd&#8217; my-hadoop-cluster 10</p>
+<p class="medium">By using a combination of command line options and simple configuration files, you can install packages and modify settings to meet the needs of your specific MapReduce jobs.&#160; If you have any additional commands you want to run immediately after your Hadoop EC2 cluster launches, then you can add them to the bottom of the file hadoop-ec2-init-remote.sh.</p>
+<p class="medium">For trendingtopics, we added a few lines of code to fetch the <a id="cgq5" title="trendingtopics" href="http://github.com/datawrangling/trendingtopics/tree/master">trendingtopics source code</a> from GitHub and start our daily batch job:</p>
+<pre>function run_trendingtopics_batch() {
+  MYBUCKET=trendingtopics
+  MYSERVER=db.trendingtopics.org
+  MAILTO=pete@datawrangling.com
+  # set the default number of reducers using the following formula:
+  # number of concurrent reducers per node * number of nodes * 1.75
+  # for 10 c1.medium instances = 2 * 10 * 1.75 = 35
+  NUMREDUCERS=35 
+
+  cd /mnt
+  # git clone the trendingtopics code
+  git clone git://github.com/datawrangling/trendingtopics.git
+  cd trendingtopics
+  git checkout --track -b experimental origin/experimental
+  cd ../
+
+  bash trendingtopics/lib/scripts/run_daily_merge.sh \
+ $MYBUCKET $MYSERVER $MAILTO $NUMREDUCERS
+  # tail -f /var/log/syslog to see progress
+
+}
+
+# We want our cluster nodes to self terminate
+# if the job takes longer than 108 minutes
+shutdown -h +108 &gt;/dev/null &amp;
+
+install_user_packages
+install_hadoop
+configure_hadoop
+
+if $IS_MASTER ; then
+  setup_web
+  start_hadoop_master
+  run_trendingtopics_batch
+else
+  start_hadoop_slave
+fi</pre>
+<p class="medium"><span style="font-family: Courier New;"><br />
+</span></p>
+<h2>Running the Rails Application</h2>
+<p>If you want to explore the application further, you can on check out the code on Github. Note that the latest version of the trending topics code is in the <a id="z6jm" title="&quot;experimental&quot; branch" href="http://github.com/datawrangling/trendingtopics/tree/experimental">&#8220;experimental&#8221; branch</a>.</p>
+<h3>Dependencies for local development:</h3>
+<ul>
+<li>Ruby (1.8.7)</li>
+<li>Ruby Gems (1.3.1)</li>
+<li>Capistrano (v2.5.5)</li>
+<li>Rails (2.3.2)</li>
+</ul>
+<h3>Running locally in development mode:</h3>
+<p>Fetch the trending topics source code:</p>
+<p><span style="font-family: Courier New;">git clone git://github.com/datawrangling/trendingtopics.git</span></p>
+<p>Navigate to the root of the source code directory and create the necessary configuration files from the provided examples:</p>
+<p><span style="font-family: Courier New;">$ cd trendingtopics<br />
+$ cp config/config.yml.example config/config.yml<br />
+$ cp config/database.yml.example config/database.yml</span></p>
+<p>Run the normal Rails gem installations to get any missing dependencies:</p>
+<p><span style="font-family: Courier New;">$ rake gems:install</span></p>
+<p>Note that we also use the following plugins (already included in /vendor):</p>
+<ul>
+<li>autocomplete</li>
+<li>annotated-timeline</li>
+<li>gc4r (modified a bit for custom sparklines)</li>
+</ul>
+<p>Create the database:</p>
+<p><span style="font-family: Courier New;">$ rake db:create<br />
+$ rake db:migrate</span></p>
+<p>Populate the app with 2 months of demo data from 100 wiki articles:</p>
+<p><span style="font-family: Courier New;">$ rake db:develop</span></p>
+<p>Launch the Rails app itself:</p>
+<p><span style="font-family: Courier New;">$ script/server<br />
+=&gt; Booting Mongrel<br />
+=&gt; Rails 2.3.2 application starting on http://0.0.0.0:3000<br />
+=&gt; Call with -d to detach<br />
+=&gt; Ctrl-C to shutdown server</span></p>
+<p>Navigate to <em>http://localhost:3000/</em> to access the application.</p>
+<h3>Deploying the Rails App to EC2</h3>
+<p>The Rails app and MySQL database are deployed to Amazon EC2 using Paul Dowman&#8217;s <a title="EC2 on Rails" href="http://ec2onrails.rubyforge.org/">EC2 on Rails</a>.&#160; To deploy the application to EC2, first install the EC2 on Rails gem as described at <a title="http://ec2onrails.rubyforge.org/" href="http://ec2onrails.rubyforge.org/">http://ec2onrails.rubyforge.org/</a>:</p>
+<p><span style="font-family: Courier New;">$ sudo gem install ec2onrails</span></p>
+<p>Find AMI ID of the latest 32-bit EC2 on Rails image (in our case this was ami-5394733a):<span style="font-family: Courier New;"><br />
+</span></p>
+<p><span style="font-family: Courier New;">$ cap ec2onrails:ami_ids</span></p>
+<p>Launch an instance of the latest EC2 on Rails AMI and note the returned instance address from ec2-describe-instances. It will be something like ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com.<span style="font-family: Courier New;"><br />
+</span></p>
+<p><span style="font-family: Courier New;">$ ec2-run-instances ami-5394733a -k gsg-keypair<br />
+$ ec2-describe-instances</span></p>
+<p>Fetch the trendingtopics source code from Github as shown in the previous section. Create the necessary configuration files from the examples provided and edit them, filling in your EC2 instance address information, keypairs, and other configuration details as indicated in the comments of each file. See the ec2onrails documentation or source code for more details on each setting.<span style="font-family: Courier New;"><br />
+</span></p>
+<p><span style="font-family: Courier New;">$ cp config/deploy.rb.example config/deploy.rb<br />
+$ cp config/s3.yml.example config/s3.yml<br />
+$ cp config/config.yml.example config/config.yml<br />
+$ cp config/database.yml.example config/database.yml</span></p>
+<p>Be sure to substitute your own AWS key and secret key in both config.yml and s3.yml (you can leave these out of s3.yml and ec2onrails will still work &#8211; it just won&#8217;t back up MySQL or the log files).</p>
+<p><span style="font-family: Courier New;">aws_secret_access_key: YYVUYVIUBIBI<br />
+aws_access_key_id: BBKBBOUjbkj/BBOUBOBJKBjbjbboubuBUB</span></p>
+<p>Deploy the app to your launched EC2 instance with Capistrano (this will take several minutes).</p>
+<p><span style="font-family: Courier New;">$ cap ec2onrails:setup<br />
+$ cap deploy:cold</span></p>
+<p>You should now be able to access your app from a web browser or as a web service at the URL of the instance you provided in deploy.rb: http://ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com. You can also SSH into your running EC2 instance as usual with your keypairs to debug any issues. See the EC2 on Rails forums for more help with debugging.</p>
+<p>To redeploy the app after making changes to the base trending topics code, just do the usual cap deploy:</p>
+<p><span style="font-family: Courier New;">$ cap deploy</span></p>
+<p>No data will be populated in the production-deployed app until you run the included Hadoop jobs and import the resulting data to MySQL. To test the deployment, you can use Capistrano to run the db:develop task on the EC2 server; just wipe the dev data before loading real production data.</p>
+<h2>Possible Next Steps with Hadoop and Trending Topics</h2>
+<ul>
+<li>Implement alternate trend-detection algorithms</li>
+<li>Use the Cloudera EBS (beta) to persist the timeline data in HDFS between runs, appending each hour of data to partitioned Hive tables</li>
+<li>Explore using partitions with Hive for fast time window queries</li>
+<li>Generate smaller representative sample datasets for R&amp;D with Hive bucket sampling</li>
+<li>Use Wikipedia text content to find trends for individual words and phrases</li>
+<li>Use the Wikipedia link graph dataset to show related articles for each trend</li>
+<li>Find correlated Wikipedia articles based on page views</li>
+</ul>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/community/" title="View all posts in Community" rel="category tag">Community</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/distribution/" title="View all posts in Distribution" rel="category tag">Distribution</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/guest/" title="View all posts in Guest" rel="category tag">Guest</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>10 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.sematext.com/">Otis Gospodnetic</a> /
+			July 31, 2009 / 9:54 PM		</em>
+		<p>Interesting stuff.  Did I stumble upon a bug, though?<br />
+Note how Wikipedia has pages for Simpy and SimPy.<br />
+I can find both at trendingtopics.org if I search for &#8220;simpy&#8221;.<br />
+Then, when I click on &#8220;Simpy&#8221;, I end up on <a href="http://www.trendingtopics.org/page/Simpy" rel="nofollow">http://www.trendingtopics.org/page/Simpy</a> , which looks correct.  But note how the pageview chart is actually for SimPy (not Simpy)!</p>
+<p>Is this a bug?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.datawrangling.com">Pete Skomoroch</a> /
+			August 03, 2009 / 9:43 AM		</em>
+		<p>Good catch Otis, this looks like a bug.  Both pages are in the database, but url capitalization is not routing correctly for cases like this, I filed a bug and will look into it: </p>
+<p><a href="http://github.com/datawrangling/trendingtopics/issues" rel="nofollow">http://github.com/datawrangling/trendingtopics/issues</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://mithya.in/">nikhil</a> /
+			August 04, 2009 / 10:53 AM		</em>
+		<p>Great article guys, thanks for sharing. Time and again, I find that Cloudera has the best tutorials and articles about everything Hadoop :)</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.trafficmavericks.org">Ryan Flinchbaugh</a> /
+			June 15, 2010 / 7:59 AM		</em>
+		<p>Good article, I&#8217;m frequent visitor of the blog, retain up the good function, and I will probably be a regular visitor for a extended time.</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='912' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="+ks=" />
+		<input type="hidden" name="cptch_time" value="1398163032" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &times; &#101;igh&#116; = 40	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

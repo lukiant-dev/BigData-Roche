@@ -1,0 +1,1138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-to: Resample from a Large Data Set in Parallel (with R on Hadoop) | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-to: Resample from a Large Data Set in Parallel (with R on Hadoop)"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/02/how-to-resample-from-a-large-data-set-in-parallel-with-r-on-hadoop/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; How-to: Resample from a Large Data Set in Parallel (with R on Hadoop) Comments Feed" href="http://blog.cloudera.com/blog/2013/02/how-to-resample-from-a-large-data-set-in-parallel-with-r-on-hadoop/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Call for Speakers and Early Bird Registration: HBaseCon 2013' href='http://blog.cloudera.com/blog/2013/02/call-for-papers-hbasecon-2013/' />
+<link rel='next' title='Apache Pig: It Goes to 0.11' href='http://blog.cloudera.com/blog/2013/02/apache-pig-it-goes-to-0-11/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/02/how-to-resample-from-a-large-data-set-in-parallel-with-r-on-hadoop/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=20525' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-20525 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-to: Resample from a Large Data Set in Parallel (with R on Hadoop)</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/laserson/" title="Posts by Uri Laserson (@laserson)" rel="author">Uri Laserson (@laserson)</a></li>
+				<li>February 25, 2013</li>
+				<li class="comment"><a href="#comments">15 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><strong>UPDATED 20130424:</strong> The new RHadoop treats output to Streaming a bit differently, so <code>do.trace=FALSE</code> must be set in the <code>randomForest</code> call.</p>
+<p><strong>UPDATED 20130408:</strong> Antonio Piccolboni, the author of RHadoop, has improved the code somewhat using his substantially greater experience with R.  The most material change is that the latest version of RHadoop can bind multiple calls to keyval correctly.</p>
+<p>Internet-scale data sets present a unique challenge to traditional machine-learning techniques, such as fitting <a href="http://en.wikipedia.org/wiki/Random_forest" target="_blank">random forests</a> or &#8220;<a href="http://en.wikipedia.org/wiki/Bootstrap_aggregating" target="_blank">bagging</a>&#8220;. In order to fit a classifier to a large data set, it’s common to generate many smaller data sets derived from the initial large data set (i.e.,resampling). There are two reasons for this:</p>
+<ul>
+<li>Large data sets typically live in a cluster, so any operations should have some level of parallelism. Separate models are fit on separate nodes that contain different subsets of the initial data.</li>
+<li>Even if you could use the entire initial data set to fit a single model, it turns out that <a href="http://en.wikipedia.org/wiki/Ensemble_learning" target="_blank">ensemble methods</a>, where you fit multiple smaller models using subsets of the data, generally outperform single models. Indeed, fitting a single model with 100M data points can perform <strong>worse</strong> than fitting just a few models with 10M data points each (so less total data outperforms more total data; e.g., see <a href="http://dl.acm.org/citation.cfm?id=2213958" target="_blank">this paper</a>).</li>
+</ul>
+<p>Furthermore, bootstrapping is another popular method that randomly chops up an initial data set in order to characterize distributions of statistics and also to build ensembles of classifiers (e.g., bagging). In fact, parallelizing bootstrap sampling or ensemble learning can provide significant performance gains even when your data set is not so large that it must live in a cluster. The gains from purely parallelizing the random number generation are still significant.</p>
+<p>Sampling-with-replacement is the most popular method for sampling from the initial data set to produce a collection of samples for model fitting. This method is equivalent to sampling from a <a href="http://en.wikipedia.org/wiki/Multinomial_distribution" target="_blank">multinomial distribution</a> where the probability of selecting any individual input data point is uniform over the entire data set. <em>Unfortunately, it is not possible to sample from a multinomial distribution across a cluster without using some kind of communication between the nodes (i.e., sampling from a multinomial is not <a href="http://en.wikipedia.org/wiki/Embarrassingly_parallel" target="_blank">embarrassingly parallel</a>)</em>. But do not despair: we can approximate a multinomial distribution by sampling from an identical <a href="http://en.wikipedia.org/wiki/Poisson_distribution" target="_blank">Poisson distribution</a> on each input data point <em>independently</em>, lending itself to an embarrassingly parallel implementation.</p>
+<p>Below, we will show you how to implement such a Poisson approximation to enable you to train a random forest on an enormous data set. As a bonus, we’ll be implementing it in <a href="http://www.r-project.org/" target="_blank">R</a> and <a href="https://github.com/RevolutionAnalytics/RHadoop/wiki" target="_blank">RHadoop</a>, as R is many people’s statistical tool of choice. Because this technique is broadly applicable to any situation involving resampling a large data set, we begin with a fully general description of the problem and solution.</p>
+<h2>Formal Problem Statement</h2>
+<p>Our situation is as follows:</p>
+<ul>
+<li>We have <em>N</em> data points in our initial training set {<em>x<sub>i</sub></em>}, where <em>N</em> is very large (10<sup>6</sup>&#8211;10<sup>9</sup>) and the data is distributed over a cluster.</li>
+<li>We want to train a set of <em>M</em> different models for an ensemble classifier, where <em>M</em> is anywhere from a handful to thousands.</li>
+<li>We want each model to be trained with <em>K</em> data points, where typically <em>K &lt;&lt; N</em>. (For example, <em>K</em> may be 1&#8211;10% of <em>N.</em>)</li>
+</ul>
+<p>The number of training data points available to us, <em>N</em>, is fixed and generally outside of our control. However, <em>K</em> and <em>M</em> are both parameters that we can set and their product <em>KM</em> determines the total number of input vectors that will be consumed in the model fitting process. There are three cases to consider:</p>
+<ul>
+<li><em>KM &lt; N</em>, in which case we are not using the full amount of data available to us.</li>
+<li><em>KM = N</em>, in which case we can exactly partition our data set to produce totally independent samples.</li>
+<li><em>KM &gt; N</em>, in which case we must resample some of our data with replacement.</li>
+</ul>
+<p>The Poisson sampling method described below handles all three cases in the same framework. (However, note that for the case <em>KM = N</em>, it does not partition the data, but simply resamples it as well.)</p>
+<p>(Note: The case where <em>K = N</em> corresponds exactly to bootstrapping the full initial data set, but this is often not desired for very large data sets. Nor is it practical from a computational perspective: performing a bootstrap of the full data set would require the generation of <em>MN</em> data points and <em>M</em> scans of an <em>N</em>-sized data set. However, in cases where this computation is desired, there exists an approximation called a <a href="http://arxiv.org/abs/1112.5016" target="_blank">&#8220;Bag of Little Bootstraps&#8221;</a>.)</p>
+<p>So our goal is to generate <em>M</em> data sets of size <em>K</em> from the original <em>N</em> data points where <em>N</em> can be very large and the data is sitting in a distributed environment. The two challenges we want to overcome are:</p>
+<ul>
+<li>Many resampling implementations perform <em>M</em> passes through the initial data set. which is highly undesirable in our case because the initial data set is so large.</li>
+<li>Sampling-with-replacement involves sampling from a multinomial distribution over the <em>N</em> input data points. However, sampling from a multinomial distribution requires message passing across the entire data set, so it is not possible to do so in a distributed environment in an embarrassingly parallel fashion (i.e., as a map-only MapReduce job).</li>
+</ul>
+<h2>Poisson-approximation Resampling</h2>
+<p>Our solution to these issues is to approximate the multinomial sampling by sampling from a Poisson distribution for each input data point separately. For each input point <em>x<sub>i</sub></em>, we sample <em>M</em> times from a Poisson(<em>K / N</em>) distribution to produce <em>M</em> values {<em>m<sub>j</sub></em>}, one for each model <em>j</em>. For each data point <em>x<sub>i</sub></em> and each model <em>j</em>, we emit the key-value pair <em>&lt;j, x<sub>i</sub>&gt;</em> a total of <em>m<sub>j</sub></em> times (where <em>m<sub>j</sub></em> can be zero). Because the sum of multiple Poisson variables is Poisson, the number of times a data point is emitted is distributed as Poisson(<em>KM / N</em>), and the size of each generated sample is distributed as Poisson(<em>K</em>), as desired. Because the Poisson sampling occurs for each input point independently, this sampling method can be parallelized in the map portion of a MapReduce job.</p>
+<p>(Note that our approximation never guarantees that every single input data point is assigned to at least one of the models, but this is no worse than multinomial resampling of the full data set. However, in the case where <em>KM = N</em>, this is particularly bad in contrast to the alternative of partitioning the data, as partitioning will guarantee independent samples using all <em>N</em> training points, while resampling can only generate (hopefully) uncorrelated samples with a fraction of the data.)</p>
+<p>Ultimately, each generated sample will have size <em>K</em> <em>on average</em>, and so this method will approximate the exact multinomial sampling method with a <em>single pass</em> through the data in an embarrassingly parallel fashion, addressing both of the big data limitations described above. Because we are randomly sampling from the initial data set, and similarly to the “exact” method of multinomial sampling, it’s possible that some of the initial input vectors will never be chosen for any of the samples. In fact, we expect that approximately exp{&#8211;<em>KM / N</em>} of the initial data will be entirely missing from any of the samples (see figure below).</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/02/uri1.jpg"><img class="aligncenter size-full wp-image-20513" src="http://blog.cloudera.com/wp-content/uploads/2013/02/uri1.jpg" alt="" width="700" height="526" /></a></p>
+<p align="center"><strong>Amount of missed data as a function of <em>KM / N</em>. The value for <em>KM = N</em> is marked in gray.</strong></p>
+<p>Finally, the MapReduce shuffle distributes all the samples to the reducers and the model fitting or statistic computation is performed on the reduce side of the computation.</p>
+<p>The algorithm for performing the sampling is presented below in pseudocode. Recall that there are three parameters &#8212; <em>N</em>, <em>M</em>, and <em>K</em> &#8212; where one is fixed; we choose to specify <em>T = K / N</em> as one of the parameters as it eliminates the need to determine the value of <em>N</em> in advance.</p>
+<pre style="padding-left: 10px"># example sampling parameters
+T = 0.1  # param 1: K / N; average fraction of input data in each model; 10%
+M = 50   # param 2: number of models
+
+def map(k, v):  // for each input data point
+    for i in 1:M  // for each model
+        m = Poisson(T)  // num times curr point should appear in this sample
+        if m &gt; 0
+            for j in 1:m  // emit current input point proper num of times
+                emit (i, v)
+
+def reduce(k, v):
+    fit model or calculate statistic with the sample in v
+</pre>
+<p>&nbsp;</p>
+<p>Note that even more significant performance enhancements can be achieved if it is possible to use a combiner, but this is highly statistic/model-dependent.</p>
+<p>&nbsp;</p>
+<h2>Example: Kaggle Data Set on Bulldozer Sale Prices</h2>
+<p>We will apply this method to test out training of a random forest regression model on a Kaggle data set found <a href="http://www.kaggle.com/c/bluebook-for-bulldozers/" target="_blank">here</a>. The data set comprises ~400k training data points. Each data point represents a sale of a particular bulldozer at an auction, for which we have the sale price along with a set of other features about the sale and about the bulldozer. (This data set is not especially large, but will illustrate our method nicely.) The goal will be to build a regression model using an ensemble method (specifically, a random forest) to predict the sale price of a bulldozer from the available features.</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/02/uri2.jpg"><img class="aligncenter size-full wp-image-20514" src="http://blog.cloudera.com/wp-content/uploads/2013/02/uri2.jpg" alt="" width="500" height="375" /></a></p>
+<p align="center"><strong>Could be yours for $141,999.99</strong></p>
+<p>The data are actually supplied as two tables: a transaction table that includes the sale price (target variable) and some other features, including a reference to a specific bulldozer; and a bulldozer table, that contains additional features for each bulldozer. As this post does not concern itself with data munging, we will assume that the data come pre-joined. But in a real-life situation, we’d incorporate the join as part of the workflow by, for example, processing it with a Hive query or a Pig script. Since in this case the data are relatively small, we simply use some R commands. The code to prepare the data can be found <a href="https://github.com/cloudera/poisson_sampling/blob/master/src/joindata.R" target="_blank">here</a>.</p>
+<h2>Quick Note on R and RHadoop</h2>
+<p>As so much statistical work is performed in R, it is highly valuable to have an interface to use R over large data sets in a Hadoop cluster. This can be performed with <a href="https://github.com/RevolutionAnalytics/RHadoop/wiki">RHadoop</a>, which is developed with the support of <a href="http://www.revolutionanalytics.com/" target="_blank">Revolution Analytics</a>. (Another option for R and Hadoop is the <a href="http://www.datadr.org/" target="_blank">RHIPE</a> project.)</p>
+<p>One of the nice things about RHadoop is that R environments can be serialized and shuttled around, so there is never any reason to explicitly move any side data through Hadoop’s configuration or distributed cache. All environment variables are distributed around transparently to the user. Another nice property is that Hadoop is used quite transparently to the user, and the semantics allow for easily composing MapReduce jobs into pipelines by writing modular/reusable parts.</p>
+<p>The only thing that might be unusual for the “traditional” Hadoop user (but natural to the R user) is that the mapper function should be written to be fully vectorized (i.e., <code>keyval()</code> should be called once per mapper as the last statement). This is to maximize the performance of the mapper (since R’s interpreted REPL is quite slow), but it means that mappers receive multiple input records at a time and everything the mappers emit must be grouped into a single object.</p>
+<p>Finally, I did not find the RHadoop installation instructions (or the documentation in general) to be in a very mature state, so <a href="https://github.com/cloudera/poisson_sampling/blob/master/INSTALL.md">here are the commands I used</a> to install RHadoop on my small cluster.</p>
+<h2>Fitting an Ensemble of Random Forests with Poisson Sampling on RHadoop</h2>
+<p>We implement our Poisson sampling strategy with RHadoop. We start by setting global values for our parameters:</p>
+<pre style="padding-left: 10px">frac.per.model &lt;- 0.1  # 10% of input data to each sample on avg
+num.models &lt;- 50
+</pre>
+<p>&nbsp;</p>
+<p>As mentioned previously, the mapper must deal with multiple input records at once, so there needs to be a bit of data wrangling before emitting the keys and values:</p>
+<pre style="padding-left: 10px"># MAP function
+poisson.subsample &lt;- function(k, input) {
+  # this function is used to generate a sample from the current block of data
+  generate.sample &lt;- function(i) {
+    # generate N Poisson variables
+    draws &lt;- rpois(n=nrow(input), lambda=frac.per.model)
+    # compute the index vector for the corresponding rows,
+    # weighted by the number of Poisson draws
+    indices &lt;- rep((1:nrow(input)), draws)
+    # emit the rows; RHadoop takes care of replicating the key appropriately
+    # and rbinding the data frames from different mappers together for the
+    # reducer
+    keyval(i, input[indices, ])
+  }
+
+  # here is where we generate the actual sampled data
+  c.keyval(lapply(1:num.models, generate.sample))
+}
+</pre>
+<p>&nbsp;</p>
+<p>Because we are using R, the reducer can be incredibly simple: it takes the sample as an argument and simply feeds it to our model-fitting function, <code>randomForest()</code>:</p>
+<pre style="padding-left: 10px"># REDUCE function
+fit.trees &lt;- function(k, v) {
+  # rmr rbinds the emited values, so v is a dataframe
+  # note that do.trace=T is used to produce output to stderr to keep
+  # the reduce task from timing out
+  rf &lt;- randomForest(formula=model.formula,
+                        data=v,
+                        na.action=na.roughfix,
+                        ntree=10,
+                        do.trace=FALSE)
+  # rf is a list so wrap it in another list to ensure that only
+  # one object gets emitted. this is because keyval is vectorized
+  keyval(k, list(forest=rf))
+}
+</pre>
+<p>&nbsp;</p>
+<p>Keep in mind that in our case, we are actually fitting 10 trees per sample, but we could easily only fit a single tree per “forest”, and merge the results from each sample into a single real forest.</p>
+<p>Note that the choice of predictors is specified in the variable <code>model.formula</code>. R’s random forest implementation does not support factors that have more than 32 levels, as the optimization problem grows too fast. For the purpose of illustrating the Poisson sampling method, we chose to simply ignore those features, even though they probably contain useful information for regression. In a future blog post, we will address various ways that we can get around this limitation.</p>
+<p>The MapReduce job itself is initiated like so:</p>
+<pre style="padding-left: 10px">mapreduce(input="/poisson/training.csv",
+               input.format=bulldozer.input.format,
+               map=poisson.subsample,
+               reduce=fit.trees,
+               output="/poisson/output")
+</pre>
+<p>&nbsp;</p>
+<p>and the resulting trees are dumped in HDFS at <code>/poisson/output</code>.</p>
+<p>Finally, we can load the trees, merge them, and use them to classify new test points:</p>
+<pre style="padding-left: 10px">raw.forests &lt;- values(from.dfs(&quot;/poisson/output&quot;))
+forest &lt;- do.call(combine, raw.forests)
+</pre>
+<p>&nbsp;</p>
+<p>Each of 50 samples produced a random forest with 10 trees, so the final random forest is an ensemble of 500 trees, fitted in a distributed fashion over a Hadoop cluster. The full set of source files is available <a href="https://github.com/cloudera/poisson_sampling" target="_blank">here</a>.</p>
+<p>Hopefully, you have now learned a scalable approach for training ensemble classifiers or bootstrapping in a parallel fashion by using a Poisson approximation to multinomial sampling.</p>
+<p><em>Uri Laserson (@laserson) is a data scientist at Cloudera.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/data-science/" title="View all posts in Data Science" rel="category tag">Data Science</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/how-to/" title="View all posts in How-to" rel="category tag">How-to</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>15 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://piccolboni.info">Antonio Piccolboni</a> /
+			February 25, 2013 / 11:07 AM		</em>
+		<p>Hi, I am a developer on the RHadoop project. First thanks for this very interesting example. Then two notes. First is that the somewhat complex &#8220;reshaping&#8221; at the end of the mapper will be captured by a new API function, c.keyval, which will be available in rmr2.1. As far as the installation, the variety of platforms on which users are installing RHadoop is an obstacle to making installation easier, I think some software tools will be necessary. I am interested in any other feedback to help get the docs to the next level.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">James Lee</a> /
+			April 19, 2013 / 4:03 PM		</em>
+		<p>Hi Uri, thanks for sharing this great article!  Regarding your mention about the R limit of 32 levels per factor, do you have a new blog post yet to explain a workaround, along with example code?  Thanks in advance!</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Uri Laserson (@laserson)</a> /
+			April 19, 2013 / 4:10 PM		</em>
+		<p>Hi James, this is still in the works, but generally the solution is to find another representation for your features.  Here are two examples:<br />
+<a href="http://stats.stackexchange.com/questions/49243/rs-randomforest-can-not-handle-more-than-32-levels-what-is-workaround" rel="nofollow">http://stats.stackexchange.com/questions/49243/rs-randomforest-can-not-handle-more-than-32-levels-what-is-workaround</a><br />
+<a href="http://stackoverflow.com/questions/8774403/r-sampling-to-get-around-randomforest-32-factor-limit" rel="nofollow">http://stackoverflow.com/questions/8774403/r-sampling-to-get-around-randomforest-32-factor-limit</a></p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">JAMES LEE</a> /
+			April 24, 2013 / 1:05 PM		</em>
+		<p>Hi Uri, many thanks again for your advice to work around the R limit of 32 levels per factor.  We&#8217;re now much farther along experimenting with your example code and our dataset, but then ran into the same problem you encountered earlier, as listed in your run session log<br />
+<a href="https://gist.github.com/laserson/5341707/raw/27e550fe15e8217f1e94ebb2c9581011dfa09aff/gistfile1.txt" rel="nofollow">https://gist.github.com/laserson/5341707/raw/27e550fe15e8217f1e94ebb2c9581011dfa09aff/gistfile1.txt</a><br />
+Can you please explain how you fixed this error, and what is the root cause?   Appreciate your reply here or to my email address.  Thanks again and look forward to your reply!</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Uri Laserson (@laserson)</a> /
+			April 24, 2013 / 3:17 PM		</em>
+		<p>Hi James, in the actual call to randomForest, set do.trace=FALSE.  The newer version of RHadoop deals a bit differently with writing to stdout/stderr, so having do.trace=TRUE confuses the Streaming framework.  (Thanks again to Antonio Piccolboni for this solution.)  There is a potential problem in which the reduce tasks may time out, but it worked fine for me.  I will change the code shortly to reflect this issue.</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://www.radoop.eu">Zoltan Prekopcsak</a> /
+			May 31, 2013 / 12:19 PM		</em>
+		<p>Hi Uri,<br />
+Thanks, interesting post. I am not very familiar with RHadoop, but do I get it right that each tree in the forest is built in a single reduce task? I assume then K is limited by the memory available for the given reduce task and it strongly depends on RHadoop&#8217;s memory handling and of course the number of attributes. How do you think this limited K affects accuracy? Or do K=40000 produce trees that are already good enough? Have you made any accuracy comparisons? Thanks in advance!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://piccolboni.info">Antonio Piccolboni</a> /
+			June 24, 2013 / 10:18 AM		</em>
+		<p>Zoltan, you may be interested in a paper by Jordan et al on the Bag of Little Bootstraps <a href="http://arxiv.org/abs/1112.5016" rel="nofollow">http://arxiv.org/abs/1112.5016</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">anuja</a> /
+			September 24, 2013 / 12:49 AM		</em>
+		<p>Hi when I run the following command:<br />
+ forest &lt;- do.call(combine, raw.forests)<br />
+ I run into this error :<br />
+&quot;Error in rf$votes + ifelse(is.na(rflist[[i]]$votes), 0, rflist[[i]]$votes) :  non-conformable arrays<br />
+In addition: Warning message:<br />
+In rf$oob.times + rflist[[i]]$oob.times :<br />
+  longer object length is not a multiple of shorter object length&quot;<br />
+ any solution to this?</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Andrew Milkowski</a> /
+			September 29, 2013 / 10:22 AM		</em>
+		<p>Submitted 3 issues in github</p>
+<p>a) reducer task stuck at 67%<br />
+<a href="https://github.com/cloudera/poisson_sampling/issues/3" rel="nofollow">https://github.com/cloudera/poisson_sampling/issues/3</a></p>
+<p>b) running fitRandomForrest with small input data sample results in the exception (M/R terminates)<br />
+<a href="https://github.com/cloudera/poisson_sampling/issues/4" rel="nofollow">https://github.com/cloudera/poisson_sampling/issues/4</a></p>
+<p>c) Not an issue per say as the M/R succeeds but with much reduced input training data sethttps://github.com/cloudera/poisson_sampling/issues/5</p>
+<p>Last issue is really a question, even though M/R job succeeds, it pertains to scalability of the solution/framework (M/R with R executing random forest fitness algorithm)</p>
+<p>copying just last &#8220;issue&#8221; for reference, this looks like a great way to address sampling but its also uncertain as to stability of the solution&#8230;</p>
+<p>inally, setting number of input rows to 1000, in joinData.R</p>
+<p>transactions &lt;- read.table(file=&quot;../downloads/train.csv&quot;,<br />
+nrows=1000,<br />
+#nrows=20,<br />
+&#8230;<br />
+allows fitRandomForrest.R M/R job to succeed (randomForrest trees are created)</p>
+<p>hence it might be question of resources, or limits in rmr2 lib itself</p>
+<p>from the stability point of view, would like to find out why the small # of samples cause R M/R to terminate with an exception</p>
+<p>and also, what if sample input data set is very large much larger than provided in the example, what are operational boundaries of this framework</p>
+<p>Thanks and appreciate and feedback/advice!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Andrew Milkowski</a> /
+			September 30, 2013 / 12:26 PM		</em>
+		<p>Want to also note that seeing one reduce task being created, tried setting  D=&#8221;mapred.reduce.tasks=10&#8243; in the mapred function</p>
+<p>however this caused only 2 reduce tasks to be created (2 R processes) this is still way too small of the number, it won&#8217;t scale&#8230;</p>
+<p>24497 mapred 20 0 667m 481m 4284 R 97.8 12.6 4:58.21 R</p>
+<p>24492 mapred 20 0 667m 481m 4284 R 97.1 12.6 4:43.82 R</p>
+<p>this is hence looking less and less as rmr2 but a combination of theoretical underpinnings of random forest / input data entropy/structure</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Andrew Milkowski</a> /
+			October 01, 2013 / 1:32 PM		</em>
+		<p>the issues above has been resolved (fundamental error in the mapred configuration)</p>
+<p><a href="https://github.com/cloudera/poisson_sampling/issues/6#issuecomment-25478103" rel="nofollow">https://github.com/cloudera/poisson_sampling/issues/6#issuecomment-25478103</a></p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">vineet</a> /
+			February 12, 2014 / 5:26 AM		</em>
+		<p>I am also getting the error mentioned by Anuja above and  notice that it has not been answered yet. I am getting below error while running :</p>
+<p>&gt; forest &lt;- do.call(combine, raw.forests)<br />
+Error in rf$votes + ifelse(is.na(rflist[[i]]$votes), 0, rflist[[i]]$votes) :<br />
+  non-conformable arrays<br />
+In addition: Warning message:<br />
+In rf$oob.times + rflist[[i]]$oob.times :<br />
+  longer object length is not a multiple of shorter object length</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='20525' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="40Q=" />
+		<input type="hidden" name="cptch_time" value="1398162776" />
+		<input type="hidden" value="Version: 2.4" />
+		5 &#43; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  &#116;&#104;i&#114;t&#101;en	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

@@ -1,0 +1,979 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>RecordBreaker: Automatic structure for your text-formatted data | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="RecordBreaker: Automatic structure for your text-formatted data"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2011/07/recordbreaker-automatic-structure-for-your-text-formatted-data/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; RecordBreaker: Automatic structure for your text-formatted data Comments Feed" href="http://blog.cloudera.com/blog/2011/07/recordbreaker-automatic-structure-for-your-text-formatted-data/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Evolution of Hadoop Ecosystem: AOL Advertising Experience' href='http://blog.cloudera.com/blog/2011/07/evolution-of-hadoop-ecosystem-aol-advertising-experience/' />
+<link rel='next' title='Hoop &#8211; Hadoop HDFS over HTTP' href='http://blog.cloudera.com/blog/2011/07/hoop-hadoop-hdfs-over-http/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2011/07/recordbreaker-automatic-structure-for-your-text-formatted-data/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=7960' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-7960 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">RecordBreaker: Automatic structure for your text-formatted data</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Michael Cafarella</li>
+				<li>July 13, 2011</li>
+				<li class="comment"><a href="#comments">3 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><em>This post was contributed by Michael Cafarella, an assistant professor of computer science at the University of Michigan.  Mike&#8217;s research interests focus on databases, in particular managing Web data.  Before becoming a professor, he was one of the founders of the Nutch and Hadoop projects with Doug Cutting.  This first version of RecordBreaker was developed by Mike in conjunction with Cloudera.</em></p>
+<p>RecordBreaker is a project that automatically turns your text-formatted data (logs, sensor readings, etc) into structured data, without any need to write parsers or extractors.  In particular, RecordBreaker targets Avro as its output format.  The project&#8217;s goal is to dramatically reduce the time spent preparing data for analysis, enabling more time for the analysis itself.</p>
+<p>Hadoop&#8217;s HDFS is often used to store large amounts of text-formatted data: log files, sensor readings, transaction histories, etc.  Much of this data is &#8220;near-structured&#8221;: the data has a format that&#8217;s obvious to a human observer, but is not made explicit in the file itself.</p>
+<p>Imagine you have a simple file listing, stored in <tt>listing.txt</tt>:</p>
+<pre style="margin-bottom:8px" class="code">
+5 mjc staff 170 Mar 14 2011 14:14 bin
+5 mjc staff 170 Mar 12 2011 05:13 build
+1 mjc staff 11080 Mar 14 2011 14:14 build.xml
+</pre>
+<p>This &#8220;near-structured&#8221; data has metadata that is obvious to people who are familiar with file listings: a file owner, a file size, a last-modified date, etc.  It&#8217;s easy for people despite the fact that certain strings, such as the date and time, cannot be parsed with simple whitespace breaks.  In order for a user to process such data with MapReduce, Pig, or some similar tool, she must explicitly and laboriously reconstruct the metadata that is simple for anyone who just <em> eyeballs the data</em>.  </p>
+<p>Performing this reconstruction usually entails writing a parser or extractor, often one based on relatively brittle regular expressions.  For some very common data, writing a good parser for it is probably worthwhile.  However, there are also album track listings, temperature readings, flight schedules, and many other kinds of data; the number of good parsers we need to write gets large, quickly.  Writing all of these straightforward extractors, again and again, is a time-consuming and error-prone pain for everyone.  We believe it is a major obstacle to faster and easier data analytics.</p>
+<p>The RecordBreaker project aims to <em>automatically generate structure</em> for text-embedded data.  It consists of two main components.</p>
+<hr />
+<h2>LearnStructure</h2>
+<p><strong>LearnStructure</strong> takes a text file as input and derives a parser that breaks lines of the file into typed fields.  For example, the above file listing is broken into fields that include the file owner <tt>mjc</tt>, the group owner <tt>staff</tt>, etc.  It emits all the schemas and code necessary to turn the raw text file into a file full of structured data.  For example, we discover a JSON schema for the above file listing that looks like this:</p>
+<pre style="margin-bottom:8px" class="code">
+{
+&nbsp;  "type" : "record",
+&nbsp;  "name" : "record_1",
+&nbsp;  "namespace" : "",
+&nbsp;  "doc" : "RECORD",
+&nbsp;  "fields" : [ {
+&nbsp;&nbsp;    "name" : "base_0",
+&nbsp;&nbsp;    "type" : "int",
+&nbsp;&nbsp;    "doc" : "Example data: '5', '5', '1'"
+&nbsp;  }, {
+&nbsp;&nbsp;    "name" : "base_2",
+&nbsp;&nbsp;    "type" : "string",
+&nbsp;&nbsp;    "doc" : "Example data: 'mjc', 'mjc', 'mjc'"
+&nbsp;  }, {
+&nbsp;&nbsp;    "name" : "base_4",
+&nbsp;&nbsp;    "type" : "string",
+&nbsp;&nbsp;    "doc" : "Example data: 'staff', 'staff', 'staff'"
+&nbsp;  }, {
+&nbsp;&nbsp;    "name" : "base_6",
+&nbsp;&nbsp;    "type" : "int",
+&nbsp;&nbsp;    "doc" : "Example data: '170', '170', '11080'"
+&nbsp;  }, {
+&nbsp;&nbsp;    "name" : "base_8",
+&nbsp;&nbsp;    "type" : {
+&nbsp;&nbsp;&nbsp;      "type" : "record",
+&nbsp;&nbsp;&nbsp;      "name" : "base_8",
+&nbsp;&nbsp;&nbsp;      "doc" : "",
+&nbsp;&nbsp;&nbsp;      "fields" : [ {
+&nbsp;&nbsp;&nbsp;&nbsp;        "name" : "month",
+&nbsp;&nbsp;&nbsp;&nbsp;        "type" : "int",
+&nbsp;&nbsp;&nbsp;&nbsp;        "doc" : ""
+&nbsp;&nbsp;&nbsp;      }, {
+&nbsp;&nbsp;&nbsp;&nbsp;        "name" : "day",
+&nbsp;&nbsp;&nbsp;&nbsp;        "type" : "int",
+&nbsp;&nbsp;&nbsp;&nbsp;        "doc" : ""
+&nbsp;&nbsp;&nbsp;      }, {
+&nbsp;&nbsp;&nbsp;&nbsp;        "name" : "year",
+&nbsp;&nbsp;&nbsp;&nbsp;        "type" : "int",
+&nbsp;&nbsp;&nbsp;&nbsp;        "doc" : ""
+&nbsp;&nbsp;&nbsp;      } ]
+&nbsp;&nbsp;    },
+&nbsp;&nbsp;    "doc" : "Example data: '(14, 3, 2011)', '(12, 3, 2011)', '(14, 3, 2011)'"
+&nbsp;  }, {
+&nbsp;&nbsp;    "name" : "base_10",
+&nbsp;&nbsp;    "type" : {
+&nbsp;&nbsp;&nbsp;      "type" : "record",
+&nbsp;&nbsp;&nbsp;      "name" : "base_10",
+&nbsp;&nbsp;&nbsp;      "doc" : "",
+&nbsp;&nbsp;&nbsp;      "fields" : [ {
+&nbsp;&nbsp;&nbsp;&nbsp;        "name" : "hrs",
+&nbsp;&nbsp;&nbsp;&nbsp;        "type" : "int",
+&nbsp;&nbsp;&nbsp;&nbsp;        "doc" : ""
+&nbsp;&nbsp;&nbsp;      }, {
+&nbsp;&nbsp;&nbsp;&nbsp;        "name" : "mins",
+&nbsp;&nbsp;&nbsp;&nbsp;        "type" : "int",
+&nbsp;&nbsp;&nbsp;&nbsp;        "doc" : ""
+&nbsp;&nbsp;&nbsp;      }, {
+&nbsp;&nbsp;&nbsp;&nbsp;        "name" : "secs",
+&nbsp;&nbsp;&nbsp;&nbsp;        "type" : "int",
+&nbsp;&nbsp;&nbsp;&nbsp;        "doc" : ""
+&nbsp;&nbsp;&nbsp;      } ]
+&nbsp;&nbsp;    },
+&nbsp;&nbsp;    "doc" : "Example data: '(14, 14, 0)', '(5, 13, 0)', '(14, 14, 0)'"
+&nbsp;  }, {
+&nbsp;&nbsp;    "name" : "base_12",
+&nbsp;&nbsp;    "type" : "string",
+&nbsp;&nbsp;    "doc" : "Example data: 'bin', 'build', 'build.xml'"
+&nbsp;  } ]
+}
+</pre>
+<p>Of course, the field names here are nonsense.  All of the values, except for subfields of the date and timestamp records, have nondescriptive synthetically-generated names.  The LearnStructure step attempts to recover the type of each field, but has no way to know its name or role.  Obtaining names for these fields is the job of the <strong>SchemaDictionary step</strong>.  For now, we just live with these bad synthetic names.</p>
+<hr />
+<h2>SchemaDictionary</h2>
+<p><strong>SchemaDictionary</strong> takes data that&#8217;s been parsed by LearnStructure and applies topic-specific labels.  For example, <tt>mjc</tt> should ideally be labelled as <em>owner</em> or perhaps <em>user</em>.  The parsed <tt>staff</tt> data should be labelled as <em>group</em>.</p>
+<p>The <strong>SchemaDictionary</strong> tool matches the newly-parsed data against a known database of structures.  It finds the closest match, then assigns human-understandable names based on the best-matching previously-observed dataset.  For example, with the above data and a small set of known datasets, <strong>SchemaDictionary</strong> can find that <tt>base_10</tt> should actually be <tt>timemodified</tt>, that <tt>base_8</tt> should be <tt>datemodified</tt>, and so on.  Depending on the input data and the known database of structures, this labelling may be more or less accurate.</p>
+<p>As mentioned, the target structured data format is <a target="_about" href="http://avro.apache.org/">Avro</a>.  Avro allows efficient cross-platform data serialization, similar to <a target="_about" href="http://incubator.apache.org/thrift/">Thrift</a> or <a target="_about" href="http://code.google.com/p/protobuf/">Protocol Buffers</a>.  Data stored in Avro has many advantages (read <a target="_about" href="http://blog.cloudera.com/blog/2011/07/avro-data-interop/"> Doug Cutting&#8217;s recent overview of Avro</a> for more) and many tools either support Avro or will soon: <a target="_about" href="http://hadoop.apache.org/mapreduce/">Hadoop MapReduce</a>, <a target="_about" href="http://pig.apache.org/">Apache Pig</a>, and others.</p>
+<hr />
+<h2>Related Work</h2>
+<p>Our work on the LearnStructure component draws inspiration from the <a target="_about" href="http://www.padsproj.org/index.html">PADS research project</a> (<a target="_about" href="http://www.padsproj.org/index.html">http://www.padsproj.org/index.html</a>), in particular the paper <a target="_about" href="http://www.padsproj.org/papers/popl08.pdf">From Dirt to Shovels: Fully Automatic Tool Generation from Ad Hoc Data, by Fisher, Walker, Zhu, and White.  Published in POPL, 2008.</a>.  That paper itself draws on many papers in the area of information extraction and related fields.  The authors have released code for their system, written in ML.  ML is a great language, but is not well-suited to our needs: it is not supported by Avro, and is unlikely to appeal to many of the developers currently involved with the Hadoop ecosystem.</p>
+<p>SchemaDictionary is more generally inspired by database schema mapping systems.  (A famous example is described in <a target="_about" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.20.1842&#038;rep=rep1&#038;type=pdf">The Clio Project: Managing Heterogeneity, by Miller, Hernandez, Haas, Yan, Ho, Fagin, and Popa, published in SIGMOD Record 30(1), March 2001, pp.78-83</a>.)  Schema mapping systems are usually designed to help database administrators merge existing databases; for example, when company A purchases company B and must then merge the employee lists.  These tools are often expensive and expect a lot of administrator attention.  In contrast, our SchemaDictionary is for busy data analysts who simply want to check out a novel dataset as quickly as possible.  It is fast and simple, but can only handle relatively simple structures (rendering it inappropriate for databases, but on target for the kind of data that is popular in text-based formats).</p>
+<h2>Project</h2>
+<p>RecordBreaker works, but is not complete.  It is just the start of what we hope will be many interesting applications and research projects. Please take a look at the <a target="_about" href="https://github.com/cloudera/RecordBreaker">code</a> and <a target="_about" href="http://cloudera.github.com/RecordBreaker/">documentation</a> (the <a target="_about" href="https://github.com/cloudera/RecordBreaker">repo</a> is at <a target="_about" href="https://github.com/cloudera/RecordBreaker">https://github.com/cloudera/RecordBreaker</a>, and the <a target="_about" href="http://cloudera.github.com/RecordBreaker/">tutorial</a> is at <a target="_about" href="http://cloudera.github.com/RecordBreaker/">http://cloudera.github.com/RecordBreaker/</a>). Maybe you can pitch in and help.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/avro/" title="View all posts in Avro" rel="category tag">Avro</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>3 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+    </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='7960' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="59Q=" />
+		<input type="hidden" name="cptch_time" value="1398162925" />
+		<input type="hidden" value="Version: 2.4" />
+		9 &minus; f&#105;ve =  <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" />	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

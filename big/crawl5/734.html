@@ -1,0 +1,1256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Using Cloudera&#8217;s Hadoop AMIs to process EBS datasets on EC2  | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Using Cloudera&#8217;s Hadoop AMIs to process EBS datasets on EC2"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2009/05/using-clouderas-hadoop-amis-to-process-ebs-datasets-on-ec2/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Using Cloudera&#8217;s Hadoop AMIs to process EBS datasets on EC2 Comments Feed" href="http://blog.cloudera.com/blog/2009/05/using-clouderas-hadoop-amis-to-process-ebs-datasets-on-ec2/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='What&#8217;s New in Hadoop Core 0.20' href='http://blog.cloudera.com/blog/2009/05/what%e2%80%99s-new-in-hadoop-core-020/' />
+<link rel='next' title='5 Common Questions About Apache Hadoop' href='http://blog.cloudera.com/blog/2009/05/5-common-questions-about-hadoop/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2009/05/using-clouderas-hadoop-amis-to-process-ebs-datasets-on-ec2/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=601' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-601 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Using Cloudera&#8217;s Hadoop AMIs to process EBS datasets on EC2</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/christophe/" title="Posts by Christophe Bisciglia" rel="author">Christophe Bisciglia</a></li>
+				<li>May 11, 2009</li>
+				<li class="comment"><a href="#comments">2 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<blockquote>
+<div><em><br />
+A while back, we noticed a <a href="http://arunxjacob.blogspot.com/2009/04/configuring-hadoop-cluster-on-ec2.html">blog post</a> From Arun Jacob over at <a href="http://www.evri.com">Evri</a> (if you haven&#8217;t seen Evri before, it&#8217;s a pretty impressive take on search UI). We were particularly interested in helping Arun and others use <a href="http://www.cloudera.com/hadoop-ec2">EC2 and Hadoop</a> to process data stored on EBS as Amazon makes many <a href="http://aws.amazon.com/publicdatasets/">public data sets</a> available. After getting started, Arun volunteered to write up his experience, and we&#8217;re happy to share it on the Cloudera blog.&#160;&#160;-Christophe<br />
+</em></div>
+</blockquote>
+<p><strong>Background</strong><br />
+A couple of weeks ago I managed to get a Hadoop cluster up and running on EC2 using the /src/contrib/ec2 scripts found in the 0.18.3 version of Hadoop. This experience was not entirely pain free, and in order to spin up clusters without a lot of hand mods, I was going to have to modify those scripts to work with an explicit AMI in order to work around some of the <a href="http://arunxjacob.blogspot.com/2009/04/configuring-hadoop-cluster-on-ec2.html">issues I had run into</a>.</p>
+<p>Fortunately, before I could get going on that rewrite, Christophe from Cloudera contacted me and let me know that they had addressed all of those issues, and invited me to try instantiating and running my MapReduce job using their scripts and AMIs.</p>
+<p><strong> Prerequisites</strong><br />
+Prior to running any of the scripts/code below, I did the following:</p>
+<ol>
+<li> Signed up for Amazon S3 and EC2, see the <a id="zt45" title="EC2 Getting Started Guide" href="http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/">EC2 Getting Started Guide</a> .</li>
+<li> Installed the Amazon <a id="u94." title="ec2 commandline API" href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351">EC2 command line API tools</a> and put them on my path.</li>
+<li> Set the following environment variables:
+<ol>
+<li> AWS_ACCOUNT_ID &#8212; available through your AWS Account info</li>
+<li> AWS_ACCESS_KEY_ID &#8211;same</li>
+<li> AWS_SECRET_ACCESS_KEY &#8212; same</li>
+<li> EC2_CERT &#8212; fully qualified path to cert file.</li>
+<li> EC2_HOME &#8212; where you installed EC2 API.</li>
+<li> EC2_PRIVATE_KEY &#8212; fully qualified path to private key file. The file needs to have permissions set to 600 (rw for user only) in order to be used during initial cluster setup.</li>
+</ol>
+</li>
+<li> Installed the 0.18.3 version of Hadoop for local debugging purposes.</li>
+<li> Installed the <a id="cyfa" title="IBM MapReduce Tools for Eclipse plugin" href="http://www.alphaworks.ibm.com/tech/mapreducetools">IBM MapReduce Tools for Eclipse plugin</a> to my version of Eclipse (3.4.1). NOTE: I was unable to get the plugin to debug against an actual cluster, but I could run my MapReduce jobs in isolation against the local FS, and this allowed me to catch a lot of issues even before running on my local single node Hadoop cluster.</li>
+<li> Installed the <a id="ihk8" title="elasticfox" href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=609">ElasticFox</a> and <a id="k:di" title="S3 Organizer" href="https://addons.mozilla.org/en-US/firefox/addon/3247">S3 Organizer</a> FireFox plugins.</li>
+</ol>
+<p><strong>Initializing the Cluster</strong><br />
+There was no drama here. When it was time to create another (larger) cluster up on EC2 for another job that we were going to run, I <a id="t7:k" title="downloaded the scripts" href="http://cloudera-packages.s3.amazonaws.com/cloudera-for-hadoop-on-ec2-0.3.0.tar.gz">downloaded the scripts</a> from Cloudera, put in my Amazon Key and security group info as <a href="http://www.cloudera.com/hadoop-ec2">instructed</a> , and ran</p>
+<p><code>./hadoop-ec2 launch-cluster {name of cluster} {number of instances}</code></p>
+<p>That&#8217;s it. While I&#8217;m happy that I worked with the original ec2 scripts from hadoop/src/contrib, I&#8217;m even happier that Cloudera&#8217;s rewrite makes this a one line operation. All HDFS initialization, master-slave connections, and other cluster setup was done for me.</p>
+<p>I also set up access to the Hadoop JobTracker and NameNode (HDFS) Web UIs, which allow me to track and debug job and HDFS status. I modified the hadoop master security group, granting http access to ports 50030 (JobTracker) and 50070 (NameNode). Note that you should constrain access to those nodes using CIDR block notation, because they have no local auth. There are many ways to do this, including using the <a id="u94." title="ec2 commandline API" href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351">ec2 command line API</a> , but I used <a id="ihk8" title="elasticfox" href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=609">ElasticFox</a>, a great UI for doing one-off things like setting up security groups.  The instructions for adding permissions to the master are found in the Cloudera <a id="h3hd" title="EC2 setup page" href="http://www.cloudera.com/hadoop-ec2">EC2 setup page</a>.</p>
+<p>Slave node TaskTracker UIs are useful because they allow you to drill into specific task logs. However, the JobTracker UI tries to link to those UIs via their Amazon Internal DNS names.  In order to get the slave node TaskTracker UIs to work, you would need to use hadoop-ec2 to start a local proxy, and use <a id="j1q8" title="foxyproxy" href="https://addons.mozilla.org/en-US/firefox/addon/2464">foxyproxy</a> to set up your browser to work with the hadoop-ec2 proxy. Details on creating a pattern based proxy to access Amazon Internal DNS names using foxyproxy can be found in the <a id="oh93" title="troubleshooting section" href="http://docs.amazonwebservices.com/ElasticMapReduce/2009-03-31/DeveloperGuide/index.html?CHAP_MonitoringJobFlows.html">troubleshooting section</a> of the Amazon Elastic MapReduce Documentation. To start the proxy, run</p>
+<p><code>hadoop-ec2 proxy <em>myclustername</em></code></p>
+<p>Make sure that foxyproxy is configured to talk to the proxy on port 6666.</p>
+<p><strong>Accessing the Cluster</strong></p>
+<p>The most logical way to get to the cluster is via the master instance. Starting jobs, uploading files to HDFS, and other tasks are all done from the master. The master (via NameNode and JobTracker) takes care of distributing input data to the nodes and running jobs (machine) local to those nodes.  There are a couple of ways to access the master. From the elastic fox UI, select the master instance, then click on the key icon from the Instances tab. This opens up a shell to the master.  You can also get command line access using the Cloudera hadoop-ec2 script:</p>
+<p><code>{location of scripts}/bin/hadoop-ec2 login <em>myclustername</em></code></p>
+<p>Either way is required to actually run a job on the cluster. From the master it is very easy to ssh into the nodes &#8212; something I&#8217;ve found necessary when debugging map/reduce logic gone awry:</p>
+<p><code>ssh {internal or external dns name of slave node}</code></p>
+<p>is all that is required, since ssh keygen was taken care of during cluster setup.</p>
+<p><strong>Running A Job</strong></p>
+<p>Now that the cluster is up, accessible, and ready to go, I want to run a MapReduce job on it.</p>
+<p>At <a id="ek48" title="Evri" href="http://evri.com">Evri</a> one of the many sources we process as we go about creating a data graph of people, places, and things is Wikipedia. Wikipedia not only contains relevant facts about entities &#8212; it also contains a lot of useful metadata about those entities. Some of that metadata is immediately available in the article. The more interesting data is obtained by traversing Wikipedia dumps and aggregating basic metadata.</p>
+<p>One interesting piece of metadata is the number of inlinks (links to) for each Wikipedia article from other Wikipedia articles. An article with a lot of inlinks tends to be better known than an article with fewer inlinks. Collecting inlink count per article helps us get a baseline of how popular that article is.</p>
+<p>In order to do that, I actually need to extract all of the outlinks (links away) from each Wikipedia article, tracking where they are linking to. Then I need to aggregate the link destinations and summarize the link counts for each unique destination. This is a perfect candidate for a MapReduce job &#8212; transforming data in one form to another. It is very analogous to the canonical word frequency count MapReduce job.</p>
+<p>One of the great things about the intersection of Hadoop and EC2 is the ability to use Amazon&#8217;s <a id="z1w9" title="Public Datasets" href="http://aws.amazon.com/publicdatasets/">Public Datasets</a> as input data for a MapReduce. That&#8217;s right, huge amounts of maintained, clean data, there for the taking.  The dataset that is most useful to us is the <a id="kzeb" title="Freebase Wikipedia Extraction (WEX)" href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2345&amp;categoryID=249">Freebase Wikipedia Extraction (WEX)</a> data set. <a id="pnk4" title="Freebase" href="http://freebase.com">Freebase</a> processes the raw (wikitext) Wikipedia dumps and converts the wiki text to XML, which makes programmatic analysis of Wikipedia much easier for the rest of us. This dump is available from their website, but they&#8217;ve gone the extra mile and have uploaded the results to Amazon in TSV (tab separated value) format, which is exactly what we need to process the data in Hadoop &#8212; thanks Freebase!</p>
+<p><strong>The Source Code</strong></p>
+<p>We&#8217;ve defined exactly what we need to do above: collate all links to all Wikipedia pages and aggregate their counts. We will do this by counting the frequency of all links in the Map phase as we process all Wikipedia articles during the Map phase. We will emit link URIs as keys, and counts as values.  Hadoop will then collate the data and group it under the key we specified during the Map phase, and then call our Reduce logic during the Reduce phase. Our reduce logic will sum up all counts for each URI, giving us inlink counts for that URI.</p>
+<p>I have attached the <a href="http://blog.cloudera.com/blog/wp-content/uploads/fb-wex-inlink-aggregator.tgz">source code</a>, but want to point out some of the relevant parts in the mapper and reducer. I use JDOM and some dependent libs (Xerces, Jaxen) to parse the XML. For more fundamental questions about Hadoop MapReduce classes, I recommend the basic <a id="ues-" style="color: #551a8b;" title="Hadoop Tutorial" href="http://hadoop.apache.org/core/docs/current/mapred_tutorial.html">Hadoop Tutorial</a>.</p>
+<p>The Mapper class is declared as follows: it takes in a line number and text field, and for each URI it finds, maps counts of outlinks to a count associated with the URI. This is done by implementing the Mapper interface with the appropriate input parameters &#8212; line number = LongWritable, line text = Text) and output (URI = Text, count = LongWritable). Hadoop needs to provide alternative implementations to standard Java classes like Long and String because it implements a custom serialization format.</p>
+<p><code>
+<pre>public class LinkMapper extends MapReduceBase implements Mapper {
+...
+}</pre>
+<p></code></p>
+<p>The Mapping function is pretty simple. It is passed a line count and String representing each line in the freebase-articles.tsv. It parses the XML, and pushes all outlink counts to the passed in Collector. All mapping functionality updates the Collector with key/value pairs, and updates the Reporter with status, counter value updates, or errors.</p>
+<pre><code>/**
+* calculates frequency of targets in processed XML
+*/
+@Override
+public void map(LongWritable lineCt, Text line, OutputCollector collector, Reporter reporter) throws IOException {
+     String[] parts = line.toString().split("\t");
+    // the xml should be in the 4th split.
+    if(parts.length == 4) {
+       String xml = parts[3];
+         // fix up xml so that JDOM can parse it.
+       xml = xml.replaceFirst("xmlns:xhtml=\" \"", "xmlns:xhtml=\"foo\"");
+       String xmlProtocol = "";
+
+       String fullXml = xmlProtocol+xml;
+         for (Map.Entry entry : parseXml(fullXml).entrySet()) {
+             collector.collect(entry.getKey(), entry.getValue());
+         }
+
+    }
+}
+</code></pre>
+<p>The parseXML() function called by map() uses XPath to locate all outlinks and puts them into a map, so instances of the same outlink are detected and the count is incremented. The wikipedize() method creates a wikpedia specific URI from the target text.</p>
+<p><code></p>
+<pre>/**
+* gets a map of counts by link for a given XML fragment.
+* @param parser
+* @param xmlFragment
+* @return map of URIs mapped to counts
+* @throws IOException
+*/
+protected  Map parseXml(String xmlFragment) throws IOException {
+Map parsedLinks = new HashMap();
+        logger.debug("parsing "+xmlFragment);
+     SAXBuilder builder = new SAXBuilder();
+
+        // command line should offer URIs or file names
+        try {
+          StringReader reader = new StringReader(xmlFragment);
+         Document doc = builder.build(reader);
+
+         XPath xp = XPath.newInstance("//target");
+
+         List targets = xp.selectNodes(doc);
+
+         for(Object obj : targets) {
+             Element target = (Element)obj;
+             Text wikiLink = new Text(wikipedize(target.getText()));
+             LongWritable newCount  = ONE;
+             LongWritable count = parsedLinks.get(wikiLink);
+            if(count != null) {
+               newCount = new LongWritable(count.get()+1);
+            }
+
+            logger.debug("putting key="+wikiLink.toString()+", value="+newCount.get());
+            parsedLinks.put(wikiLink,newCount);
+        }
+
+    }
+    catch (JDOMException e) {
+      logger.error(xmlFragment + " is not well-formed.");
+      logger.error(e.getMessage());
+    }
+    catch (IOException e) {
+      logger.error("Could not check " + xmlFragment);
+      logger.error(" because " + e.getMessage());
+    }  
+
+  return parsedLinks;
+
+}</pre>
+<p></code></p>
+<p>The Reducer is also very simple. It sums the counts for each key and updates the collector with the sum.</p>
+<p><code></p>
+<pre>public class URIReducer extends MapReduceBase
+    implements Reducer {
+
+     @Override
+     public void reduce(Text key, Iterator values,
+            OutputCollector collector,
+            Reporter reporter)
+        throws IOException {
+
+             long totalSum = 0;
+             while(values.hasNext()) {
+             LongWritable value = values.next();
+                 totalSum += value.get();
+             }
+             collector.collect(key,new LongWritable(totalSum));
+    }
+}</pre>
+<p></code></p>
+<p>Note that since this reducer is simply an aggregator, I can also use it as a Combiner, which is in effect a local reduce for a slave node prior to the overall aggregation and sorting that happens in order to run the global reduce.  The Combiner is set (just like the Mapper and Reducer) in the JobConf class used to run the job. This code is contained in the<br />
+WexLinkDriver class definition in the attached code:</p>
+<p><code>
+<pre>
+...
+JobClient client = new JobClient();
+JobConf conf = new JobConf(getConf(),
+com.evri.infocloud.wexlinks.WexLinkDriver.class);</code>
+
+conf.setJobName("test job");
+conf.setOutputKeyClass(Text.class);
+conf.setOutputValueClass(LongWritable.class);
+
+conf.setMapperClass(LinkMapper.class);
+conf.setCombinerClass(URIReducer.class);
+conf.setReducerClass(URIReducer.class);
+
+conf.setInputFormat(TextInputFormat.class);
+conf.setOutputFormat(TextOutputFormat.class);
+
+FileInputFormat.setInputPaths(conf,new Path(input[1]));
+FileOutputFormat.setOutputPath(conf,new Path(output[1]));
+
+client.setConf(conf);
+JobClient.runJob(conf);
+...
+</pre>
+<p></code></p>
+<p><strong>Building the Jar File</strong><br />
+The source code needs to be bundled into a jar and uploaded to the master node. Jars that the source code rely on also need to be bundled into that jar.</p>
+<p>The jar contains the following directories:</p>
+<ul>
+<li>com.* (source code path)</li>
+<li>lib (all jars the source depends on)</li>
+<li>META-INF (contains MANIFEST.MF, specifying Main-Class to run)</li>
+</ul>
+<p>I created a build.xml to copy the lib directory to the correct location where it can be jarred up relative to the classes and the META-INF directory:</p>
+<p><code></p>
+<pre>    &lt;property name="classes.dir" value="target/classes"/&gt;
+
+    &lt;target name="init"&gt;
+        &lt;mkdir dir="${classes.dir}"/&gt;
+        &lt;copy includeemptydirs="false" todir="${classes.dir}"&gt;
+            &lt;fileset dir="src" excludes="**/*.launch, **/*.java"/&gt;
+        &lt;/copy&gt;
+    &lt;copy includeemptydirs="false" todir="${classes.dir}/lib"&gt;
+            &lt;fileset dir="lib" includes="**/*.jar"/&gt;
+        &lt;/copy&gt;
+    &lt;/target&gt;
+    &lt;target depends="init" name="build"&gt;
+        &lt;echo message="${ant.project.name}: ${ant.file}"/&gt;
+        &lt;javac debug="true" debuglevel="${debuglevel}" destdir="target/classes"
+            source="${source}" target="${target}"&gt;
+            &lt;src path="src"/&gt;
+            &lt;classpath refid="fb-wex-inlink-aggregator.classpath"/&gt;
+        &lt;/javac&gt;
+    &lt;/target&gt;</pre>
+<p></code></p>
+<p>This creates the right structure under target/classes, which gets jarred up in a later step:<br />
+<code>
+<pre>
+    &lt;target depends="build, test" name="hadoop-jar"&gt;
+    	&lt;jar destfile="target/inlink-aggregator.jar"
+        	manifest="src/META-INF/MANIFEST.MF"
+        	basedir="${classes.dir}" &gt;
+    	&lt;/jar&gt;
+    &lt;/target&gt;
+</pre>
+<p></code></p>
+<p>See the <a href="http://blog.cloudera.com/blog/wp-content/uploads/fb-wex-inlink-aggregator.tgz">attached</a> build.xml for the entire listing.</p>
+<p><strong>Getting The Dataset</strong></p>
+<p>The Dataset, as mentioned above, is available as an Elastic Block Store &#8212; available to be mounted by an EC2 instance. Mounting an EBS volume is as easy as (a) connecting the EBS volume to an EC2 instance (in this case, the master) as a virtual device on that EC2 instance, and (b) mounting that instance, i.e. running mount {device} {directory}.</p>
+<p>I connect the EBS volume to my master EC2 instance via elastic fox, although, as mentioned above, it is possible to do this with the EC2 command line tools. Via ElasticFox, I</p>
+<ol>
+<li>select the Volumes and Snapshots tab.
+<li>click on the &#8216;+&#8217; button to add a new volume.
+<li>input the size of the volume I need (Freebase-WEX needs 66GB).
+<li>Input the snapshot ID of the volume I want to attach to (the snapshot ID of Freebase WEX is snap-1781757e)
+</ol>
+<p>Now that I have the volume I need to attach it to the master. </p>
+<ol>
+<li>right click on the volume.
+<li>select &#8216;Attach this volume&#8217; menu option.
+<li>input the instance id of the master node.
+</ol>
+<p>Once I&#8217;ve attached the volume to the instance, I ssh into the instance and mount the device. If I&#8217;ve attached the EBS volume as /dev/sdb, I mount like this:</p>
+<p><code>mount /dev/sdb freebase-wex</code></p>
+<p><strong>Uploading the Data to the Cluster</strong></p>
+<p>Now that I&#8217;ve mounted the Freebase WEX data, I am going to use {mount dir}/rawd/articles/freebase-wex-2009-01-12-articles.tsv as the input data for my hadoop job. In order to do this I need to get articles.tsv onto the cluster HDFS. </p>
+<p>Since the Cloudera scripts have taken care of HDFS Namenode initialization, all I need to do is create an input directory and upload the tsv file to it:</p>
+<p><code>hadoop fs -mkdir input<br />
+hadoop fs -copyFromLocal freebase-wex/rawd/articles/freebase-wex-2009-01-12-articles.tsv input</code></p>
+<p><strong>Running the Job</strong></p>
+<p>In order to run the job, I need to upload the jar to the master node. I copy the jar to the master node:</p>
+<p><code>hadoop-ec2 push my-cluster-name inlink-aggregator.jar</code></p>
+<p>and then run the jar as follows</p>
+<p><code>hadoop jar inlink-aggregator.jar input output </code></p>
+<p>Note that the output directory cannot exist when the job is run.</p>
+<p><strong>Results</strong></p>
+<p>The results of the MapReduce job are in your output dir, which is in HDFS. Copy those results down to  the master node:</p>
+<p><code> hadoop fs -copyToLocal {HDFS output dir} {desired output dir on local FS}</code></p>
+<p>and (if you want) save them to S3 using the /usr/bgin/s3cmd.rb file that comes on the Cloudera AMI. In order to use s3cmd, you need to set the AWS_ACCESS_KEY and AWS_SECRET_ACCESS_KEY environment variables. </p>
+<p><code>s3cmd put --force output/* s3://hadoop-freebase-wex-demo/output</code></p>
+<p>From S3 you can download them to your machine using the S3 sync tool of your choice. I use <a href="https://addons.mozilla.org/en-US/firefox/addon/3247">S3Organizer</a> to do this. </p>
+<p><strong>NOTE:</strong> you can upload directly to S3 and skip the above. In the cluster master:</p>
+<p>(1) edit /etc/hadoop/conf/hadoop-site.xml, and add the following:</p>
+<p><code>
+<pre>&lt;property&gt;
+ &lt;name&gt;fs.s3n.awsAccessKeyId&lt;/name&gt;
+ &lt;value&gt;YOUR-AWS-ACCESS-KEY-ID&lt;/value&gt;
+&lt;/property&gt;
+
+&lt;property&gt;
+ &lt;name&gt;fs.s3n.awsSecretAccessKey&lt;/name&gt;
+ &lt;value&gt;YOUR-AWS-SECRET-ACCESS-KEY&lt;/value&gt;
+&lt;/property&gt;</pre>
+<p></code></p>
+<p>(2) restart NameNode so that HDFS picks up the changes<br />
+<code>service hadoop-namenode restart</code></p>
+<p>(3)  run<br />
+<code>hadoop jar inlink-aggregator.jar input s3n://infocloud-subject-output-1/run1 </code></p>
+<p>As a final note, I noticed that unless I specified the S3 output dir as a subdir of a top level S3 bucket, I recieved the following exception:</p>
+<p><code>java.lang.IllegalArgumentException: Path must be absolute: s3n://infocloud-subject-output-1</code></p>
+<p>In subsequent MapReduce jobs, this logic also applies to the input dir (if you are using an S3 bucket as input). Details on this issue can be found <a href="http://developer.amazonwebservices.com/connect/thread.jspa?threadID=30945&#038;tstart=0">here</a>.</p>
+<p><strong>Debugging/Analyzing the Results</strong></p>
+<p>While the job ran fine, examination of the results shows that the counts are suspiciously low. For example Barack Obama only has 57 inlinks. At this point I&#8217;m going to refactor the mapping code and start tracking map state using Counters.</p>
+<p>I have a suspicion that (a) the tsv format may not be consistent, or (b) the XML I&#8217;m parsing is not valid. In order to test those theories I&#8217;m going to instrument the code with counters.</p>
+<p>In order to use Counters I need to create an enum that contains the states I want to represent.  </p>
+<p><code>
+<pre>public enum MapState {
+ERROR_INVALID_XML,
+ERROR_IO_EXCEPTION,
+XML_PARSED,
+ERROR_RUNTIME_EXCEPTION,
+};</pre>
+<p></code></p>
+<p>I first instrumented the existing code and ran it  to see if I was getting exceptions or just not parsing XML. </p>
+<p>I used the Reporter interface to instrument the code, using the enums I had created: </p>
+<p><code>reporter.incrCounter(MapState.XML_PARSED, 1);</code></p>
+<p>I ran, and saw no exceptions, but the XML_PARSED count was  574251, which seems very low, considering that the input file has 4183153 records.</p>
+<p>I then modified the mapping code to check every line part to see if it was the XML, and re-ran:</p>
+<p><code>
+<pre>@Override
+public void map(LongWritable lineCt, Text line,
+OutputCollector<Text, LongWritable> collector, Reporter reporter) throws IOException {
+     String[] parts = line.toString().split("\t");
+     String xml = null;
+     try {
+     // the xml is not located in the same split from row to row, find first one. 
+
+         for(int i = 0; i < parts.length;i++) {
+             if(parts[i].startsWith(ARTICLES_XMLNS)) {
+                  xml = parts[i];
+                  break;
+             }
+         }
+
+         if(xml != null) {
+              // fix up the XML so that JDOM can parse it.
+             xml = xml.replaceFirst("xmlns:xhtml=\" \"", "xmlns:xhtml=\"foo\"");
+             String xmlProtocol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+             String fullXml = xmlProtocol+xml;
+
+           for (Map.Entry<Text,LongWritable> entry : parseXml(fullXml).entrySet()) {
+                 collector.collect(entry.getKey(), entry.getValue());
+             }
+          reporter.incrCounter(MapState.XML_PARSED, 1);
+
+         }
+     } catch (JDOMException e) {
+          logger.error(xml+ " is not well-formed.");
+          logger.error(e.getMessage());
+          reporter.incrCounter(MapState.ERROR_INVALID_XML, 1);
+
+     } catch (IOException e) {
+          logger.error("Could not check " + xml);
+          logger.error(" because " + e.getMessage());
+          reporter.incrCounter(MapState.ERROR_IO_EXCEPTION, 1);
+     } catch (RuntimeException ex) {
+         logger.error("RUNTIME EXCEPTION: "+ex.getMessage());
+         logger.error("xml: "+xml);
+         reporter.incrCounter(MapState.ERROR_RUNTIME_EXCEPTION, 1);
+
+         throw ex;
+    }
+}</pre>
+<p></code></p>
+<p>When re-running this job, I noticed it ran a lot slower. When I checked my counter values via the web UI after the job completed the XML_PARSED counter was set to 4,180,888, much more in line with the line count . So apparently I _was_ missing a lot of data. A quick check on Barack Obama reveals that his page inlink count went from 77 to 11851, which is more in line with what I would expect. </p>
+<p>The Web UI also provides access to the logs, provided that (a) you open up the TaskTracker port on the slave security group, and (b) you use the Amazon public DNS name instead of the Amazon private DNS name.  </p>
+<p><strong>Summary</strong></p>
+<p>The ease with which I was able to get a job running on EC2 using the Cloudera scripts and AMIS helped me resolve focus on the logic related issues of my MapReduce code instead of thrashing around getting the cluster functional.  </p>
+<p>The other nice thing about the Cloudera scripts is that I didn&#8217;t have to spend time learning the (182!) EC2 scripts. The hadoop-ec2 script, in combination with ElasticFox for finding and mounting an EBS volume, was all I really needed. If it isn&#8217;t clear by now, I am really, really happy that Cloudera has taken the time to do this, and do it very well.</p>
+<p><strong>Bloopers</strong></p>
+<p>There were a couple of potholes along the way that I want to mention should anyone else fall into them.</p>
+<p>(1) File permissions on my EC2 private key needed to be set to 0600, otherwise the hadoop-ec2 launch-cluster script would fail trying to set up passwordless ssh between master and slaves.</p>
+<p>(2) Logging. I was logging the entire blurb of XML prior to refactoring the code to look for the XML in &#8216;non standard&#8217; locations. When I started up the job again, it would run just fine, and then I would start seeing: </p>
+<p><code>
+<pre>/04/29 17:50:50 INFO mapred.JobClient: Task Id : attempt_200904291618_0002_m_000041_0, Status : FAILED
+java.io.IOException: Task process exit with nonzero status of 1.
+        at org.apache.hadoop.mapred.TaskRunner.runChild(TaskRunner.java:462)
+        at org.apache.hadoop.mapred.TaskRunner.run(TaskRunner.java:403)
+
+09/04/29 17:50:50 WARN mapred.JobClient: Error reading task outputhttp://domU-12-31-39-02-CA-45.compute-1.internal:50060/tasklog?plaintext=true&#038;taskid=attempt_200904291618_0002_m_000041_0&#038;filter=stdout
+09/04/29 17:50:50 WARN mapred.JobClient: Error reading task outputhttp://domU-12-31-39-02-CA-45.compute-1.internal:50060/tasklog?plaintext=true&#038;taskid=attempt_200904291618_0002_m_000041_0&#038;filter=stderr </pre>
+<p></code></p>
+<p>Eventually, this would happen across a majority of slaves and the master would consider the job &#8216;failed&#8217;. Of course, I could not actually see what went wrong with the task because the JobClient couldn&#8217;t read the error output. I did manage to look at the logs for several of the task trackers that failed, and decided to stop logging the XML. The issue resolved itself at that point. </p>
+<p>(3) Debugging: I would recommend always running a MapReduce job over a small set of data on a local single node install prior to pushing it out to the cluster. While this didn&#8217;t reproduce the logging issue above, it did catch some late night null pointer exception goofs. Since debugging failures over any distributed environment is a detective game at best, you want to show up with something that has been reasonably tested before throwing it across an N node cluster. </p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/community/" title="View all posts in Community" rel="category tag">Community</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/distribution/" title="View all posts in Distribution" rel="category tag">Distribution</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/guest/" title="View all posts in Guest" rel="category tag">Guest</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hadoop/" title="View all posts in Hadoop" rel="category tag">Hadoop</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>2 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">awshy</a> /
+			December 10, 2009 / 2:13 PM		</em>
+		<p>Hi,</p>
+<p>Is there any way to mount the public dataset programmatically? or I should mount the public datasets to volumn, then vol to instance manually, is this the only way to make the public datasest available to use???? Thanks&#8230;</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://helwr.com">helwr</a> /
+			June 23, 2010 / 9:33 PM		</em>
+		<p>Christophe &amp; Cloudera, thank you</p>
+<p>it is the first time i&#8217;m using cloudera product and it&#8217;s been a blast, saved me from lots of painful hours</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='601' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="fGU=" />
+		<input type="hidden" name="cptch_time" value="1397910163" />
+		<input type="hidden" value="Version: 2.4" />
+		3 &minus; <input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> =  tw&#111;	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

@@ -1,0 +1,1051 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>Online Apache HBase Backups with CopyTable | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="Online Apache HBase Backups with CopyTable"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2012/06/online-hbase-backups-with-copytable-2/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Online Apache HBase Backups with CopyTable Comments Feed" href="http://blog.cloudera.com/blog/2012/06/online-hbase-backups-with-copytable-2/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Cloudera Manager 3.7.6 released!' href='http://blog.cloudera.com/blog/2012/06/cloudera-manager-3-7-6-released/' />
+<link rel='next' title='Hue 2.0 Packs New Features in a Refreshing UI' href='http://blog.cloudera.com/blog/2012/06/hue-2-0-packs-new-features/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2012/06/online-hbase-backups-with-copytable-2/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=15323' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-15323 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (293)"
+					class=""
+									>
+					Hadoop (293)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (12)"
+					class=""
+									>
+					YARN (12)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">Online Apache HBase Backups with CopyTable</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/jon/" title="Posts by Jonathan Hsieh" rel="author">Jonathan Hsieh</a></li>
+				<li>June 04, 2012</li>
+				<li class="comment"><a href="#comments">9 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>CopyTable is a simple Apache HBase utility that, unsurprisingly, can be used for copying individual tables within an HBase cluster or from one HBase cluster to another. In this blog post, we’ll talk about what this tool is, why you would want to use it, how to use it, and some common configuration caveats.</p>
+<h2>Use cases:</h2>
+<p>CopyTable is at its core an Apache Hadoop MapReduce job that uses the standard HBase Scan read-path interface to read records from an individual table and writes them to another table (possibly on a separate cluster) using the standard HBase Put write-path interface. It can be used for many purposes:</p>
+<ul>
+<li>Internal copy of a table (Poor man’s snapshot)</li>
+<li>Remote HBase instance backup</li>
+<li>Incremental HBase table copies</li>
+<li>Partial HBase table copies and HBase table schema changes</li>
+</ul>
+<h2>Assumptions and limitations:</h2>
+<p>The CopyTable tool has some basic assumptions and limitations. First, if being used in the multi-cluster situation, both clusters must be online and the target instance needs to have the target table present with the same column families defined as the source table.</p>
+<p>Since the tool uses standards scans and puts, the target cluster doesn&#8217;t have to have the same number of nodes or regions.  In fact, it can have different numbers of tables, different numbers of region servers, and could have completely different region split boundaries. Since we are copying entire tables, you can use performance optimization settings like setting larger scanner caching values for more efficiency. Using the put interface also means that copies can be made between clusters of different minor versions. (0.90.4 -&gt; 0.90.6, CDH3u3 -&gt; CDH3u4) or versions that are wire compatible (0.92.1 -&gt; 0.94.0).</p>
+<p>Finally, HBase only provides row-level ACID guarantees; this means while a CopyTable is going on, newly inserted or updated rows may occur and these concurrent edits will either be completely included or completely excluded. While rows will be consistent, there is no guarantees about the consistency, causality, or order of puts on the other rows.</p>
+<h2>Internal copy of a table (Poor man’s snapshot)</h2>
+<p>Versions of HBase up to and including the most recent 0.94.x versions do not support table snapshotting. Despite HBase’s ACID limitations, CopyTable can be used as a naive snapshotting mechanism that makes a physical copy of a particular table.</p>
+<p>Let’s say that we have a table, tableOrig with column-families cf1 and cf2. We want to copy all its data to tableCopy. We need to first create tableCopy with the same column families:</p>
+<pre class="code">srcCluster$ echo "create 'tableOrig', 'cf1', 'cf2'" | hbase shell</pre>
+<p style="padding-top: 10px;">We can then create and copy the table with a new name on the same HBase instance:</p>
+<pre class="code">srcCluster$ hbase org.apache.hadoop.hbase.mapreduce.CopyTable --new.name=tableCopy tableOrig</pre>
+<p style="padding-top: 10px;">This starts an MR job that will copy the data.</p>
+<h2>Remote HBase instance backup</h2>
+<p>Let’s say we want to copy data to another cluster. This could be a one-off backup, a periodic job or could be for bootstrapping for cross-cluster replication. In this example, we’ll have two separate clusters: srcCluster and dstCluster.</p>
+<p>In this multi-cluster case, CopyTable is a push process &#8212; your source will be the HBase instance your current hbase-site.xml refers to and the added arguments point to the destination cluster and table. This also assumes that all of the MR TaskTrackers can access all the HBase and ZK nodes in the destination cluster. This mechanism for configuration also means that you could run this as a job on a remote cluster by overriding the hbase/mr configs to use settings from any accessible remote cluster and specify the ZK nodes in the destination cluster. This could be useful if you wanted to copy data from an HBase cluster with lower SLAs and didn’t want to run MR jobs on them directly.</p>
+<p>You will use the the &#8211;peer.adr setting to specify the destination cluster’s ZK ensemble (e.g. the cluster you are copying to). For this we need the ZK quorum’s IP and port as well as the HBase root ZK node for our HBase instance. Let’s say one of these machine is srcClusterZK (listed in hbase.zookeeper.quorum) and that we are using the default zk client port 2181 (hbase.zookeeper.property.clientPort) and the default ZK znode parent /hbase (zookeeper.znode.parent). (Note: If you had two HBase instances using the same ZK, you’d need a different zookeeper.znode.parent for each cluster.</p>
+<pre class="code"># create new tableOrig on destination cluster
+dstCluster$ echo "create 'tableOrig', 'cf1', 'cf2'" | hbase shell
+# on source cluster run copy table with destination ZK quorum specified using --peer.adr
+# WARNING: In older versions, you are not alerted about any typo in these arguments!
+srcCluster$ hbase org.apache.hadoop.hbase.mapreduce.CopyTable --peer.adr=dstClusterZK:2181:/hbase tableOrig</pre>
+<p style="padding-top: 10px;">Note that you can use the &#8211;new.name argument with the &#8211;peer.adr to copy to a differently named table on the dstCluster.</p>
+<pre class="code"># create new tableCopy on destination cluster
+dstCluster$ echo "create 'tableCopy', 'cf1', 'cf2'" | hbase shell
+# on source cluster run copy table with destination --peer.adr and --new.name arguments.
+srcCluster$ hbase org.apache.hadoop.hbase.mapreduce.CopyTable --peer.adr=dstClusterZK:2181:/hbase --new.name=tableCopy tableOrig</pre>
+<p style="padding-top: 10px;">This will copy data from tableOrig on the srcCluster to the dstCluster’s tableCopy table.</p>
+<h2>Incremental HBase table copies</h2>
+<p>Once you have a copy of a table on a destination cluster, how do you do copy new data that is later written to the source cluster? Naively, you could run the CopyTable job again and copy over the entire table. However, CopyTable provides a more efficient incremental copy mechanism that just copies the updated rows from the srcCluster to the backup dstCluster specified in a window of time. Thus, after the initial copy, you could then have a periodic cron job that copies data from only the previous hour from srcCluster to the dstCuster.</p>
+<p>This is done by specifying the &#8211;starttime and &#8211;endtime arguments. Times are specified as decimal milliseconds since unix epoch time.</p>
+<pre class="code"># WARNING: In older versions, you are not alerted about any typo in these arguments!
+# copy from beginning of time until timeEnd 
+# NOTE: Must include start time for end time to be respected. start time cannot be 0.
+srcCluster$ hbase org.apache.hadoop.hbase.mapreduce.CopyTable ... --starttime=1 --endtime=timeEnd ...
+# Copy from starting from and including timeStart until the end of time.
+srcCluster$ hbase org.apache.hadoop.hbase.mapreduce.CopyTable ... --starttime=timeStart ...
+# Copy entries rows with start time1 including time1 and ending at timeStart excluding timeEnd.
+srcCluster$ hbase org.apache.hadoop.hbase.mapreduce.CopyTable ... --starttime=timestart --endtime=timeEnd</pre>
+<h2 style="padding-top: 10px;">Partial HBase table copies and HBase table schema changes</h2>
+<p>By default, CopyTable will copy all column families from matching rows. CopyTable provides options for only copying data from specific column-families. This could be useful for copying original source data and excluding derived data column families that are added by follow on processing.</p>
+<p>By adding these arguments we only copy data from the specified column families.</p>
+<ul>
+<li>&#8211;families=srcCf1</li>
+<li>&#8211;families=srcCf1,srcCf2</li>
+</ul>
+<p>Starting from 0.92.0 you can copy while changing the column family name:</p>
+<ul>
+<li>&#8211;families=srcCf1:dstCf1</li>
+<ul>
+<li>copy from srcCf1 to dstCf1 </li>
+</ul>
+<li>&#8211;families=srcCf1:dstCf1,dstCf2,srcCf3:dstCf3</li>
+<ul>
+<li>copy from srcCf1 to destCf1, copy dstCf2 to dstCf2 (no rename), and srcCf3 to dstCf3</li>
+</ul>
+</ul>
+<p>Please note that dstCf* must be present in the dstCluster table!</p>
+<p>Starting from 0.94.0 new options are offered to copy delete markers and to include a limited number of overwritten versions. Previously, if a row is deleted in the source cluster, the delete would not be copied &#8212; instead that a stale version of that row would remain in the destination cluster. This takes advantage of some of the 0.94.0 release’s advanced features.</p>
+<ul>
+<li>&#8211;versions=vers</li>
+<ul>
+<li>where vers is the number of cell versions to copy (default is 1 aka the latest only)</li>
+</ul>
+<li>&#8211;all.cells </li>
+<ul>
+<li>also copy delete markers and deleted cells</li>
+</ul>
+</ul>
+<h2>Common Pitfalls</h2>
+<p>The HBase client in the 0.90.x, 0.92.x, and 0.94.x versions always use zoo.cfg if it is in the classpath, even if an hbase-site.xml file specifies other ZooKeeper quorum configuration settings. This “feature” causes a problem common in CDH3 HBase because its packages default to including a directory where zoo.cfg lives in HBase’s classpath. This can and has lead to frustration when trying to use CopyTable (HBASE-4614). The workaround for this is to exclude the zoo.cfg file from your HBase’s classpath and to specify ZooKeeper configuration properties in your hbase-site.xml file. http://hbase.apache.org/book.html#zookeeper</p>
+<h2>Conclusion</h2>
+<p>CopyTable provides simple but effective disaster recovery insurance for HBase 0.90.x (CDH3) deployments. In conjunction with the replication feature found and supported in CDH4’s HBase 0.92.x based HBase, CopyTable’s incremental features become less valuable but its core functionality is important for bootstrapping a replicated table. While more advanced features such as HBase snapshots (HBASE-50) may aid with disaster recovery when it gets implemented, CopyTable will still be a useful tool for the HBase administrator.</p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hbase/" title="View all posts in HBase" rel="category tag">HBase</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>9 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="http://tech.tomgoren.com">Tom Goren</a> /
+			June 06, 2012 / 7:45 AM		</em>
+		<p>Excellent guide to CopyTable!</p>
+<p>Just wanted to add my 2 cents, as I used CopyTable in a script for the purpose of migrating HBase tables from one cluster to another.</p>
+<p>If nothing else, a nice take away from my script is automatic creation of all the column families on the destination cluster, so as to avoid doing it manually.</p>
+<p>Here it is:<br />
+<a href="http://tech.tomgoren.com/archives/284" rel="nofollow">http://tech.tomgoren.com/archives/284</a></p>
+<p>It uses Python and the Thrift API.</p>
+<p>Thanks!</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jonathan Hsieh</a> /
+			June 06, 2012 / 8:34 AM		</em>
+		<p>Hey Tom, </p>
+<p>Sounds like the auto cf creation feature might be useful to add as an option to CopyTable upstream.  Have you considered contributing code or at least filing an issue/feature request upstream here so we can add functionality?  (<a href="https://issues.apache.org/jira/browse/HBASE" rel="nofollow">https://issues.apache.org/jira/browse/HBASE</a>, click create issue).</p>
+<p>The other good news is that in a soon to be published blog post, we&#8217;ll talk about wire compatibility and compatibility between major version &#8212; hopefully after an upgrade to that version, you won&#8217;t have to do that upgrade process again!</p>
+<p>Jon.</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Joe Travaglini</a> /
+			July 03, 2012 / 11:03 AM		</em>
+		<p>Jon,<br />
+  Nice write up, but I am confused by something.</p>
+<p>In the section about a poor man&#8217;s snapshot, shouldn&#8217;t the first command read:</p>
+<p>srcCluster$ echo &#8220;create &#8216;tableCopy&#8217;, &#8216;cf1&#8242;, &#8216;cf2&#8242;&#8221; | hbase shell</p>
+<p>If I&#8217;m interpreting how this works correctly, the shell should be labelled &#8216;srcCluster&#8217; as it&#8217;s internal (i.e. only one cluster involved), and the pre-seed command should contain the ultimate name of the copied table, in this case, &#8216;tableCopy&#8217;.</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jonathan Hsieh</a> /
+			July 03, 2012 / 3:07 PM		</em>
+		<p>Hi Joe,</p>
+<p>You are correct.    I&#8217;ve updated the post with the change.</p>
+<p>Thanks!<br />
+Jon.</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">PsyberS</a> /
+			December 07, 2012 / 2:12 PM		</em>
+		<p>There are some typos.  The commands in the incremental section state:</p>
+<p>hbase org.apache.hadoop.HBase.mapreduce.CopyTable</p>
+<p>but not the case is wrong on &#8216;HBase&#8217;.  It should be:</p>
+<p>hbase org.apache.hadoop.hbase.mapreduce.CopyTable</p>
+	</li>
+<ul class='children'>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Jonathan Hsieh</a> /
+			January 23, 2013 / 4:11 PM		</em>
+		<p>Thanks! I&#8217;ve updated the post to fix the typos.</p>
+<p>-Jon.</p>
+	</li>
+</li>
+</ul>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">shailesh</a> /
+			February 06, 2013 / 10:44 PM		</em>
+		<p>Hi Jon,</p>
+<p>This is indeed helpful.</p>
+<p>I have one query -<br />
+In the section &#8220;Partial HBase table copies..&#8221; you have mentioned that starting version  0.94.0 there are options to copy delete markers as well to the destination cluster so a deleted row on source cluster does not remain for ever on the destination. But, will this work right even after a major compaction has happened on the source cluster. Since major compaction will cleanup the delete markers (and the actual rows), how can copyTables fetch the delete markers?</p>
+<p>Thanks!</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Maziyar Mirabedini</a> /
+			March 21, 2013 / 4:53 PM		</em>
+		<p>Hi there,<br />
+Thanks for the great write up!<br />
+We&#8217;re using CopyTable to copy a table from one cluster to another. But its very slow. We noticed that CopyTable is copying data to one region server at a time. Is there anyway we can speed up things or copy to multiple region servers at the same time?<br />
+Thanks!</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='15323' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="xmk=" />
+		<input type="hidden" name="cptch_time" value="1397909981" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &minus; &#116;&#104;&#114;ee = 2	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

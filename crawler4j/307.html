@@ -1,0 +1,1148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>How-To: Schedule Recurring Hadoop Jobs with Apache Oozie | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="How-To: Schedule Recurring Hadoop Jobs with Apache Oozie"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2013/01/how-to-schedule-recurring-hadoop-jobs-with-apache-oozie/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; How-To: Schedule Recurring Hadoop Jobs with Apache Oozie Comments Feed" href="http://blog.cloudera.com/blog/2013/01/how-to-schedule-recurring-hadoop-jobs-with-apache-oozie/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Meet the Instructor: Jesse Anderson' href='http://blog.cloudera.com/blog/2013/01/meet-the-instructor-jesse-anderson/' />
+<link rel='next' title='Cloudera Impala Beta (version 0.4) and Cloudera Manager 4.1.3 Now Available' href='http://blog.cloudera.com/blog/2013/01/cloudera-impala-beta-version-0-4-and-cloudera-manager-4-1-3-now-available/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2013/01/how-to-schedule-recurring-hadoop-jobs-with-apache-oozie/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=19927' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-19927 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">How-To: Schedule Recurring Hadoop Jobs with Apache Oozie</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by Jon Natkins</li>
+				<li>January 18, 2013</li>
+				<li class="comment"><a href="#comments">1 comment</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p><em>Our thanks to guest author Jon Natkins (@nattyice) of WibiData for the following post!</em></p>
+<p>Today, many (if not most) companies have <a href="http://en.wikipedia.org/wiki/Extract,_transform,_load">ETL</a> or data enrichment jobs that are executed on a regular basis as data becomes available. In this scenario it is important to minimize the lag time between data being created and being ready for analysis.</p>
+<p>CDH, Cloudera&#8217;s open-source distribution of Apache Hadoop and related projects, includes a framework called <a href="http://oozie.apache.org/">Apache Oozie</a> that can be used to design complex job workflows and coordinate them to occur at regular intervals. In this how-to, you’ll review a simple Oozie coordinator job, and learn how to schedule a recurring job in Hadoop. The example involves adding new data to a Hive table every hour, using Oozie to schedule the execution of recurring Hive scripts. (For the full context of the example, see the &#8220;<a href="http://blog.cloudera.com/blog/2012/09/analyzing-twitter-data-with-hadoop/">Analyzing Twitter Data with Apache Hadoop&#8221;</a> series.)</p>
+<h2>Adding Data to Hive Tables</h2>
+<p>In <a href="http://hive.apache.org">Apache Hive</a>, tables may be <a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL#LanguageManualDDL-Partitionedtables">partitioned</a> to make it easier to manage a rolling window of data, or to improve performance of queries that predicate on the partition column. (To learn more about Hive, and how partitions work, see <a href="http://blog.cloudera.com/blog/2012/11/analyzing-twitter-data-with-hadoop-part-3-querying-semi-structured-data-with-hive/">&#8220;Querying Semi-structured Data with Apache Hive&#8221;.)</a> For the purpose of this article, we’ll work with a table, introduced in a <a href="http://blog.cloudera.com/blog/2012/11/analyzing-twitter-data-with-hadoop-part-3-querying-semi-structured-data-with-hive/">previous blog post</a>, used to store Twitter tweets, and populated by a data stream ingested by Flume into HDFS:</p>
+<pre class="code" style="padding-left: 10px;">ADD JAR /tmp/hive-serdes-1.0-SNAPSHOT.jar
+
+CREATE EXTERNAL TABLE tweets (
+ ...
+ retweeted_status STRUCT&lt;
+   text:STRING,
+   user:STRUCT&gt;,
+ entities STRUCT&lt;
+   urls:ARRAY&gt;,
+   user_mentions:ARRAY&gt;,
+   hashtags:ARRAY&gt;&gt;,
+ text STRING,
+ ...
+)
+PARTITIONED BY (datehour INT)
+ROW FORMAT SERDE 'com.cloudera.hive.serde.JSONSerDe'
+LOCATION '/user/flume/tweets';
+</pre>
+<p>&nbsp;</p>
+<p>The important things to note here are that the root of the table’s data directory is located at /user/flume/tweets, and that the table has a partition column, which uses an integer to represent the date and hour of the partition. We’ve chosen to mimic the Java date format <a href="http://docs.oracle.com/javase/1.4.2/docs/api/java/text/SimpleDateFormat.html">‘yyyyMMddHH’</a>. For example, the partition containing data for 2013-01-04 09:00 UTC would be identified by the partition value of 2013010409.</p>
+<p>For this example, we will design an Oozie coordinator job that will add a new partition to the table each hour.</p>
+<h2>Writing the Hive Queries</h2>
+<p>In order to add a partition to a Hive table, you’ll need a file containing the queries that need to be executed. In Hive, partitions are created through an <code>ALTER TABLE</code> statement:</p>
+<pre class="code" style="padding-left: 10px;">ADD JAR ${JSON_SERDE};
+ALTER TABLE tweets
+   ADD IF NOT EXISTS
+   PARTITION (datehour = ${DATEHOUR})
+   LOCATION '${PARTITION_PATH}';
+  </pre>
+<p>&nbsp;</p>
+<p> The commands are fairly straightforward. The table that was created uses a custom SerDe, which Hive will use when performing the add partition command. In order to ensure that Hive can access the SerDe class for the table, you must add the JAR file, and then add the partition. However, several of the values in the query are variables: <code>${JSON_SERDE}</code>, <code>${DATEHOUR}</code>, and <code>${PARTITION_PATH}</code>will be replaced by Oozie with their actual values at execution time.</p>
+<h2>Designing the Workflow</h2>
+<p>In order to run a recurring job, you’ll need to have an Oozie workflow to execute. Oozie workflows are written as an XML file representing a <a href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph (DAG)</a>.</p>
+<p>Let’s look at a simple workflow example, and dive into what’s actually going on. The following file is saved as add-partition-hive-action.xml, in a directory which is referenced as <code>workflowRoot</code>:</p>
+<pre class="code" style="padding-left: 10px;">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;workflow-app xmlns="uri:oozie:workflow:0.4" name="hive-add-partition-wf"&gt;
+  &lt;start to="hive-add-partition"/&gt;
+
+  &lt;action name="hive-add-partition"&gt;
+    &lt;hive xmlns="uri:oozie:hive-action:0.4"&gt;
+      &lt;job-tracker&gt;${jobTracker}&lt;/job-tracker&gt;
+      &lt;name-node&gt;${nameNode}&lt;/name-node&gt;
+      &lt;prepare&gt;
+        &lt;delete path="${workflowRoot}/output-data/hive"/&gt;
+        &lt;mkdir path="${workflowRoot}/output-data"/&gt;
+      &lt;/prepare&gt;
+      &lt;job-xml&gt;${workflowRoot}/hive-site.xml&lt;/job-xml&gt;
+      &lt;configuration&gt;
+        &lt;property&gt;
+          &lt;name&gt;oozie.hive.defaults&lt;/name&gt;
+          &lt;value&gt;${workflowRoot}/hive-site.xml&lt;/value&gt;
+        &lt;/property&gt;
+      &lt;/configuration&gt;
+      &lt;script&gt;add_partition_hive_script.q&lt;/script&gt;
+      &lt;param&gt;JSON_SERDE=${workflowRoot}/lib/hive-serdes-1.0-SNAPSHOT.jar&lt;/param&gt;
+      &lt;param&gt;PARTITION_PATH=${workflowInput}&lt;/param&gt;
+      &lt;param&gt;DATEHOUR=${dateHour}&lt;/param&gt;
+    &lt;/hive&gt;
+    &lt;ok to="end"/&gt;
+    &lt;error to="fail"/&gt;
+  &lt;/action&gt;
+
+  &lt;kill name="fail"&gt;
+    &lt;message&gt;Hive failed, error message[${wf:errorMessage(wf:lastErrorNode())}]&lt;/message&gt;
+  &lt;/kill&gt;
+  &lt;end name="end"/&gt;
+&lt;/workflow-app&gt;
+</pre>
+<p>&nbsp;</p>
+<p>The graph is made up of a series of control-flow nodes and Oozie actions. The control flow nodes are XML entities like <code>&lt;start&gt;</code>, <code>&lt;kill&gt;</code>, and <code>&lt;end&gt;</code>, which identify the beginning, error, and final states of the workflow. There are also several other more complex control flow nodes called <code>&lt;decision&gt;</code>, <code>&lt;fork&gt;</code>, and <code>&lt;join&gt;</code>. More information on those nodes can be found in the <a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/WorkflowFunctionalSpec.html#a3.1_Control_Flow_Nodes">Oozie documentation</a>. In the workflow above, we’ve designed a very simple workflow, which, when visualized as a DAG, looks like this:</p>
+<p align="center"><a href="http://blog.cloudera.com/wp-content/uploads/2013/01/natty.png"><img class="aligncenter size-full wp-image-19928" title="natty" src="http://blog.cloudera.com/wp-content/uploads/2013/01/natty.png" alt="" width="416" height="361" /></a></p>
+<p>This is a very simple workflow that only executes a single action. <a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/WorkflowFunctionalSpec.html#a3.2_Workflow_Action_Nodes">Actions</a> in Oozie are a discrete computation or processing task. They can do a number of different things: execute a MapReduce job, run a Java main class, or run a Hive or Pig script, to name a few possibilities. In this workflow, we identify the action as a Hive action with this node: <code>&lt;hive xmlns="uri:oozie:hive-action:0.4"&gt;</code>. As an aside, in order to use Hive actions, the <a href="http://blog.cloudera.com/blog/2012/12/how-to-use-the-sharelib-in-apache-oozie/">Oozie Share Lib</a> must be installed.</p>
+<p>Looking more closely at the Hive action, we can see how its functionality is defined. The <code>&lt;job-tracker&gt;</code> and <code>&lt;name-node&gt;</code> entities dictate the servers that the Hive job will connect to for executing its script:</p>
+<pre class="code" style="padding-left: 10px;">&lt;job-tracker&gt;${jobTracker}&lt;/job-tracker&gt;
+&lt;name-node&gt;${nameNode}&lt;/name-node&gt;
+</pre>
+<p>&nbsp;</p>
+<p>You’ll see where the variable values <code>${jobTracker}</code> and <code>${nameNode}</code>come from a little later.</p>
+<p>The <code>&lt;job-xml&gt;</code> entity is used to specify a configuration file for Hive. Since most Hive installations will need to connect to a non-default metastore database, this configuration file will likely contain database connection credentials. You may also notice that the <code>&lt;configuration&gt;</code> section of the action defines a parameter called oozie.hive.defaults, which points to the same file as <code>&lt;job-xml&gt;</code>:</p>
+<pre class="code" style="padding-left: 10px;">&lt;job-xml&gt;${workflowRoot}/hive-site.xml&lt;/job-xml&gt;
+      &lt;configuration&gt;
+        &lt;property&gt;
+          &lt;name&gt;oozie.hive.defaults&lt;/name&gt;
+          &lt;value&gt;${workflowRoot}/hive-site.xml&lt;/value&gt;
+        &lt;/property&gt;
+      &lt;/configuration&gt;
+</pre>
+<p>&nbsp;</p>
+<p>This approach is necessary because in the current version of Oozie (CDH4.1.2), Oozie Hive actions require a Hive defaults file. The file can be provided using the workflow configuration or, in certain versions of Hive, is provided by the Hive JAR itself. However, the CDH4.1.2 version of Hive no longer packages or uses that file, so you must include it in the workflow despite it having no effect on the action. (For more information, see <a href="https://issues.apache.org/jira/browse/OOZIE-1087">OOZIE-1087</a>.) In CDH4.2, it will no longer be necessary to include the <code>oozie.hive.defaults</code> configuration parameter.</p>
+<p>The most interesting pieces in this action are the <code>&lt;script&gt;</code> and <code>&lt;param&gt;</code> entities:</p>
+<pre class="code" style="padding-left: 10px;">&lt;script&gt;add_partition_hive_script.q&lt;/script&gt;
+&lt;param&gt;JSON_SERDE=${workflowRoot}/lib/hive-serdes-1.0-SNAPSHOT.jar&lt;/param&gt;
+&lt;param&gt;PARTITION_PATH=${workflowInput}&lt;/param&gt;
+&lt;param&gt;DATEHOUR=${dateHour}&lt;/param&gt;
+</pre>
+<p>&nbsp;</p>
+<p>The <code>&lt;script&gt;</code> entity specifies the location of the Hive script in HDFS, and the <code>&lt;param&gt;</code> entities contain declarations of variables that will be passed into the Hive script. You can see here that the parameters being passed in match the names of the variables from the Hive script. Again, for reference, the <code>JSON_SERDE</code>parameter specifies the HDFS path to a JAR file containing the custom SerDe class.</p>
+<h2>Scheduling Recurring Workflows</h2>
+<p>Oozie has another type of a job called a <a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/CoordinatorFunctionalSpec.html#a1._Coordinator_Overview">coordinator application</a>. Coordinator applications allow users to schedule more complex workflows, including workflows that are scheduled regularly, or that have dependencies on the output from other workflows. For this application, which is stored on an HDFS cluster in a file named add-partition-coord-app.xml, the add partition workflow is executed on an hourly basis:</p>
+<pre class="code" style="padding-left: 10px;">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;coordinator-app name="add-partition-coord" frequency="${coord:hours(1)}"
+             start="${jobStart}" end="${jobEnd}"
+             timezone="UTC"
+             xmlns="uri:oozie:coordinator:0.4"&gt;
+  &lt;datasets&gt;
+    &lt;dataset name="tweets" frequency="${coord:hours(1)}"
+         initial-instance="${initialDataset}" timezone="America/Los_Angeles"&gt;
+      &lt;uri-template&gt;
+        hdfs://hadoop1:8020/user/flume/tweets/${YEAR}/${MONTH}/${DAY}/${HOUR}
+      &lt;/uri-template&gt;
+      &lt;done-flag&gt;&lt;/done-flag&gt;
+    &lt;/dataset&gt;
+  &lt;/datasets&gt;
+ 
+&lt;input-events&gt;
+    &lt;data-in name="tweetInput" dataset="tweets"&gt;
+      &lt;instance&gt;${coord:current(coord:tzOffset() / 60)}&lt;/instance&gt;
+    &lt;/data-in&gt;
+    &lt;data-in name="readyIndicator" dataset="tweets"&gt;
+      &lt;instance&gt;${coord:current(1 + (coord:tzOffset() / 60))}&lt;/instance&gt;
+    &lt;/data-in&gt;
+  &lt;/input-events&gt;
+  &lt;action&gt;
+    &lt;workflow&gt;
+      &lt;!-- add-partition-hive-action.xml is the workflow containing the Hive action --&gt;
+      &lt;app-path&gt;${workflowRoot}/add-partition-hive-action.xml&lt;/app-path&gt;
+      &lt;configuration&gt;
+       
+&lt;property&gt;
+          &lt;name&gt;workflowInput&lt;/name&gt;
+          &lt;value&gt;${coord:dataIn('tweetInput')}&lt;/value&gt;
+        &lt;/property&gt;
+       
+&lt;property&gt;
+         &lt;name&gt;dateHour&lt;/name&gt;
+         &lt;value&gt;
+            ${coord:formatTime(coord:dateOffset(coord:nominalTime(), tzOffset, 'HOUR'), 'yyyyMMddHH')}
+          &lt;/value&gt;
+        &lt;/property&gt;
+      &lt;/configuration&gt;
+    &lt;/workflow&gt;
+  &lt;/action&gt;
+&lt;/coordinator-app&gt;
+</pre>
+<p>&nbsp;</p>
+<p>Note in the top-level entity that the app is configured to run once an hour using the <code>coord:hours(1)</code> method. Oozie includes a number of different methods for specifying frequency intervals, which can be found in the <a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/CoordinatorFunctionalSpec.html#a4.4._Frequency_and_Time-Period_Representation">documentation</a>. You also have to specify a start time and end time for the job, which are represented by the <code>jobStart</code> and <code>jobEnd</code>variables. You’ll see where those values come from a little later on.</p>
+<p>The second major component of the coordinator app is the <a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/CoordinatorFunctionalSpec.html#a5._Dataset">datasets</a> entity. A dataset specifies the location of a set of input data. In this case, there is a dataset called tweets, which is updated every hour, as specified by the frequency. For each execution of the Hive workflow, you will have a separate instance of the tweets dataset, starting with the initial instance specified by the dataset. A particular instance of a dataset is identified by its creation time in <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO-8601 format</a>, such as 2013-01-04T09:00Z. In this case, the location of the data is hdfs://hadoop1:8020/user/flume/tweets/${YEAR}/${MONTH}/${DAY}/${HOUR}.</p>
+<p>YEAR, MONTH, DAY, and HOUR are special variables that can be used to parameterize the URI template for the dataset. The done flag specifies a file that determines when the dataset is done being generated. The default value for this is <code>_SUCCESS</code>, which is the name of the file that a MapReduce job generates when it completes. For the purposes of this application, data was being ingested into HDFS via Flume, which does not generate a <code>_SUCCESS</code> file. Instead, the done flag is empty, which instructs Oozie that the dataset is considered ready when the directory exists. For this application, Flume is configured to write events to a different directory each hour.</p>
+<p>Having a completed dataset is one of the criteria for executing an instance of the Hive workflow. The other requirement is for any input events to be satisfied. Currently, Oozie is restricted to input events in the form of available datasets. This means that an input event will not be satisfied until a particular instance of a dataset exists. In the context of a more complex data pipeline, this means that a job can be configured to execute only after all of its input data has been successfully generated. For this coordinator app, the input events look like this:</p>
+<pre class="code" style="padding-left: 10px;">&lt;input-events&gt;
+  &lt;data-in name="tweetInput" dataset="tweets"&gt;
+    &lt;instance&gt;${coord:current(coord:tzOffset() / 60)}&lt;/instance&gt;
+  &lt;/data-in&gt;
+  &lt;data-in name="readyIndicator" dataset="tweets"&gt;
+    &lt;instance&gt;${coord:current(1 + (coord:tzOffset() / 60))}&lt;/instance&gt;
+  &lt;/data-in&gt;
+&lt;/input-events&gt;
+</pre>
+<p>&nbsp;</p>
+<p>There are a number of things going on here: we have two distinct input events, and each of them is specified by an Oozie built-in function. Let’s break down the built-in function:</p>
+<pre class="code" style="padding-left: 10px;">${coord:current(coord:tzOffset() / 60)}
+</pre>
+<p>&nbsp;</p>
+<p><code>coord:tzOffset()</code>is a function that returns the offset, in minutes, from UTC, of the timezone of the machine executing the workflow. In order to get the number of hours offset from UTC, we divide by 60.</p>
+<p><code>coord:current(n)</code> will return the timestamp representing the nth instance for a dataset. For example, if the time were 2013-01-17 at midnight UTC, then <code>coord:current(0)</code> would return 2013-01-17T00:00Z. For the tweets dataset, which has an hourly frequency, <code>coord:current(1)</code> would evaluate to 2013-01-17T01:00Z. However, if the tweets dataset had a frequency of <code>coord:days(1)</code>, <code>coord:current(1)</code> would evaluate to 2013-01-18T00:00Z.</p>
+<p>Putting these two pieces together, you can see that function used to determine the <code>tweetInput</code> input event is going to evaluate to the current dataset instance for your machine’s local timezone. Making a logical leap, the <code>readyIndicator</code> input event refers to the dataset instance immediately after the current one, both in your local timezone.</p>
+<p>In order to understand why the <code>readyIndicator</code> event exists, let&#8217;s revisit the <code>done</code> flag for the tweets dataset. Since Flume does not create an indicator file when it’s finished writing to a particular directory, we left the flag empty to specify that an instance of the tweets dataset would exist when a directory exists. Since Flume will immediately begin writing to a new directory each hour, this means is that the current instance of the tweets dataset is really not ready for processing until Flume has started writing the next hour’s directory. You can ensure that the current instance is ready by using the readyIndicator event to ensure that Flume has started writing the next instance of the tweets dataset.</p>
+<p>The final section of the coordinator app is the action, which contains the details of what will be executed:</p>
+<pre class="code" style="padding-left: 10px;">&lt;action&gt;
+    &lt;workflow&gt;
+      &lt;app-path&gt;${workflowRoot}/add-partition-hive-action.xml&lt;/app-path&gt;
+      &lt;configuration&gt;
+        &lt;property&gt;
+          &lt;name&gt;workflowInput&lt;/name&gt;
+          &lt;value&gt;${coord:dataIn('tweetInput')}&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property&gt;
+      	   &lt;name&gt;dateHour&lt;/name&gt;
+      	   &lt;value&gt;
+            ${coord:formatTime(coord:dateOffset(coord:nominalTime(), tzOffset, 'HOUR'), 'yyyyMMddHH')}
+          &lt;/value&gt;
+    	 &lt;/property&gt;
+      &lt;/configuration&gt;
+    &lt;/workflow&gt;
+  &lt;/action&gt;
+</pre>
+<p>&nbsp;</p>
+<p>The action specifies a workflow that will be executed, as well as any configuration properties that the workflow will need in order to execute. For this worfklow, we’ve specified <code>workflowInput</code> and <code>dateHour</code>. The function used to generate workflowInput, <code>coord:dataIn('tweetInput')</code>, will evaluate to the URI of the current tweetInput instance. To illustrate this, let’s consider an example:</p>
+<p>The time is 2013-01-04 5:00 PM in the Pacific timezone. Then the current tweetInput instance time will be 2013-01-04T09:00Z, since Pacific time is offset by -8 hours from UTC. The <code>tweetInput</code> event is linked to the tweets dataset, so the HDFS URI that is returned by the coord:dataIn function is hdfs://hadoop1:8020/user/flume/tweets/2013/01/04/09.</p>
+<p>The <code>dateHour</code> parameter will be used to generate the partition that we will be adding. In the Hive table, the partition is an integer representing the year, month, day, and hour in the form ‘yyyyMMddHH’. To generate the appropriate value, we use another function:<code> coord:formatTime(coord:dateOffset(coord:nominalTime(), tzOffset, 'HOUR'), 'yyyyMMddHH')</code>.</p>
+<p>Considering the same example as above, the <code>coord:nominalTime() </code>function will return the time when the coordinator action was created. Since the coordinator app has a frequency of one hour, this time will be somewhere between 2013-01-04 5:00 PM and 2013-01-04 5:59 PM (Pacific Time), depending on when the coordinator app was started. The <code>coord:dateOffset</code> function will take that nominal time, and offset the hours by our timezone offset, which is -8, so we’ll end up with a timestamp of the form 2013-01-04T09:XXZ, where XX is something between 00 and 59. Finally, the coord:formatTime function will translate the timestamp to a string 2013010409, which Hive will be able to convert to the integer partition value.</p>
+<p>When all is said and done, this particular coordinator action would run these Hive commands:</p>
+<pre class="code" style="padding-left: 10px;">ALTER TABLE tweets
+    ADD IF NOT EXISTS
+    PARTITION (datehour = 2013010409)
+    LOCATION 'hdfs://hadoop1:8020/user/flume/tweets/2013/01/04/09';
+</pre>
+<p>&nbsp;</p>
+<p>You still need one last piece to fill in the remaining variables, such as <code>jobStart</code>, <code>jobEnd</code>, and <code>workflowRoot</code>. That piece is the job.properties file:</p>
+<pre class="code" style="padding-left: 10px;">nameNode=hdfs://hadoop1:8020
+jobTracker=hadoop1:8021
+workflowRoot=${nameNode}/user/${user.name}/add-tweet-partitions
+
+# jobStart and jobEnd should be in UTC, because Oozie uses UTC for
+# processing coordinator jobs by default (and it is not recommended
+# to change this)
+jobStart=2013-01-04T22:00Z
+jobEnd=2013-12-12T23:00Z
+
+# Timezone offset between UTC and the server timezone
+tzOffset=-8
+
+# This should be set to an hour boundary, and should be set to a time
+# of jobStart + tzOffset or earlier.
+initialDataset=2013-01-04T14:00Z
+
+# Adds a default system library path to the workflow’s classpath
+# Used to allow workflows to access the Oozie Share Lib, which includes
+# the Hive action
+oozie.use.system.libpath=true
+
+# HDFS path of the coordinator app
+oozie.coord.application.path=${nameNode}/user/${user.name}/add-tweet-partitions/add-partition-coord-app.xml
+</pre>
+<p>&nbsp;</p>
+<p>You can see here where the remaining variables are set: One variable of note, user.name, is actually an Oozie built-in variable, and evaluates to the name of the user running the coordinator app. A directory must exist in HDFS with all the necessary files and external JAR files for running the application. In this app, <code>workflowRoot</code>points to the location where that directory exists.</p>
+<h2>Running the Coordinator Application</h2>
+<p>In order to run the coordinator app, you first have to stage the necessary files in HDFS. The files should be put in HDFS according to their defined locations in the XML files. In this example, all the files are located in the same directory: /user/${user.name}/add-tweet-partitions. That directory will also need to have a lib subdirectory in it. The lib directory can be used to make any dependency JARs available to the workflow. For example, Hive actions will usually require a JDBC driver, in order to communicate with a non-Derby metastore, and for the example in this article, the lib directory will contain the custom SerDe JAR file, as well.</p>
+<pre class="code" style="padding-left: 10px;">[natty@frumious ~]$ hadoop fs -ls /user/natty/add-tweet-partitions
+  Found 5 items
+  -rw-r--r--   3 natty natty        938 2012-12-27 09:37 /user/natty/add-tweet-partitions/add_partition_hive_script.q
+  -rw-r--r--   3 natty natty       2533 2012-12-27 09:37 /user/natty/add-tweet-partitions/add-partition-coord-app.xml
+  -rw-r--r--   3 natty natty       1918 2012-12-27 09:37 /user/natty/add-tweet-partitions/add-partition-hive-action.xml
+  -rw-r--r--   3 natty natty       1386 2012-12-27 09:37 /user/natty/add-tweet-partitions/job.properties
+  drwxr-xr-x   - natty natty          0 2012-12-27 09:38 /user/natty/add-tweet-partitions/lib
+
+[natty@frumious ~]$ hadoop fs -ls /user/natty/add-tweet-partitions/lib
+ Found 2 items
+  -rw-r--r--   3 natty natty     236141 2012-12-27 09:38 /user/natty/add-tweet-partitions/lib/hive-serdes-1.0-SNAPSHOT.jar
+  -rw-r--r--   3 natty natty     758452 2012-12-27 09:38 /user/natty/add-tweet-partitions/lib/mysql-connector-java.jar
+</pre>
+<p>&nbsp;</p>
+<p>In order to run the coordinator app, the job.properties file should be stored locally, and the following command should be run:</p>
+<pre class="code" style="padding-left: 10px;">$ oozie job -oozie http://:/oozie -config add-tweet-partitions/job.properties -run
+</pre>
+<p>&nbsp;</p>
+<p>That command will return the name of the job, which can be used to get status updates on the job, either via the web UI or the <a href="http://archive.cloudera.com/cdh4/cdh/4/oozie/DG_CommandLineTool.html">command line tool</a>.</p>
+<p>Once executed, the coordinator app will create and run instances of the workflow each hour, and data will automatically become queryable through Hive as the partitions get created.</p>
+<h2>Conclusion</h2>
+<p>Oozie is a versatile system that can be used to set up and automate even the most complicated of data processing workflows. Also, check out the recently added <a href="http://blog.cloudera.com/blog/2012/10/whats-new-in-cdh4-1-hue/">workflow and coordinator app creation UI in </a><a href="http://blog.cloudera.com/blog/2012/10/whats-new-in-cdh4-1-hue/">Hue</a>, which makes it much easier to design and execute complicated data flows.</p>
+<p>This how-to is certainly not comprehensive, and there are lots of other features in Oozie that haven’t been discussed. I encourage you to go and try to build your own Oozie workflows and coordinator apps, and explore some different features.</p>
+<p><em>Jon Natkins is a field engineer at WibiData. Formerly, he worked as a software engineer at Cloudera.</em></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/guest/" title="View all posts in Guest" rel="category tag">Guest</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/hive/" title="View all posts in Hive" rel="category tag">Hive</a></li>
+	<li><a href="http://blog.cloudera.com/blog/category/oozie/" title="View all posts in Oozie" rel="category tag">Oozie</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>1 Response</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Anne</a> /
+			February 11, 2013 / 12:30 AM		</em>
+		<p>I keep getting a &#8220;The matching wildcard is strict, but no declaration can be found for element &#8216;hive&#8217;.&#8221; error.  Been searching around the web for solutions, and I already checked my Oozie config (oozie-site.xml and using the Cloudera manager) and the required .xsd files are declared there.  </p>
+<p>Any idea on what could be causing this?  I&#8217;m on CDH 4.1.3. Thanks!</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='19927' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="QvE=" />
+		<input type="hidden" name="cptch_time" value="1398162790" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &minus; &#116;&#119;o = 5	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>

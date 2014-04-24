@@ -1,0 +1,1091 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+<title>7 Tips for Improving MapReduce Performance | Cloudera Developer Blog</title>
+
+<meta name="keywords" content="hadoop, hadoop training, cloudera, hadoop tutorial, hadoop certification, apache hadoop, hadoop download, big data, open source" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="msvalidate.01" content="8857B9071A02F989DE3F8BEE557BB584" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="/assets/opensearch.xml" title="Cloudera" />
+
+<meta property="og:title" content="7 Tips for Improving MapReduce Performance"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="http://blog.cloudera.com/blog/2009/12/7-tips-for-improving-mapreduce-performance/"/>
+<meta property="og:site_name" content="Cloudera Developer Blog"/>
+
+
+<link rel="icon" href="/wp-content/themes/solutionset/assets/favicon.ico" type="image/x-icon" /> 
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/960.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/reset.css?070910" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/all.css?20120620" />
+<link rel="stylesheet" media="all" type="text/css" href="/wp-content/themes/solutionset/assets/css/wp.css?20120620" /> 
+
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie6-7.css?20120605" media="screen"/><![endif]-->
+<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="http://blog.cloudera.com/wp-content/themes/solutionset/assets/css/ie.css?20120605" media="screen"/><![endif]-->
+
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/modernizr-2.6.1.min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/mootools-1.2.4.4-more-yui.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript"> jQuery.noConflict(); </script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="/wp-content/themes/solutionset/assets/js/global.js?20120605"></script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-aa86c136-1042-b30d-950-dd905bb179a0", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+
+<link rel="pingback" href="http://blog.cloudera.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Feed" href="http://blog.cloudera.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; Comments Feed" href="http://blog.cloudera.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Cloudera Developer Blog &raquo; 7 Tips for Improving MapReduce Performance Comments Feed" href="http://blog.cloudera.com/blog/2009/12/7-tips-for-improving-mapreduce-performance/feed/" />
+<link rel='stylesheet' id='prettify-gc-syntax-highlighter-css'  href='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.css?ver=3.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='cptchStylesheet-css'  href='http://blog.cloudera.com/wp-content/plugins/captcha/css/style_wp_before_3.8.css?ver=3.3.2' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.cloudera.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.cloudera.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Observers: Making ZooKeeper Scale Even Further' href='http://blog.cloudera.com/blog/2009/12/observers-making-zookeeper-scale-even-further/' />
+<link rel='next' title='Hadoop World: Hadoop Applications at Yahoo!' href='http://blog.cloudera.com/blog/2009/12/hadoop-world-hadoop-applications-at-yahoo/' />
+<meta name="generator" content="WordPress 3.3.2" />
+<link rel='canonical' href='http://blog.cloudera.com/blog/2009/12/7-tips-for-improving-mapreduce-performance/' />
+<link rel='shortlink' href='http://blog.cloudera.com/?p=1723' />
+
+
+<script type="text/javascript">
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-2275969-16']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+</script>
+
+
+</head>
+<body class="single single-post postid-1723 single-format-standard devcenter">
+			
+		
+			
+	<header id="site-head">
+<nav class="properties">
+            <div class="container">
+                <ul>
+                    <!--<li><a href="http://www.cloudera.com">Cloudera.com</a></li>-->
+                     <!--<li><a href="http://university.cloudera.com">Cloudera University</a></li>
+                   <li><a href="${config.LINK_CCP}/display/DOC/Documentation">Documentation</a></li>-->
+                    <li><a id="support_home_page" href="http://cloudera.com/content/support/en/home.html" class="active">Support</a></li>
+                    <li><a href="http://cloudera.com/content/dev-center/en/home.html">Developers</a></li>
+                  <!--<li><a href="http://cloudera.com/content/cloudera/en/partners.html">PARTNERS</a></li>-->
+                   
+                </ul>
+                <ul class="user">
+                    <li>
+                       <!--<a id="signinLink" class="hidden" href="https://clouderapkb.echolane.cs3.force.com/idp/login?app=0spQ00000004CD5">Sign In</a>-->
+<a id="signinLink" class="hidden" href="https://cloudera.secure.force.com">Sign In</a>
+                    </li>
+                    <li><a id="registerLink" class="hidden" href="http://cloudera.com/content/support/en/user-registration.html">Register</a></li>
+                    <li><a href="http://cloudera.com/content/cloudera/en/about/contact-us.html">Contact Us</a></li>
+                    <li><a href="http://cloudera.com/content/support/en/downloads.html">Downloads</a></li>
+                    <li>
+                        <div id="dropdownAction" class="dropdown" style="display:none">
+                            <a id="lnkDropdowntoogle" data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            </a>
+                            <ul aria-labelledby="dropdownMenu" tole="menu" class="dropdown-menu">
+                                <li><a href="http://cloudera.com/content/support/en/edit-user-profile.html" id="editProfileLink" tabindex="-1">Edit Profile</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                <a id="logoutLink" tabindex="-1" href="#">Logout</a>
+                                </script>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-fix"></div>
+        </nav>
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="bg-fix"></div>
+    <h1 class="logo">
+        <a href="http://cloudera.com/content/cloudera/en/home.html">Cloudera</a>
+    </h1>
+
+<nav class="site">
+        <ul>
+    <li class="">
+ <a href="http://community.cloudera.com" data-link="external">Community</a>
+</li>
+<li class="">
+ <a href="http://cloudera.com/content/support/en/documentation.html" data-link="external">Documentation</a>
+</li>
+ <li class="">
+                    <a href="http://cloudera.com/content/support/en/downloads.html" data-link="external">Downloads</a>
+   </li>
+     <li class="">
+                    <a href="http://university.cloudera.com" data-link="external">Training</a>
+     </li>
+<li class="">
+                    <a href="http://blog.cloudera.com" data-link="external" class="active">Blogs</a>
+                    <nav class="subnav menu"> <nav><ul>
+<li><a href="http://vision.cloudera.com">Cloudera Vision</a></li>
+<!--<li><a href="http://blog.cloudera.com/blog">Developer Blog</a></li>-->
+</ul>
+</nav> </nav>
+</li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="form-holder">
+		
+	    <form action="http://cloudera.com/content/cloudera/en/search.html" id="site-search" method="get" novalidate> 
+	        <label for="q" class="visuallyhidden">Search</label> 
+	        <input type="search" name="q" id="q" placeholder="Search"><i class="icon-search"></i> 
+	    </form>
+    </div>
+    </div><!--</div>-->
+        </header>
+				
+	<div role="main" class="main">
+		<div class="wrapper">
+			<section class="two-col">
+
+	
+<aside class="left-col">
+
+				<nav>
+			<ul class=" ">
+			
+								
+							<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/hadoop-and-big-data.html"
+					title="Hadoop &amp; Big Data"
+					class=""
+					target="_blank"				>
+					Hadoop &amp; Big Data				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/our-customers.html"
+					title="Our Customers"
+					class=""
+					target="_blank"				>
+					Our Customers				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="http://www.cloudera.com/content/cloudera/en/why-cloudera/faqs.html"
+					title="FAQs"
+					class=""
+					target="_blank"				>
+					FAQs				</a>
+
+							</li>
+			
+					<li class="current">
+				<a
+					href="/blog/"
+					title="Blog"
+					class="blog"
+									>
+					Blog				</a>
+
+									<ul>
+									<li class="">
+				<a
+					href="/blog/category/accumulo/"
+					title="Accumulo (1)"
+					class=""
+									>
+					Accumulo (1)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/avro/"
+					title="Avro (16)"
+					class=""
+									>
+					Avro (16)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/bigtop/"
+					title="Bigtop (6)"
+					class=""
+									>
+					Bigtop (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/books/"
+					title="Books (6)"
+					class=""
+									>
+					Books (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/careers/"
+					title="Careers (14)"
+					class=""
+									>
+					Careers (14)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cdh/"
+					title="CDH (127)"
+					class=""
+									>
+					CDH (127)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloud-2/"
+					title="Cloud (9)"
+					class=""
+									>
+					Cloud (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-life/"
+					title="Cloudera Life (3)"
+					class=""
+									>
+					Cloudera Life (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/cloudera-manager/"
+					title="Cloudera Manager (61)"
+					class=""
+									>
+					Cloudera Manager (61)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/community/"
+					title="Community (182)"
+					class=""
+									>
+					Community (182)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-collection/"
+					title="Data Collection (17)"
+					class=""
+									>
+					Data Collection (17)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/data-science/"
+					title="Data Science (26)"
+					class=""
+									>
+					Data Science (26)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/distribution/"
+					title="Distribution (36)"
+					class=""
+									>
+					Distribution (36)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/events/"
+					title="Events (37)"
+					class=""
+									>
+					Events (37)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/flume/"
+					title="Flume (18)"
+					class=""
+									>
+					Flume (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/general/"
+					title="General (327)"
+					class=""
+									>
+					General (327)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/guest/"
+					title="Guest (77)"
+					class=""
+									>
+					Guest (77)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hadoop/"
+					title="Hadoop (294)"
+					class=""
+									>
+					Hadoop (294)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hardware/"
+					title="Hardware (3)"
+					class=""
+									>
+					Hardware (3)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hbase/"
+					title="HBase (124)"
+					class=""
+									>
+					HBase (124)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hdfs/"
+					title="HDFS (45)"
+					class=""
+									>
+					HDFS (45)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hive/"
+					title="Hive (62)"
+					class=""
+									>
+					Hive (62)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/how-to/"
+					title="How-to (53)"
+					class=""
+									>
+					How-to (53)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/hue/"
+					title="Hue (30)"
+					class=""
+									>
+					Hue (30)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/impala/"
+					title="Impala (63)"
+					class=""
+									>
+					Impala (63)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/kite-sdk/"
+					title="Kite SDK (11)"
+					class=""
+									>
+					Kite SDK (11)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mahout-2/"
+					title="Mahout (5)"
+					class=""
+									>
+					Mahout (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/mapreduce/"
+					title="MapReduce (71)"
+					class=""
+									>
+					MapReduce (71)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/meet-the-engineer/"
+					title="Meet The Engineer (18)"
+					class=""
+									>
+					Meet The Engineer (18)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/oozie/"
+					title="Oozie (25)"
+					class=""
+									>
+					Oozie (25)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/ops/"
+					title="Ops And DevOps (19)"
+					class=""
+									>
+					Ops And DevOps (19)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/pig/"
+					title="Pig (35)"
+					class=""
+									>
+					Pig (35)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/quickstart-vm/"
+					title="QuickStart VM (5)"
+					class=""
+									>
+					QuickStart VM (5)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/search/"
+					title="Search (21)"
+					class=""
+									>
+					Search (21)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/security-2/"
+					title="Security (15)"
+					class=""
+									>
+					Security (15)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/spark/"
+					title="Spark (9)"
+					class=""
+									>
+					Spark (9)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/sqoop/"
+					title="Sqoop (20)"
+					class=""
+									>
+					Sqoop (20)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/support/"
+					title="Support (4)"
+					class=""
+									>
+					Support (4)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/testing/"
+					title="Testing (8)"
+					class=""
+									>
+					Testing (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/this-month-in-the-ecosystem/"
+					title="This Month In The Ecosystem (8)"
+					class=""
+									>
+					This Month In The Ecosystem (8)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/tools/"
+					title="Tools (6)"
+					class=""
+									>
+					Tools (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/training-2/"
+					title="Training (42)"
+					class=""
+									>
+					Training (42)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/use-case/"
+					title="Use Case (59)"
+					class=""
+									>
+					Use Case (59)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/whirr/"
+					title="Whirr (6)"
+					class=""
+									>
+					Whirr (6)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/yarn/"
+					title="YARN (13)"
+					class=""
+									>
+					YARN (13)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/blog/category/zookeeper/"
+					title="ZooKeeper (24)"
+					class=""
+									>
+					ZooKeeper (24)				</a>
+
+							</li>
+			
+					<li class="">
+				<a
+					href="/archive/"
+					title="Archives by Month"
+					class=""
+									>
+					Archives by Month				</a>
+
+							</li>
+			
+							</ul>
+							</li>
+			
+						
+			    
+			
+				<div style="clear:both"></div>
+			</ul>
+			</nav>
+			<div class="menu-special">
+				<ul>
+							
+				
+				
+		
+				
+		
+				
+				
+				
+				
+
+		
+					</ul>
+			</div>
+			
+</aside>
+
+
+<section>
+			<h1 class="heading ">7 Tips for Improving MapReduce Performance</h1>
+			
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			
+			<ul class="post-info">
+				<li>by <a href="http://blog.cloudera.com/blog/author/todd/" title="Posts by Todd Lipcon (@tlipcon)" rel="author">Todd Lipcon (@tlipcon)</a></li>
+				<li>December 17, 2009</li>
+				<li class="comment"><a href="#comments">14 comments</a></li>
+				
+			</ul>
+			
+			<div class="text-block">
+				<p>One service that Cloudera provides for our customers is help with tuning and optimizing MapReduce jobs. Since MapReduce and HDFS are complex distributed systems that run arbitrary user code, there&#8217;s no hard and fast set of rules to achieve optimal performance; instead, I tend to think of tuning a cluster or job much like a doctor would treat a sick human being. There are a number of key symptoms to look for, and each set of symptoms leads to a different diagnosis and course of treatment.</p>
+<p>In medicine, there&#8217;s no automatic process that can replace the experience of a well seasoned doctor. The same is true with complex distributed systems &#8212; experienced users and operators often develop a &#8220;sixth sense&#8221; for common issues. Having worked with Cloudera customers in a number of different industries, each with a different workload, dataset, and cluster hardware, I&#8217;ve accumulated a bit of this experience, and would like to share some with you today.</p>
+<p>In this blog post, I&#8217;ll highlight a few tips for improving MapReduce performance. The first few tips are cluster-wide, and will be useful for operators and developers alike. The latter tips are for developers writing custom MapReduce jobs in Java. For each tip, I&#8217;ll also note a few of the &#8220;symptoms&#8221; or &#8220;diagnostic tests&#8221; that indicate a particular remedy might bring you some good improvements.</p>
+<p>Please note, also, that these tips contain lots of rules of thumb based on my experience across a variety of situations. They may not apply to your particular workload, dataset, or cluster, and you should always benchmark your jobs before and after any changes. For these tips, I&#8217;ll show some comparative numbers for a 40GB wordcount job on a small 4-node cluster. Tuned optimally, each of the map tasks in this job runs in about 33 seconds, and the total job runtime is about 8m30s.</p>
+<h2>Tip 1) Configure your cluster correctly</h2>
+<p><strong>Diagnostics/symptoms:</strong></p>
+<ul>
+<li><code>top</code> shows slave nodes fairly idle even when all map and reduce task slots are filled up running jobs.</li>
+<li><code>top</code> shows kernel processes like RAID (<code>mdX_raid*</code>) or <code>pdflush</code> taking most of the CPU time.</li>
+<li>Linux load averages are often seen more than twice the number of CPUs on the system.</li>
+<li>Linux load averages stay less than half the number of CPUs on the system, even when running jobs.</li>
+<li>Any swap usage on nodes beyond a few MB.</li>
+</ul>
+<p>The first step to optimizing your MapReduce performance is to make sure your cluster configuration has been tuned. For starters, check out our earlier <a href="http://blog.cloudera.com/blog/2009/03/30/configuration-parameters-what-can-you-just-ignore/">blog post on configuration parameters</a>. In addition to those knobs in the Hadoop configuration, here are a few more checklist items you should go through before beginning to tune the performance of an individual job:</p>
+<ul>
+<li>Make sure the mounts you&#8217;re using for DFS and MapReduce storage have been mounted with the <code>noatime</code> option. This disables access time tracking and can improve IO performance.</li>
+<li>Avoid RAID and LVM on TaskTracker and DataNode machines &#8211; it generally reduces performance.</li>
+<li>Make sure you&#8217;ve configured <code>mapred.local.dir</code> and <code>dfs.data.dir</code> to point to one directory on each of your disks to ensure that all of your IO capacity is used. Run <code>iostat -dx 5</code> from the <code>sysstat</code> package while the cluster is loaded to make sure each disk shows utilization.</li>
+<li>Ensure that you have <a href="http://en.wikipedia.org/wiki/S.M.A.R.T.">SMART</a> monitoring for the health status of your disk drives. MapReduce jobs are fault tolerant, but dying disks can cause performance to degrade as tasks must be re-executed. If you find that a particular TaskTracker becomes blacklisted on many job invocations, it may have a failing drive.</li>
+<li>Monitor and graph swap usage and network usage with software like <a href="http://ganglia.info/">Ganglia</a>. <a href="http://blog.cloudera.com/blog/2009/03/12/hadoop-metrics/">Monitoring Hadoop metrics</a> in Ganglia is also a good idea. If you see swap being used, reduce the amount of RAM allocated to each task in <code>mapred.child.java.opts</code>.</li>
+</ul>
+<p><strong>Benchmarks:</strong></p>
+<p>Unfortunately I was not able to perform benchmarks for this tip, as it would involve re-imaging the cluster. If you have had relevant experience, feel free to leave a note in the Comments section below.</p>
+<h2>Tip 2) Use LZO Compression</h2>
+<p><strong>Diagnostics/symptoms:</strong></p>
+<ul>
+<li>This is almost always a good idea for intermediate data! In the doctor analogy, consider LZO compression your vitamins.</li>
+<li>Output data size of MapReduce job is nontrivial.</li>
+<li>Slave nodes show high <code>iowait</code> utilization in <code>top</code> and <code>iostat</code> when jobs are running.</li>
+</ul>
+<p>Almost every Hadoop job that generates an non-negligible amount of map output will benefit from intermediate data compression with LZO. Although LZO adds a little bit of CPU overhead, the reduced amount of disk IO during the shuffle will usually save time overall.</p>
+<p>Whenever a job needs to output a significant amount of data, LZO compression can also increase performance on the output side. Since writes are replicated 3x by default, each GB of output data you save will save 3GB of disk writes.<br />
+In order to enable LZO compression, check out our <a href="http://blog.cloudera.com/blog/2009/11/17/hadoop-at-twitter-part-1-splittable-lzo-compression/">recent guest blog from Twitter</a>. Be sure to set <code>mapred.compress.map.output</code> to <code>true</code>.</p>
+<p><strong>Benchmarks:</strong></p>
+<p>Disabling LZO compression on the wordcount example increased the job runtime only slightly on our cluster. The <code>FILE_BYTES_WRITTEN</code> counter increased from 3.5GB to 9.2GB, showing that the compression yielded a 62% decrease in disk IO. Since this job was not sharing the cluster, and each node has a high ratio of number of disks to number of tasks, IO is not the bottleneck here, and thus the improvement was not substantial. On clusters where disks are pegged due to a lot of concurrent activity, a 60% reduction in IO can yield a substantial improvement in job completion speed.</p>
+<h2>Tip 3) Tune the number of map and reduce tasks appropriately</h2>
+<p><strong>Diagnostics/symptoms:</strong></p>
+<ul>
+<li>Each map or reduce task finishes in less than 30-40 seconds.</li>
+<li>A large job does not utilize all available slots in the cluster.</li>
+<li>After most mappers or reducers are scheduled, one or two remains pending and then runs all alone.</li>
+</ul>
+<p>Tuning the number of map and reduce tasks for a job is important and easy to overlook. Here are some rules of thumb I use to set these parameters:</p>
+<ul>
+<li>If each task takes less than 30-40 seconds, reduce the number of tasks. The task setup and scheduling overhead is a few seconds, so if tasks finish very quickly, you&#8217;re wasting time while not doing work. JVM reuse can also be enabled to solve this problem.</li>
+<li>If a job has more than 1TB of input, consider increasing the block size of the input dataset to 256M or even 512M so that the number of tasks will be smaller. You can change the block size of existing files with a command like <code>hadoop distcp -Ddfs.block.size=$[256*1024*1024] /path/to/inputdata /path/to/inputdata-with-largeblocks</code>. After this command completes, you can remove the original data.</li>
+<li>So long as each task runs for at least 30-40 seconds, increase the number of mapper tasks to some multiple of the number of mapper slots in the cluster. If you have 100 map slots in your cluster, try to avoid having a job with 101 mappers &#8211; the first 100 will finish at the same time, and then the 101st will have to run alone before the reducers can run. This is more important on small clusters and small jobs.</li>
+<li>Don&#8217;t schedule too many reduce tasks &#8211; for most jobs, we recommend a number of reduce tasks equal to or a bit less than the number of reduce slots in the cluster.</li>
+</ul>
+<p><strong>Benchmarks:</strong></p>
+<p>To make the wordcount job run with too many tasks, I ran it with the argument <code>-Dmapred.max.split.size=$[16*1024*1024]</code>. This yielded 2640 tasks instead of the 360 that the framework chose by default. When running with this setting, each task took about 9 seconds, and watching the Cluster Summary view on the JobTracker showed the number of running maps fluctuating between 0 and 24 continuously throughout the job. The entire job finished in 17m52s, more than twice as slow as the original job.</p>
+<h2>Tip 4) Write a Combiner</h2>
+<p><strong>Diagnostics/symptoms:</strong></p>
+<ul>
+<li>A job performs aggregation of some sort, and the <em>Reduce input groups</em> counter is significantly smaller than the <em>Reduce input records</em> counter.</li>
+<li>The job performs a large shuffle (e.g. map output bytes is multiple GB per node)</li>
+<li>The number of <em>spilled records</em> is many times larger than the number of <em>map output records</em> as seen in the Job counters.</li>
+</ul>
+<p>If your algorithm involves computing aggregates of any sort, chances are you can use a Combiner in order to perform some kind of initial aggregation before the data hits the reducer. The MapReduce framework runs combiners intelligently in order to reduce the amount of data that has to be written to disk and transfered over the network in between the Map and Reduce stages of computation.</p>
+<p><strong>Benchmarks:</strong></p>
+<p>I modified the word count example to remove the call to <code>setCombinerClass</code>, and otherwise left it the same. This changed the average map task run time from 33s to 48s, and increased the amount of shuffled data from 1GB to 1.4GB. The total job runtime increased from 8m30s to 15m42s, nearly a factor of two. Note that this benchmark was run with map output compression enabled &#8211; without map output compression, the effect of the combiner would have been even more important.</p>
+<h2>Tip 5) Use the most appropriate and compact Writable type for your data</h2>
+<p><strong>Symptoms/diagnostics:</strong></p>
+<ul>
+<li><code>Text</code> objects are used for working with non-textual or complex data</li>
+<li><code>IntWritable</code> or <code>LongWritable</code> objects are used when most output values tend to be significantly smaller than the maximum value.</li>
+</ul>
+<p>When users are new to programming in MapReduce, or are switching from Hadoop Streaming to Java MapReduce, they often use the <code><a href="http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/Text.html">Text</a></code> writable type unnecessarily. Although <code>Text</code> can be convenient, converting numeric data to and from UTF8 strings is inefficient and can actually make up a significant portion of CPU time. Whenever dealing with non-textual data, consider using the binary Writables like <code><a href="http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/IntWritable.html">IntWritable</a></code>, <code><a href="http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/FloatWritable.html">FloatWritable</a></code>, etc.</p>
+<p>In addition to avoiding the text parsing overhead, the binary Writable types will take up less space as intermediate data. Since disk IO and network transfer will become a bottleneck in large jobs, reducing the sheer number of bytes taken up by the intermediate data can provide a substantial performance gain. When dealing with integers, it can also sometimes be faster to use <code><a href="http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/VIntWritable.html">VIntWritable</a></code> or <code><a href="http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/VLongWritable.html">VLongWritable</a></code> &#8212; these implement variable-length integer encoding which saves space when serializing small integers. For example, the value 4 will be serialized in a single byte, whereas the value 10000 will be serialized in two. These variable length numbers can be very effective for data like counts, where you expect that the majority of records will have a small number that fits in one or two bytes.</p>
+<p>If the Writable types that ship with Hadoop don&#8217;t fit the bill, consider writing your own. It&#8217;s pretty simple, and will be significantly faster than parsing text. If you do so, make sure to provide a <code><a href="http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/RawComparator.html">RawComparator</a></code> &#8212; see the source code for the built in Writables for an example.</p>
+<p>Along the same vein, if your MapReduce job is part of a multistage workflow, use a binary format like <code><a href="http://hadoop.apache.org/common/docs/current/api/org/apache/hadoop/io/SequenceFile.html">SequenceFile</a></code> for the intermediate steps, even if the last stage needs to output text. This will reduce the amount of data that needs to be materialized along the way.</p>
+<p><strong>Benchmarks:</strong></p>
+<p>For the example word count job, I modified the intermediate count values to be <code>Text</code> type rather than <code>IntWritable</code>. In the reducer, I used <code>Integer.parseString(value.toString())</code> when accumulating the sum. The performance of the suboptimal version of the WordCount was about 10% slower than the original. The full job ran in a bit over 9 minutes, and each map task took 36 seconds instead of the original 33. Since integer parsing is itself rather fast, this did not represent a large improvement; in the general case, I have seen using more efficient Writables to make as much as a 2-3x difference in performance.</p>
+<h2>Tip 6) Reuse Writables</h2>
+<p><strong>Symptoms/diagnostics:</strong></p>
+<ul>
+<li>Add <code>-verbose:gc -XX:+PrintGCDetails</code> to <code>mapred.child.java.opts</code>. Then inspect the logs for some tasks. If garbage collection is frequent and represents a lot of time, you may be allocating unnecessary objects.</li>
+<li>grep for &#8220;<code>new Text</code>&#8221; or &#8220;<code>new IntWritable</code>&#8221; in your code base. If you find this in an inner loop, or inside the <code>map</code> or <code>reduce</code> functions this tip may help.</li>
+<li>This tip is especially helpful when your tasks are constrained in RAM.</li>
+</ul>
+<p>One of the first mistakes that many MapReduce users make is to allocate a new <code>Writable</code> object for every output from a mapper or reducer. For example, one might implement a word-count mapper like this:</p>
+<pre>public void map(...) {
+  ...
+  for (String word : words) {
+    output.collect(new Text(word), new IntWritable(1));
+  }
+}</pre>
+<p>This implementation causes thousands of very short-lived objects to be allocated. While the Java garbage collector does a reasonable job at dealing with this, it is more efficient to write:</p>
+<pre>class MyMapper ... {
+ &#160;Text wordText = new Text();
+  IntWritable one = new IntWritable(1);
+  public void map(...) {
+    ...
+    for (String word : words) {
+      wordText.set(word);
+      output.collect(word, one);
+    }
+  }
+}</pre>
+<p><strong>Benchmarks:</strong></p>
+<p>When I modified the word count example as described above, I initially found it made no difference in the run time of the job. This is because this cluster&#8217;s default settings include a 1GB heap size for each task, so garbage collection never ran. However, running it with each task allocated only 200mb of heap size showed a drastic slowdown in the version that did not reuse Writables &#8212; the total job runtime increased from around 8m30s to over 17 minutes. The original version, which does reuse Writables, stayed the same speed even with the smaller heap. Since reusing Writables is an easy fix, I recommend always doing so &#8211; it may not bring you a gain for every job, but if you&#8217;re low on memory it can make a huge difference.</p>
+<h2>Tip 7) Use &#8220;Poor Man&#8217;s Profiling&#8221; to see what your tasks are doing</h2>
+<p>This is a trick I almost always use when first looking at the performance of a MapReduce job. Profiling purists will disagree and say that this won&#8217;t work, but you can&#8217;t argue with results!</p>
+<p>In order to do what I call &#8220;poor man&#8217;s profiling&#8221;, <code>ssh</code> into one of your slave nodes while some tasks from a slow job are running. Then simply run <code>sudo killall -QUIT java</code> 5-10 times in a row, each a few seconds apart. Don&#8217;t worry &#8212; this doesn&#8217;t cause anything to quit, despite the name. Then, use the JobTracker interface to navigate to the <code>stdout</code> logs for one of the tasks that&#8217;s running on this node, or look in <code>/var/log/hadoop/userlogs/</code> for a <code>stdout</code> file of a task that is currently running. You&#8217;ll see stack trace output from each time you sent the <code>SIGQUIT</code> signal to the JVM.</p>
+<p>It takes a bit of experience to parse this output, but here&#8217;s the method I usually use:</p>
+<ol>
+<li>For each thread in the trace, quickly scan for the name of your Java package (e.g. com.mycompany.mrjobs). If you don&#8217;t see any lines in the trace that are part of your code, skip over this thread.</li>
+<li>When you find a stack trace that has some of your code in it, make a quick mental note what it&#8217;s doing. For example, &#8220;something NumberFormat-related&#8221; is all you need at this point. Don&#8217;t worry about specific line numbers yet.</li>
+<li>Go down to the next dump you took a few seconds later in the logs. Perform the same process here and make a note.</li>
+<li>After you&#8217;ve gone through 4-5 of the traces, you might notice that the same vague thing shows up in every one of them. If that thing is something that you expect to be fast, you probably found your culprit. If you take 10 traces, and 5 of them show <code>NumberFormat</code> in the dump, it means that you&#8217;re spending somewhere around 50% of your CPU time formatting numbers, and you might consider doing something differently.</li>
+</ol>
+<p>Sure, this method isn&#8217;t as scientific as using a real profiler on your tasks, but I&#8217;ve found that it&#8217;s a surefire way to notice any glaring CPU bottlenecks very quickly and with no setup involved. It&#8217;s also a technique that you&#8217;ll get better at with practice as you learn what a normal dump looks like and when something jumps out as odd.</p>
+<p>Here are a few performance mistakes I often find through this technique:</p>
+<ul>
+<li><code>NumberFormat</code> is slow &#8211; avoid it where possible.</li>
+<li><code>String.split</code>, as well as encoding or decoding UTF8 are slower than you think &#8211; see above tips about using the appropriate Writables</li>
+<li>Concatenating <code>String</code>s rather than using <code>StringBuffer.append</code></li>
+</ul>
+<hr />These are just a few tips for improving MapReduce performance. If you have your own tips and tricks for profiling and optimizing MapReduce jobs, please leave a comment below! If you&#8217;d like to look at the code I used for running the benchmarks, I&#8217;ve put it online at <a href="http://github.com/toddlipcon/performance-blog-code/">http://github.com/toddlipcon/performance-blog-code/</a></p>
+<p><span style="font-size: 90%;"><br />
+<strong>Appendix: Benchmark Cluster Setup</strong><br />
+Each node in the cluster is a dual quad-core Nehalem box with hyperthreading enabled, 24G of RAM and 12x1TB disks. The TaskTrackers are configured with 6 map and 6 reduce slots, slightly lower than we normally recommend since we sometimes run multiple clusters at once on these boxes for testing.<br />
+</span></p>
+
+				<div class="social-buttons">
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_linkedin_large' displayText='LinkedIn'></span>
+<span class='st_googleplus_large' displayText='Google +'></span>
+<span class='st_email_large' displayText='Email'></span>
+				</div>
+			</div>
+
+			<div class="grid_2" style="margin:0">
+  <div class="comments comments-2">
+    <div class="field-under">
+      <h4>Filed under:</h4>
+      <ul class="post-categories">
+	<li><a href="http://blog.cloudera.com/blog/category/general/" title="View all posts in General" rel="category tag">General</a></li></ul>  	</div>
+  	
+  <a name="comments"></a>
+  <div class="comments-head">
+    <strong>14 Responses</strong>
+   
+  </div>
+  <ul class="comments-list">
+  	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Denny Ye</a> /
+			March 30, 2011 / 8:22 PM		</em>
+		<p>hi Todd,<br />
+Thanks for your great efforts! I translated this blog to Chinese? And I tested those change points in my cluster. One problem in &#8216;reuse Writable&#8217;. I reused one constant IntWritable type in my WordCount Mapper class. The final result shows, average execution time of each map task rises from 30s to 35s, and total map tasks GC time from 40s to 120s, It make me confused, Would you help to explain what the real detail? thanks!</p>
+<p>PS: WordCount example: source data 1GB, 16MB input split</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Todd Lipcon</a> /
+			March 31, 2011 / 10:10 AM		</em>
+		<p>Hi Denny,</p>
+<p>I don&#8217;t have a good explanation for why that would be the case. Maybe you can put the two programs you&#8217;re using to prepare on github so others could look?</p>
+<p>-Todd</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Vlad</a> /
+			May 11, 2011 / 4:02 PM		</em>
+		<p>Todd, 8min30sec = 510 sec<br />
+40G of data per 4 node = 10G of data per node</p>
+<p>It means that your optimized example processes data with 20MB per sec speed which is approx 2% of available I/O (12 disks x 80MBsec).</p>
+<p>20MB sec per 8 CPU cores results in 2.5MB per sec per 1 CPU core.</p>
+<p>Nothing to be proud of, seriously.</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Mostafa Ead</a> /
+			June 24, 2012 / 9:38 AM		</em>
+		<p>Hi Todd,</p>
+<p>Thanks for sharing these good optimization rules.</p>
+<p>I have two comments:<br />
+1- VIntWritable: is the length of the integer encoded in the object at serialization ? </p>
+<p>2- Just a code typo: At tip #6:<br />
+Instead of:<br />
+      output.collect(word, one);<br />
+Use:<br />
+      output.collect(wordText, one);</p>
+<p>~Mostafa Ead</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Todd Lipcon</a> /
+			June 24, 2012 / 11:21 AM		</em>
+		<p>> 1- VIntWritable: is the length of the integer encoded in the object at serialization ?</p>
+<p>Yes, you can see the source inside WritableUtils.java in the Hadoop codebase.</p>
+<p>Thanks<br />
+-Todd</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">Mickael</a> /
+			October 02, 2012 / 2:16 AM		</em>
+		<p>Hey,</p>
+<p>Are your REALLY REALLY sure about this one :<br />
+&#8220;Concatenating Strings rather than using StringBuffer.append&#8221;</p>
+<p>Maybe I misunderstood but concatenating string is very very slow compare to use a StringBuilder (or StringBuffer).</p>
+<p>(for example but there are dozen of thousands benchmark on it on the web : <a href="http://kaioa.com/node/59" rel="nofollow">http://kaioa.com/node/59</a>)</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">xJDKEngr.</a> /
+			November 03, 2012 / 12:16 PM		</em>
+		<p>Mike is right<br />
+This statement is not correct -“Concatenating Strings rather than using StringBuffer.append”<br />
+It is the other way.<br />
+use of String concat  with + is highly discouraged<br />
+instead use Stringbuilder or StringBuffer</p>
+	</li>
+</li>
+	<li>
+		<em class="comment-date">
+			<a rel="nofollow" href="">dwhitmore</a> /
+			January 10, 2013 / 4:50 AM		</em>
+		<p>Please read the post he said:</p>
+<p>&#8220;Here are a few performance mistakes I often find through this technique:<br />
+&#8230;<br />
+    Concatenating Strings rather than using StringBuffer.append&#8221;</p>
+	</li>
+</li>
+  </ul>
+  <a name="leave-comment"></a>
+  <form action="/wp-comments-post.php" method="POST">
+  	<div class="comment-form">
+  		<h4>Leave a comment</h4>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="author"/>
+  			<label>Name <span>required</span></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="email"/>
+  			<label class="published">Email <span>required</span> <em>(will not be published)</em></label>
+  		</div>
+  		<div class="row">
+  			<input type="text" value="" class="txt" name="url"/>
+  			<label>Website</label>
+  		</div>
+  		<div class="row">
+  			<textarea rows="10" cols="30" class="area" name="comment"></textarea>
+  			<label>Comment</label>
+  		</div>
+  		<fieldset>
+  			<input type="button" value="Leave Comment" class="btn cta"/>
+  		</fieldset>
+  	</div>
+  	<input type='hidden' name='comment_post_ID' value='1723' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+  	<p class="cptch_block"><label>Prove you're human!<span class="required"> *</span></label><br />		<input type="hidden" name="cptch_result" value="0c8=" />
+		<input type="hidden" name="cptch_time" value="1398163016" />
+		<input type="hidden" value="Version: 2.4" />
+		<input id="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" /> &#43; 5 =  e&#105;g&#104;t	</p>  </form>
+</div></section>
+
+
+
+
+<!-- Google Code for New Remarketing Pixel -->
+<!-- Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. For instructions on adding this tag and more information on the above requirements, read the setup guide: google.com/ads/remarketingsetup -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1035979479;
+var google_conversion_label = "xel9CJ-P0QMQ15X_7QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+<div style="display:inline;"> <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1035979479/?value=0&label=xel9CJ-P0QMQ15X_7QM&guid=ON&script=0"/> </div>
+</noscript>
+</section>
+<span class="bg-fix"></span>
+</div>
+</div>
+<footer id="global-footer">
+<div class="footerContent parbase">
+<footer>
+  <div class="wrapper">
+    <div class="bg-fix"></div>
+    <nav>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/products-and-services.html">Products</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products/cloudera-enterprise.html">Cloudera Enterprise</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-express.html">Cloudera Express</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cloudera-enterprise/cloudera-manager.html">Cloudera Manager</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html">CDH</a></li>
+        <li><a href="http://www.cloudera.com/content/support/en/downloads.html">All Downloads</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/products-and-services/professional-services.html">Professional Services</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/training.html">Training</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/solutions.html">Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/enterprise-solutions.html">Enterprise Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/partner.html">Partner Solutions</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/solutions/industries.html">Industry Solutions</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/partners.html">Partners</a></li>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/resources/library.html">Resource Library</a></li>
+        <li class="section"><a href="https://ccp.cloudera.com/display/SUPPORT/Get+Support">Support</a></li>
+      </ul>
+      <ul>
+        <li class="section"><a href="http://www.cloudera.com/content/cloudera/en/about.html">About</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/hadoop-and-big-data.html">Hadoop &amp; Big Data</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/management.html">Management Team</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/board.html">Board</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/events.html">Events</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/press-center.html">Press Center</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/careers.html">Careers</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/about/contact-form.html">Contact Us</a></li>
+        <li><a href="http://www.cloudera.com/content/cloudera/en/subscription-center.html">Subscription Center</a></li>
+      </ul>
+      <div class="locale-and-social" style="float:right">
+        <div>
+          <div class="locale-and-social">
+            <div class="locale">
+              <select onchange="this.options[this.selectedIndex].value &amp;&amp; (window.location = this.options[this.selectedIndex].value);" class="site-language">
+                <option value="http://www.cloudera.com" name="English">English</option>
+                <option value="http://www.cloudera.co.jp/">Japanese</option>
+              </select>
+            </div>
+            <div class="social"><span class="follow">Follow us:</span><span class="share">Share:<i class="icon-share"></i></span>
+              <ul>
+                <li><a class="linkedIn" target="_blank" href="http://www.linkedin.com/company/cloudera">LinkedIn</a></li>
+                <li><a class="twitter" target="_blank" href="http://twitter.com/cloudera">Twitter</a></li>
+                <li><a class="facebook" target="_blank" href="http://www.facebook.com/cloudera">Facebook</a></li>
+                <li><a class="youtube" target="_blank" href="http://www.youtube.com/user/clouderahadoop">YouTube</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <nav class="global-footer"><span class="logo"><a>Cloudera</a></span>
+      <address>
+      <span>Cloudera, Inc.</span> <span><a target="_blank" href="http://www.google.com/maps?q=1001+Page+Mill+Rd,+Palo+Alto,+CA+94306">1001 Page Mill Road Bldg 2</a></span> <span>Palo Alto, CA 94304</span>
+      </address>
+      <address>
+      <span><a href="http://www.cloudera.com">www.cloudera.com</a></span> <span>US: 1-888-789-1488</span> <span>Intl: 1-650-362-0488</span>
+      </address>
+      <div class="copyright"><span><span class="piped">©2014 Cloudera, Inc. All rights reserved</span><span class="piped"><a href="http://www.cloudera.com/content/cloudera/en/terms-of-service.html">Terms &amp; Conditions</a></span><a href="http://www.cloudera.com/content/cloudera/en/privacy-policy.html">Privacy Policy</a></span> <span>Hadoop and the Hadoop elephant logo are trademarks of the <a target="_blank" href="http://www.apache.org/">Apache Software Foundation</a>.</span></div>
+    </nav>
+  </div>
+</footer>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/prettify.js?ver=3.3.2'></script>
+<script type='text/javascript' src='http://blog.cloudera.com/wp-content/plugins/prettify-gc-syntax-highlighter/launch.js?ver=3.3.2'></script>
+<div class="modal" style="display:none">
+  <div id="password-required">
+    <div class="inner"> </div>
+  </div>
+</div>
+<div class="tooltip" class="tooltip" style="display:none">
+</div>
+<script type="text/javascript" src="http://dnn506yrbagrg.cloudfront.net/pages/scripts/0011/2160.js"></script>
+<script type="text/javascript">var _kiq = _kiq || [];</script> 
+<script type="text/javascript" src="http://s3.amazonaws.com/ki.js/14646/2Sr.js" async></script>
+</body></html>
