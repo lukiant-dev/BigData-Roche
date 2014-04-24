@@ -4,6 +4,7 @@ http://blog.cloudera.com/blog/2011/
 http://blog.cloudera.com/blog/2012/
 http://blog.cloudera.com/blog/2013/
 http://blog.cloudera.com/blog/2014/
+http://blog.cloudera.com/blog/2014/04/apache-hadoop-yarn-avoiding-6-time-consuming-gotchas/
 http://blog.cloudera.com/blog/2014/04/sneak-preview-case-studies-track-at-hbasecon-2014/
 http://blog.cloudera.com/blog/2014/04/cloudera-live/
 http://blog.cloudera.com/blog/2014/04/making-apache-spark-easier-to-use-in-java-with-java-8/
